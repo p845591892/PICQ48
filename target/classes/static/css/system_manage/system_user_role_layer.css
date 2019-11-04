@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+
+.row {
+	width: 480px;
+}
+
+.role-table {
+	width: 175px;
+	float: left;
+	margin-left: 30px;
+}
+
+.button-i {
+	float: left;
+	margin-top: 150px;
+	margin-left: 30px;
+}
+
+.button-right {
+	float: left;
+}

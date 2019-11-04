@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.snh48.picq.dao.ResourceManagementDao">
+
+	<select id="findRoomMessage" resultType="RoomMessageVO">
+		SELECT
+			t.id AS id,
+			(
+				CASE t.is_send
+				WHEN 1 THEN
+					'未发送'
+				WHEN 2 THEN
+					'已发送'
+				END
+			) AS isSend,
+			t.message_content AS msgContent,
+			t.message_object AS msgObject,
+			DATE_FORMAT(
+				t.message_time,
+				'%Y-%m-%d %H:%i:%s'
+			) AS msgTime,
+			t.room_id AS roomId,
+			t.sender_id AS senderId,
+			t.sender_name AS senderName
+		FROM
+			t_snh_room_message t
+		ORDER BY
+			t.message_time DESC
+	</select>
+	
+</mapper>

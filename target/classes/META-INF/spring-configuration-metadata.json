@@ -1,0 +1,100 @@
+{
+  "groups": [
+    {
+      "name": "kuq",
+      "type": "com.snh48.picq.config.KuqProperties",
+      "sourceType": "com.snh48.picq.config.KuqProperties"
+    },
+    {
+      "name": "pocket48",
+      "type": "com.snh48.picq.config.Pocket48Properties",
+      "sourceType": "com.snh48.picq.config.Pocket48Properties"
+    },
+    {
+      "name": "redis",
+      "type": "com.snh48.picq.config.RedisProperties",
+      "sourceType": "com.snh48.picq.config.RedisProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "kuq.bot-name",
+      "type": "java.lang.String",
+      "description": "机器人名字",
+      "sourceType": "com.snh48.picq.config.KuqProperties"
+    },
+    {
+      "name": "kuq.enabled",
+      "type": "java.lang.Boolean",
+      "description": "是否启动酷Q的websocket，默认false",
+      "sourceType": "com.snh48.picq.config.KuqProperties"
+    },
+    {
+      "name": "kuq.log-file-name",
+      "type": "java.lang.String",
+      "description": "Logger日志文件名",
+      "sourceType": "com.snh48.picq.config.KuqProperties"
+    },
+    {
+      "name": "kuq.log-init",
+      "type": "java.lang.Boolean",
+      "description": "是否输出 Init 日志，默认true",
+      "sourceType": "com.snh48.picq.config.KuqProperties"
+    },
+    {
+      "name": "kuq.log-path",
+      "type": "java.lang.String",
+      "description": "Logger日志路径 (设为空就不输出文件了)",
+      "sourceType": "com.snh48.picq.config.KuqProperties"
+    },
+    {
+      "name": "kuq.post-port",
+      "type": "java.lang.Integer",
+      "description": "发送端口",
+      "sourceType": "com.snh48.picq.config.KuqProperties"
+    },
+    {
+      "name": "kuq.post-url",
+      "type": "java.lang.String",
+      "description": "发送URL",
+      "sourceType": "com.snh48.picq.config.KuqProperties"
+    },
+    {
+      "name": "kuq.socket-port",
+      "type": "java.lang.Integer",
+      "description": "接收端口",
+      "sourceType": "com.snh48.picq.config.KuqProperties"
+    },
+    {
+      "name": "pocket48.password",
+      "type": "java.lang.String",
+      "description": "口袋密码",
+      "sourceType": "com.snh48.picq.config.Pocket48Properties"
+    },
+    {
+      "name": "pocket48.username",
+      "type": "java.lang.String",
+      "description": "口袋账号",
+      "sourceType": "com.snh48.picq.config.Pocket48Properties"
+    },
+    {
+      "name": "redis.password",
+      "type": "java.lang.String",
+      "description": "redis服务登录密码。",
+      "sourceType": "com.snh48.picq.config.RedisProperties"
+    },
+    {
+      "name": "redis.timeout",
+      "type": "java.lang.Integer",
+      "description": "连接到redis服务的时间，非过期时间，默认2000。",
+      "sourceType": "com.snh48.picq.config.RedisProperties"
+    },
+    {
+      "name": "redis.url",
+      "type": "java.lang.String",
+      "description": "redis服务URL，例：127.0.0.1:6379。",
+      "sourceType": "com.snh48.picq.config.RedisProperties"
+    }
+  ],
+  "hints": []
+}

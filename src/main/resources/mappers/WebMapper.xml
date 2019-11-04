@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.snh48.picq.dao.WebDao">
+
+	<select id="findActiveRoom" parameterType="java.util.Map" resultType="MtboxVO">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					a.room_name `name`,
+					CONCAT(a.group_name, '-', a.`name`) `icon`,
+					count(b.room_id) `data`
+				FROM
+					t_snh_member a
+					LEFT OUTER JOIN t_snh_room_message b ON a.room_id = b.room_id
+				WHERE
+					  b.message_time &gt;= #{beginDate, jdbcType=TIMESTAMP}
+				AND b.message_time &lt;= #{endDate, jdbcType=TIMESTAMP}
+				AND a.room_monitor = 1
+				GROUP BY
+					b.room_id,
+					a.room_name,
+					a.group_name,
+					a.`name`
+			) c
+		ORDER BY
+			c.`data` DESC
+		LIMIT 5
+	</select>
+	
+	<select id="findActiveMembers" parameterType="java.util.Map" resultType="MtboxVO">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					CONCAT(b.group_name, '-', b.`name`) `name`,
+					b.avatar icon,
+					COUNT(a.sender_id) `data`
+				FROM
+					t_snh_room_message a
+					LEFT OUTER JOIN t_snh_member b ON a.sender_id = b.id
+				WHERE
+					  a.message_time &gt;= #{beginDate, jdbcType=TIMESTAMP}
+				AND b.room_monitor = 1
+				GROUP BY
+					a.sender_id
+			) c
+		ORDER BY
+			c.`data` DESC
+		LIMIT 5
+	</select>
+	
+	<select id="findModianDetailsTableByIds" parameterType="java.util.ArrayList" resultType="MtboxVO">
+		SELECT DISTINCT
+			t.user_name `name`,
+			COUNT(user_id) icon,
+			ROUND(SUM(t.backer_money), 2) `data`
+		FROM
+			t_modian_comment t
+		WHERE
+			t.project_id IN
+			<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		GROUP BY
+			t.user_id,
+			t.user_name
+		ORDER BY
+			ROUND(SUM(t.backer_money), 2) DESC
+	</select>
+
+</mapper>

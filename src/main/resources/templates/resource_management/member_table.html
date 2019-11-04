@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="Dashboard" />
+    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina" />
+
+    <title>GNZ48-章泽婷应援会</title>
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet" />
+    <!--external css-->
+    <link th:href="@{/assets/font-awesome/css/font-awesome.css}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/zabuto_calendar.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/js/gritter/css/jquery.gritter.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/lineicons/style.css}" />
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/style-responsive.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/bootstrap-table.min.css}" rel="stylesheet" />
+
+    <link th:href="@{/assets/js/fancybox/jquery.fancybox.css}" rel="stylesheet" />
+
+    <script th:src="@{/assets/js/chart-master/Chart.js}"></script>
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <section id="container">
+        <!-- **********************************************************************************************************************************************************
+      TOP BAR CONTENT & NOTIFICATIONS
+      *********************************************************************************************************************************************************** -->
+        <!--header start-->
+        <header class="header black-bg">
+            <div class="sidebar-toggle-box">
+                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="展开/收起"></div>
+            </div>
+            <!--logo start-->
+            <a href="/index" class="logo"><b>GNZ48-章泽婷应援会</b></a>
+            <!--logo end-->
+            <div class="top-menu" shiro:guest>
+                <ul class="nav pull-right top-menu">
+                    <li><a class="logout" href="/login">登录</a></li>
+                </ul>
+            </div>
+            <div class="top-menu" shiro:authenticated>
+                <ul class="nav pull-right top-menu">
+                    <li><a class="logout" href="/logout">退出</a></li>
+                </ul>
+            </div>
+        </header>
+        <!--header end-->
+
+        <!-- **********************************************************************************************************************************************************
+      MAIN SIDEBAR MENU
+      *********************************************************************************************************************************************************** -->
+        <!--sidebar start-->
+        <aside>
+            <div id="sidebar" class="nav-collapse ">
+                <!-- sidebar menu start-->
+                <ul class="sidebar-menu" id="nav-accordion">
+
+                    <p class="centered">
+                        <a href="javascript:void(0);"> <img th:src="@{/assets/img/ui-sam.jpg}" class="img-circle"
+                                width="60" />
+                        </a>
+                    </p>
+                    <h5 class="centered">
+                        <span th:if="${session.user != null}" th:text="${session.user.nickname}"></span> <span
+                            th:unless="${session.user != null}">章泽婷应援会</span>
+                    </h5>
+
+                    <li class="mt"><a href="/index"> <i class="fa fa-university"></i> <span>主页</span>
+                        </a></li>
+                    <li class="sub-menu"><a href="javascript:;"> <i class="fa fa-th-large"></i> <span>系统配置</span>
+                        </a>
+                        <ul class="sub">
+                            <li shiro:hasPermission="system-user:url"><a href="/system-manage/system-user">用户管理</a></li>
+                            <li shiro:hasPermission="system-role:url"><a href="/system-manage/system-role">角色管理</a></li>
+                            <li shiro:hasPermission="system-permission:url"><a
+                                    href="/system-manage/system-permission">资源管理</a></li>
+                        </ul>
+                    </li>
+                    <li class="sub-menu"><a class="active" href="javascript:;">
+                            <i class="fa fa-cogs"></i> <span>机器人配置</span>
+                        </a>
+                        <ul class="sub">
+                            <li class="active"><a href="/resource-management/member-table">成员列表</a></li>
+                            <li><a href="/resource-management/modian-table">摩点项目列表</a></li>
+                            <li><a href="/resource-management/weibo-table">微博用户列表</a></li>
+                            <li shiro:hasPermission="qq-table:url"><a href="/resource-management/qq-table">QQ列表</a></li>
+                            <li shiro:hasPermission="quartz-confing-table:url"><a
+                                    href="/resource-management/quartz-confing-table">轮询配置列表</a></li>
+                        </ul>
+                    </li>
+                    <li class="sub-menu"><a href="javascript:;"> <i class="fa fa-desktop"></i> <span>可视化数据</span>
+                        </a>
+                        <ul class="sub">
+                            <li shiro:hasPermission="modian-visual:url"><a
+                                    href="/data-visualization/modian-visual">摩点项目数据</a></li>
+                            <li>
+                                <a href="/data-visualization/room-message">口袋房间消息</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="sub-menu"><a href="/help"> <i class="fa fa-question-circle"></i> <span>帮助</span>
+                        </a></li>
+                </ul>
+                <!-- sidebar menu end-->
+            </div>
+        </aside>
+        <!--sidebar end-->
+        <div class="copyrights">
+            Collect from <a href="http://www.cssmoban.com/">网页模板</a>
+        </div>
+
+        <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                <h3>
+                    <i class="fa fa-angle-right"></i> 机器人配置 <i class="fa fa-angle-right"></i> 成员列表
+                </h3>
+                <div class="row">
+                    <table class="table table-bordered" id="member_table"></table>
+                    <!-- /row -->
+                </div>
+            </section>
+            <!--/wrapper -->
+        </section>
+        <!-- /MAIN CONTENT -->
+        <!--main content end-->
+        <!--footer start-->
+        <footer class="site-footer">
+            <div class="text-center">
+                2018 - GNZ48-章泽婷应援会 - QQ：<a href="javascript:void(0);" title="777095721">777095721</a> <a
+                    href="index.html#" class="go-top"> <i class="fa fa-angle-up"></i>
+                </a>
+            </div>
+        </footer>
+        <!--footer end-->
+    </section>
+
+    <!-- 工具容器 -->
+    <div id="toolbar" class="btn-group">
+        <form class="form-inline" onkeydown="if(event.keyCode==13){return false;}">
+            <div class="form-group">
+                <input id="input1" class="form-control round-form" name="searchText" placeholder="名字或拼音缩写" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="select1">团体：</label>
+                <select class="form-control" name="groupName" id="select1">
+                    <option value="ALL">ALL</option>
+                    <option value="SNH48">SNH48</option>
+                    <option value="GNZ48">GNZ48</option>
+                    <option value="BEJ48">BEJ48</option>
+                    <option value="CKG48">CKG48</option>
+                    <option value="SHY48">SHY48</option>
+                    <option value="IDFT">IDFT</option>
+                    <option value="海外练习生">海外练习生</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="select2">队伍：</label>
+                <select class="form-control" name="teamName" id="select2">
+                    <option value="ALL">ALL</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="select3">房间监控状态：</label>
+                <select class="form-control" name="roomMonitor" id="select3">
+                    <option value="ALL">ALL</option>
+                    <option value="1">开启</option>
+                    <option value="2">未开启</option>
+                    <option value="404">不存在</option>
+                </select>
+            </div>
+            <button id="btn_select" class="btn btn-info" type="button">
+                <i class="fa fa-search fa-lg"></i>
+            </button>
+            <button id="btn_refresh" class="btn btn-success" onclick="refreshVideoShow();" type="button"
+                shiro:hasPermission="member:refresh">
+                <i class="fa fa-retweet fa-lg"></i> 更新
+            </button>
+        </form>
+
+    </div>
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script th:src="@{/assets/js/jquery.js}"></script>
+    <script th:src="@{/assets/js/jquery-1.8.3.min.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <script class="include" th:src="@{/assets/js/jquery.dcjqaccordion.2.7.js}"></script>
+    <script th:src="@{/assets/js/jquery.scrollTo.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.nicescroll.js}"></script>
+    <script th:src="@{/assets/js/jquery.sparkline.js}"></script>
+
+    <!--common script for all pages-->
+    <script th:src="@{/assets/js/common-scripts.js}"></script>
+
+    <script th:src="@{/assets/js/gritter/js/jquery.gritter.js}"></script>
+    <script th:src="@{/assets/js/gritter-conf.js}"></script>
+
+    <!--script for this page-->
+    <script th:src="@{/assets/js/sparkline-chart.js}"></script>
+    <script th:src="@{/assets/js/zabuto_calendar.js}"></script>
+    <script th:src="@{/assets/js/jquery-ui-1.9.2.custom.min.js}"></script>
+
+    <script th:src="@{/assets/js/bootstrap-table.min.js}"></script>
+    <script th:src="@{/assets/js/bootstrap-table-zh-CN.min.js}"></script>
+
+    <script th:src="@{/js/resource_management/member_table.js}"></script>
+
+    <!--custom switch-->
+    <script th:src="@{/assets/js/bootstrap-switch.js}"></script>
+
+    <!--custom tagsinput-->
+    <script th:src="@{/assets/js/jquery.tagsinput.js}"></script>
+
+    <script th:src="@{/assets/js/form-component.js}"></script>
+
+    <script th:src="@{/assets/js/layer/layer.js}"></script>
+    <script th:src="@{/js/common_tool/layer_tool.js}"></script>
+
+    <script th:src="@{/assets/js/fancybox/jquery.fancybox.js}"></script>
+
+</body>
+
+</html>

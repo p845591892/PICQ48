@@ -1,0 +1,58 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: PICQ48
+  #启动配置：开发环境dev、测试环境test、灰度环境pre、生产环境pro
+  profiles.active: dev
+  thymeleaf:
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+    #非严格HTML标签，依赖nekohtml
+    mode: LEGACYHTML5
+    servlet:
+      content-type: text/html; charset=utf-8
+    cache: false
+  quartz:
+    properties:
+      org.quartz:
+        scheduler:
+          instanceName: DefaultQuartzScheduler
+          instanceId: AUTO
+          rmi:
+            export: false
+            proxy: false
+          wrapJobExecutionInUserTransaction: false
+        threadPool:
+          class: org.quartz.simpl.SimpleThreadPool
+          threadCount: 20
+          threadPriority: 5
+          threadsInheritContextClassLoaderOfInitializingThread: true
+        jobStore:
+          misfireThreshold: 60000
+          class: org.quartz.simpl.RAMJobStore
+    #连接数据库方式
+    job-store-type: jdbc
+    #初始化表结构
+    #jdbc:
+      #initialize-schema: always
+      #schema: classpath:schema/quartz_table.sql
+    
+#mybatis配置
+mybatis:
+  type-aliases-package: com.snh48.picq.entity,com.snh48.picq.vo
+  mapper-locations: classpath:mappers/*Mapper.xml
+  executor-type: simple
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    
+#分页插件
+pagehelper:
+  #使用方言
+  helper-dialect: mysql
+  #分页合理化参数
+  reasonable: true

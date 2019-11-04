@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+
+.row {
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+#room_message_table {
+	word-break: break-all;
+	word-wrap: break-all;
+}

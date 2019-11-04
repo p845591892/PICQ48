@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<meta charset="UTF-8">
+<title>角色设置</title>
+
+<!-- Bootstrap core CSS -->
+<link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet">
+<!--external css-->
+<link th:href="@{/assets/font-awesome/css/font-awesome.css}"
+	rel="stylesheet" />
+<!-- Custom styles for this template -->
+<link th:href="@{/assets/css/style.css}" rel="stylesheet">
+<link th:href="@{/assets/css/style-responsive.css}" rel="stylesheet">
+<link th:href="@{/assets/css/bootstrap-table.min.css}" rel="stylesheet" />
+
+<link th:href="@{/css/system_manage/system_user_role_layer.css}"
+	rel="stylesheet" />
+</head>
+<body>
+
+	<div class="row">
+		<div class="role-table">
+			<table class="table table-bordered" id="havent_table"></table>
+		</div>
+		<div class="button-i">
+			<div class="button-right">
+				<button id="button-right" class="btn btn-round btn-success"
+					shiro:hasPermission="user-role:add">
+					<i class="fa fa-arrow-right" aria-hidden="true"></i>
+				</button>
+			</div>
+			<div class="button-left">
+				<button id="button-left" class="btn btn-round btn-warning"
+					shiro:hasPermission="user-role:delete">
+					<i class="fa fa-arrow-left" aria-hidden="true"></i>
+				</button>
+			</div>
+		</div>
+		<div class="role-table">
+			<table class="table table-bordered" id="have_table"></table>
+		</div>
+	</div>
+	<!-- /MAIN CONTENT -->
+
+	<script th:inline="javascript">
+	    var uid = [[${uid}]]; // 用户ID
+	</script>
+
+	<!-- js placed at the end of the document so the pages load faster -->
+	<script th:src="@{/assets/js/jquery.js}"></script>
+	<script th:src="@{/assets/js/jquery-1.8.3.min.js}"></script>
+	<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+	<script class="include" type="text/javascript"
+		th:src="@{/assets/js/jquery.dcjqaccordion.2.7.js}"></script>
+	<script th:src="@{/assets/js/jquery.scrollTo.min.js}"></script>
+	<script th:src="@{/assets/js/jquery.nicescroll.js}"></script>
+
+	<script th:src="@{/assets/js/bootstrap-table.min.js}"></script>
+	<script th:src="@{/assets/js/bootstrap-table-zh-CN.min.js}"></script>
+
+	<script th:src="@{/assets/js/common-scripts.js}"></script>
+
+	<script th:src="@{/js/system_manage/system_user_role_layer.js}"></script>
+
+	<script th:src="@{/assets/js/layer/layer.js}"></script>
+	<script th:src="@{/js/common_tool/layer_tool.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.snh48.picq.dao.SystemManageDao">
+	
+	<select id="findUser" resultType="User">
+		SELECT
+			t.id,
+			t.nickname,
+			t.`password`,
+			t.salt,
+			t.state,
+			t.username,
+			t.email
+		FROM
+			t_sys_user t
+	</select>
+	
+	<update id="updateUserById" parameterType="java.util.Map">
+		UPDATE t_sys_user t
+		SET t.nickname = #{nickname},
+		 t.state = #{state}
+		WHERE
+			t.id = #{id}
+	</update>
+	
+	<select id="findRole" resultType="Role">
+		SELECT
+			t.id,
+			t.description,
+			t.role,
+			t.available
+		FROM
+			t_sys_role t
+	</select>
+	
+	<select id="findHaventRoleByUid" parameterType="java.lang.Long" resultType="Role">
+		SELECT
+			r.id,
+			r.description,
+			r.role,
+			r.available
+		FROM
+			t_sys_role r
+		WHERE
+			r.id NOT IN (
+				SELECT
+					ur.role_id
+				FROM
+					t_sys_user_role ur
+				WHERE
+					ur.user_id = #{uid}
+			)
+	</select>
+	
+	<select id="findHaveRoleByUid" parameterType="java.lang.Long" resultType="Role">
+		SELECT
+			r.id,
+			r.description,
+			r.role,
+			r.available
+		FROM
+			t_sys_role r
+			LEFT OUTER JOIN t_sys_user_role ur ON r.id = ur.role_id
+		WHERE
+			ur.user_id = #{uid}
+	</select>
+	
+	<insert id="insertUserRole" parameterType="java.util.Map">
+		INSERT INTO t_sys_user_role (user_id, role_id)
+		VALUES
+		<foreach collection="rids" index="index" item="item" separator=",">
+			(#{uid},#{item})
+		</foreach>
+	</insert>
+	
+	<delete id="deleteUserRole" parameterType="java.util.Map">
+		DELETE
+		FROM
+			t_sys_user_role
+		WHERE
+			user_id = #{uid}
+		AND role_id IN
+		<foreach collection="rids" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<update id="updateRole" parameterType="java.util.Map">
+		UPDATE t_sys_role t
+		SET t.description = #{description}
+		<if test="role != null and role != ''">
+		 ,t.role = #{role}
+		</if>
+		<if test="available != null and available != ''">
+		 ,t.available = #{available}
+		</if>
+		WHERE
+			t.id = #{id}
+	</update>
+	
+	<select id="findHaventPermissionsByRid" parameterType="java.lang.Long" resultType="Permission">
+		SELECT
+			t.id,
+			CONCAT(
+				t.`name`,
+				'[',
+				t.permission,
+				']'
+			) `name`,
+			t.parent_id parentId
+		FROM
+			t_sys_permission t
+		WHERE
+			t.id NOT IN (
+				SELECT
+					rp.permission_id
+				FROM
+					t_sys_role_permission rp
+				WHERE
+					rp.role_id = #{rid}
+			)
+	</select>
+	
+	<select id="findHavePermissionsByRid" parameterType="java.lang.Long" resultType="Permission">
+		SELECT
+			p.id,
+			CONCAT(
+				p.`name`,
+				'[',
+				p.permission,
+				']'
+			) `name`,
+			p.parent_id parentId
+		FROM
+			t_sys_permission p
+			LEFT OUTER JOIN t_sys_role_permission rp ON p.id = rp.permission_id
+		WHERE
+			rp.role_id = #{rid}
+	</select>
+	
+	<insert id="insertRolePermission" parameterType="java.util.Map">
+		INSERT INTO t_sys_role_permission (role_id, permission_id)
+		VALUES
+		<foreach collection="pids" index="index" item="item" separator=",">
+			(#{rid}, #{item})
+		</foreach>
+	</insert>
+	
+	<delete id="deleteRolePermission" parameterType="java.util.Map">
+		DELETE
+		FROM
+			t_sys_role_permission
+		WHERE
+			role_id = #{rid}
+		AND permission_id IN
+		<foreach collection="pids" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="findPermission" parameterType="java.lang.Long" resultType="Permission">
+		SELECT
+			t.available,
+			t.id,
+			t.`name`,
+			t.parent_id parentId,
+			t.permission,
+			t.resource_type resourceType,
+			t.url
+		FROM
+			t_sys_permission t
+		WHERE
+			1 = 1
+		<if test="id != null and id != ''">
+		AND t.id = #{id}
+		</if>
+		<if test="pid != null and pid != ''">
+		OR t.parent_id = #{pid}
+		</if>
+	</select>
+	
+	<update id="updatePermission" parameterType="java.util.Map">
+		UPDATE t_sys_permission t
+		SET t.resource_type = #{resourceType}
+		<if test="name != null and name != ''">
+		 ,t.`name` = #{name}
+		</if>
+		<if test="parentId != null and parentId != ''">
+		 ,t.parent_id = #{parentId}
+		</if>
+		<if test="permission != null and permission != ''">
+		 ,t.permission = #{permission}
+		</if>
+		<if test="url != null and url != ''">
+		 ,t.url = #{url}
+		</if>
+		WHERE
+			t.id = #{id}
+	</update>
+	
+</mapper>

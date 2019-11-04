@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>403</title>
+</head>
+<link rel="stylesheet" href="assets/css/bootstrap.css" />
+<style>
+    .errPage-container {
+        width: 800px;
+        margin: 100px auto;
+        background-color: #fff;
+    }
+
+    .errPage-container .pan-back-btn {
+        background: #008489;
+        color: #fff;
+    }
+
+    .errPage-container .text-jumbo {
+        font-size: 60px;
+        font-weight: 700;
+        color: #484848;
+    }
+</style>
+
+<body>
+    <div class="container errPage-container">
+        <!-- <button onclick="back" class="pan-back-btn"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>返回</button> -->
+        <div class="row">
+            <div class="col-md-6 ">
+                <h1 class="text-jumbo text-ginormous">403!</h1>
+                <h2>你没有权限</h2>
+
+                <ul class="list-unstyled">
+                    <li>或者你可以去:</li>
+                    <li class="link-type">
+                        <a href="/index">回首页</a>
+                    </li>
+                    <!-- <li class="link-type"><a href="#">随便看看</a></li>
+                    <li><a @click.prevent="dialogVisible=true" href="#">点我看图</a></li> -->
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <img src="../images/401.gif" width="313" height="428" alt="Girl has dropped her ice cream.">
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.snh48.picq.dao.MemberDao">
+
+	<update id="updateMemberById" parameterType="Member">
+		UPDATE t_snh_member t
+		SET t.avatar = #{avatar},
+			t.team_id = #{teamId},
+			t.team_name = #{teamName}, 
+			t.group_id = #{groupId}, 
+			t.group_name = #{groupName},
+			t.abbr = #{abbr},
+			t.join_time = #{joinTime},
+			t.birthday = #{birthday},
+			t.birthplace = #{birthplace},
+			t.blood_type = #{bloodType},
+			t.constellation = #{constellation},
+			t.height = #{height},
+			t.hobbies = #{hobbies},
+			t.specialty = #{specialty},
+			t.history = #{history},
+			t.nickname = #{nickname}
+			<if test="topic != null and topic != ''">
+			,t.topic = #{topic}
+			</if>
+			<if test="roomName != null and roomName != ''">
+			, t.room_name = #{roomName}
+			</if>
+			<if test="roomId != null and roomId != ''">
+			, t.room_id = #{roomId}
+			</if>
+			<if test="roomMonitor != null and roomMonitor != ''">
+			, t.room_monitor = #{roomMonitor}
+			</if>
+		WHERE
+			t.id = #{id}
+	</update>
+
+</mapper>

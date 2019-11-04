@@ -1,0 +1,23 @@
+@CHARSET "UTF-8";
+
+#main-content {
+	margin-right: 210px;
+}
+
+.error-input {
+	border: 1px solid #ed5565;
+	box-shadow: none;
+}
+
+.success-input {
+	border: 1px solid #3c763d;
+	box-shadow: none;
+}
+
+.registration {
+	text-align: center;
+}
+
+.msg {
+	color: red;
+}

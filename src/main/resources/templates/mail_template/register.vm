@@ -1,0 +1,9 @@
+<html>
+<body>
+	<div>恭喜${nickname}：</div>
+	<br>
+	<div>账号 ${username} 已成功注册GNZ48-章泽婷应援会系统，请点击下面链接激活账号。</div>
+	<br>
+	${url}
+</body>
+</html>
