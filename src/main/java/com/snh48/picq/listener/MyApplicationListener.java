@@ -1,9 +1,11 @@
 package com.snh48.picq.listener;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import com.snh48.picq.kuq.DataSourceQQThread;
 import com.snh48.picq.quartz.DataSourceJobThread;
 
 import lombok.extern.log4j.Log4j2;
@@ -25,9 +27,16 @@ public class MyApplicationListener implements ApplicationListener<ContextRefresh
 		/**
 		 * 通过线程开启数据库中已经开启的定时任务 灵感来自spring spring boot继续执行 mythread开辟线程，延迟后执行
 		 */
-		DataSourceJobThread myThread = (DataSourceJobThread) event.getApplicationContext()
-				.getBean("dataSourceJobThread");
-		myThread.start();
+		ApplicationContext applicationContext = event.getApplicationContext();
+
+		// 自动开启定时任务
+		DataSourceJobThread jobThread = (DataSourceJobThread) applicationContext.getBean("dataSourceJobThread");
+		jobThread.start();
+
+		// 自动同步酷Q好友和群
+		DataSourceQQThread qqThread = (DataSourceQQThread) applicationContext.getBean("dataSourceQQThread");
+		qqThread.start();
+	
 	}
 
 }

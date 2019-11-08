@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.snh48.picq.entity.weibo.DynamicMonitor;
-import com.snh48.picq.entity.weibo.WeiboUser;
-import com.snh48.picq.repository.weibo.DynamicMonitorRepository;
-import com.snh48.picq.repository.weibo.WeiboUserRepository;
-import com.snh48.picq.service.HttpsService;
+import com.snh48.picq.service.DynamicMonitorService;
 import com.snh48.picq.vo.ResultVO;
 
 /**
@@ -21,23 +18,8 @@ import com.snh48.picq.vo.ResultVO;
 @RestController
 public class DynamicMonitorContorller {
 
-	/**
-	 * 微博动态监控配置表DAO组件
-	 */
 	@Autowired
-	private DynamicMonitorRepository dynamicMonitorRepository;
-
-	/**
-	 * 发送Https请求获取JSON数据的服务
-	 */
-	@Autowired
-	private HttpsService httpsService;
-
-	/**
-	 * 微博用户表DAO组件
-	 */
-	@Autowired
-	private WeiboUserRepository weiboUserRepository;
+	private DynamicMonitorService dynamicMonitorService;
 
 	/**
 	 * @Description: 新增一条微博动态监控数据
@@ -48,13 +30,8 @@ public class DynamicMonitorContorller {
 	public ResultVO addDynamicMonitor(DynamicMonitor dynamicMonitor) {
 		ResultVO result = new ResultVO();
 		if (dynamicMonitor.getCommunityId() != null && dynamicMonitor.getUserId() != null) {
-			DynamicMonitor newDynamicMonitor = dynamicMonitorRepository.save(dynamicMonitor);
-			if (newDynamicMonitor != null) {
-				result.setStatus(HttpsURLConnection.HTTP_OK);
-			} else {
-				result.setStatus(HttpsURLConnection.HTTP_INTERNAL_ERROR);
-				result.setCause("新增失败");
-			}
+			dynamicMonitorService.addDynamicMonitor(dynamicMonitor);
+			result.setStatus(HttpsURLConnection.HTTP_OK);
 		} else {
 			result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
 			result.setCause("QQ号或者用户ID不能为空");
@@ -72,7 +49,7 @@ public class DynamicMonitorContorller {
 	public ResultVO deleteDynamicMonitor(Long id) {
 		ResultVO result = new ResultVO();
 		if (id != null) {
-			dynamicMonitorRepository.deleteById(id);
+			dynamicMonitorService.deleteDynamicMonitor(id);
 			result.setStatus(HttpsURLConnection.HTTP_OK);
 		} else {
 			result.setStatus(HttpsURLConnection.HTTP_INTERNAL_ERROR);
@@ -93,19 +70,8 @@ public class DynamicMonitorContorller {
 			result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
 			result.setCause("缺失参数");
 		} else {
-			WeiboUser weiboUser = null;
-			try {
-				weiboUser = httpsService.getWeiboUser(containerId);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			if (weiboUser != null) {
-				weiboUserRepository.save(weiboUser);
-				result.setStatus(HttpsURLConnection.HTTP_OK);
-			} else {
-				result.setStatus(HttpsURLConnection.HTTP_INTERNAL_ERROR);
-				result.setCause("新增失败");
-			}
+			dynamicMonitorService.addWeiboUser(containerId);
+			result.setStatus(HttpsURLConnection.HTTP_OK);
 		}
 		return result;
 	}
@@ -121,8 +87,7 @@ public class DynamicMonitorContorller {
 		if (id != null) {
 			String[] ids = id.split(",");
 			for (String userId : ids) {
-				dynamicMonitorRepository.deleteByUserId(Long.parseLong(userId));
-				weiboUserRepository.deleteById(Long.parseLong(userId));
+				dynamicMonitorService.deleteWeiboUser(userId);
 			}
 			result.setStatus(HttpsURLConnection.HTTP_OK);
 		} else {

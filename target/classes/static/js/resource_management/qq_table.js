@@ -10,6 +10,10 @@ $(document).ready(function() {
 		}, {
 			field : "communityName",
 			title : "QQ群名"
+		}, {
+			field : "qqType",
+			title : "类型",
+			formatter : qqTypeHtml
 		} ],
 		// clickToSelect : true,
 		striped : true,
@@ -73,6 +77,19 @@ function addVideoShow() {
 			});
 		}
 	});
+}
+
+/**
+ * 
+ */
+var qqTypeHtml = function(value, row, index) {
+	if (value == "GROUP") {
+		return "群";
+	} else if (value == "FRIEND") {
+		return "好友";
+	} else {
+		return "异常";
+	}
 }
 
 /* 修改按钮弹窗 */

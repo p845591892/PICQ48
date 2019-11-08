@@ -20,13 +20,13 @@ public class KuqProperties {
 	/** 机器人名字 */
 	private String botName = "bot1";
 
-	/** 发送URL */
+	/** 发送URL(酷Q的URL) */
 	private String postUrl = "127.0.0.1";
 
-	/** 发送端口 */
+	/** 发送端口(酷Q的端口) */
 	private int postPort = 31091;
 
-	/** 接收端口 */
+	/** 接收端口(PICQ的端口) */
 	private int socketPort = 31092;
 
 	/** Logger日志路径 (设为空就不输出文件了) */
@@ -37,5 +37,8 @@ public class KuqProperties {
 
 	/** 是否输出 Init 日志，默认true */
 	private boolean logInit = Boolean.TRUE;
+
+	/** 管理员QQ号(必须与登录酷Q的账号是QQ好友)，默认为开发者(847109667)。 */
+	private long adminId = 847109667;
 
 }

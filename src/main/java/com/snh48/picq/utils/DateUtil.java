@@ -63,12 +63,28 @@ public class DateUtil {
 	 *               <p>
 	 *               整数往后推,负数往前推
 	 */
-	public static String countDay(int amount) {
-		return countDay("yyyy-MM-ddHH:mm:ss", amount);
+	public static String countDayToStr(int amount) {
+		return countDayToStr("yyyy-MM-ddHH:mm:ss", amount);
 	}
 
 	/**
-	 * @Title: countDay
+	 * 获取当前时间指定变动天数后的时间
+	 * 
+	 * @param amount 变化的天数
+	 *               <p>
+	 *               正数往后推,负数往前推
+	 * @return {@link Date}
+	 */
+	public static Date countDayToDate(int amount) {
+		Date date = new Date();// 取时间
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, amount);
+		return calendar.getTime();
+	}
+
+	/**
+	 * @Title: countDayToStr
 	 * @Description: 获取当前时间指定变动天数后的指定格式时间字符串
 	 * @author JuFF_白羽
 	 * @param format 时间格式
@@ -76,12 +92,8 @@ public class DateUtil {
 	 *               <p>
 	 *               整数往后推,负数往前推
 	 */
-	public static String countDay(String format, int amount) {
-		Date date = new Date();// 取时间
-		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(date);
-		calendar.add(Calendar.DATE, amount);
-		date = calendar.getTime(); // 这个时间就是日期往后推一天的结果
+	public static String countDayToStr(String format, int amount) {
+		Date date = countDayToDate(amount);
 		return getDate(date, format);
 	}
 

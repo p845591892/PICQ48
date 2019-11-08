@@ -9,11 +9,11 @@ spring:
     enabled: true
     prefix: classpath:/templates/
     suffix: .html
+    cache: false
     #非严格HTML标签，依赖nekohtml
     mode: LEGACYHTML5
     servlet:
       content-type: text/html; charset=utf-8
-    cache: false
   quartz:
     properties:
       org.quartz:
@@ -35,9 +35,9 @@ spring:
     #连接数据库方式
     job-store-type: jdbc
     #初始化表结构
-    #jdbc:
-      #initialize-schema: always
-      #schema: classpath:schema/quartz_table.sql
+    jdbc:
+      initialize-schema: always
+      schema: classpath:schema/quartz_table.sql
     
 #mybatis配置
 mybatis:
@@ -48,6 +48,7 @@ mybatis:
     map-underscore-to-camel-case: true
     default-fetch-size: 100
     default-statement-timeout: 30
+    #sql日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     
 #分页插件

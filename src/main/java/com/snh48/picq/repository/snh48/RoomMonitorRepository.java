@@ -44,14 +44,14 @@ public interface RoomMonitorRepository extends JpaRepository<RoomMonitor, Long> 
 	 * @Title: updateKeywordById
 	 * @Description: 根据配置ID修改过滤关键字
 	 * @author JuFF_白羽
-	 * @param id 监控配置ID
+	 * @param id      监控配置ID
 	 * @param keyword 监控过滤关键字
 	 */
 	@Transactional
 	@Modifying
 	@Query(value = "update RoomMonitor t set t.keywords = ?2 where t.id = ?1")
 	int updateKeywordById(Long id, String keyword);
-	
+
 	/**
 	 * @Title: deleteByCommunityId
 	 * @Description: 删除QQ号对应的配置

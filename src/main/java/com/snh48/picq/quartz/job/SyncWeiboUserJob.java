@@ -16,6 +16,12 @@ import com.snh48.picq.repository.weibo.WeiboUserRepository;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * 同步微博用户信息任务
+ * 
+ * @author shiro
+ *
+ */
 @Log4j2
 @Transactional
 @DisallowConcurrentExecution // 任务串行注解

@@ -98,14 +98,16 @@ public class StringUtil extends StringUtils {
 
 	/**
 	 * 判断字符串是否是只含英文
+	 * 
 	 * <pre>
-     * StringUtil.isChinese("")  = true
-     * StringUtil.isChinese("  ")   = false
-     * StringUtil.isChinese("你好") = false
-     * StringUtil.isChinese("abc")  = true
-     * StringUtil.isChinese("ABC")  = true
-     * StringUtil.isChinese("abc你好") = false
-     * </pre>
+	 * StringUtil.isChinese("")  = true
+	 * StringUtil.isChinese("  ")   = false
+	 * StringUtil.isChinese("你好") = false
+	 * StringUtil.isChinese("abc")  = true
+	 * StringUtil.isChinese("ABC")  = true
+	 * StringUtil.isChinese("abc你好") = false
+	 * </pre>
+	 * 
 	 * @param charaString 要判断的字符串
 	 * @return 是返回true，否返回false
 	 */
@@ -115,13 +117,15 @@ public class StringUtil extends StringUtils {
 
 	/**
 	 * 判断字符串是否是含有中文
+	 * 
 	 * <pre>
-     * StringUtil.isChinese("")  = false
-     * StringUtil.isChinese("  ")   = false
-     * StringUtil.isChinese("abc")  = false
-     * StringUtil.isChinese("你好") = true
-     * StringUtil.isChinese("abc你好") = true
-     * </pre>
+	 * StringUtil.isChinese("")  = false
+	 * StringUtil.isChinese("  ")   = false
+	 * StringUtil.isChinese("abc")  = false
+	 * StringUtil.isChinese("你好") = true
+	 * StringUtil.isChinese("abc你好") = true
+	 * </pre>
+	 * 
 	 * @param str 要判断的字符串
 	 * @return 是返回true，否返回false
 	 */

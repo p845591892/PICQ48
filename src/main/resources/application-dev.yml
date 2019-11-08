@@ -55,6 +55,19 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  activemq:
+    broker-url: tcp://localhost:61616
+    #不使用Spring Boot内部的ActiveMQ，连接我们自己的MQ服务器
+    in-memory: false
+    #是否在重新传递来自回滚事务的消息之前停止消息传递。这意味着启用此功能时不会保留消息顺序。
+    non-blocking-redelivery: false
+    #等待发送消息超时，0为无限制
+    send-timeout: 0
+    user: admin
+    password: 123456
+  #是否启用发布订阅模式（这里不启用，使用配置类让双模式并存）
+  jms:
+    pub-sub-domain: false
     
 #口袋48配置
 pocket48:
@@ -65,10 +78,11 @@ pocket48:
 kuq:
   enabled: false
   bot-name: Bot01
-  post-url: localhost
-  post-port: 31091
-  socket-port: 31092
+  post-url: ${酷Q的IP}
+  post-port: ${酷Q的端口}
+  socket-port: ${自己应用的端口}
   log-path: null
+  admin-id: ${QQ号}
 
 #redis配置
 redis:

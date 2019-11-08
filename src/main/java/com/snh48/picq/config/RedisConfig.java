@@ -10,6 +10,12 @@ import com.snh48.picq.utils.StringUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+/**
+ * redis配置类
+ * 
+ * @author shiro
+ *
+ */
 @Configuration
 public class RedisConfig {
 

@@ -111,8 +111,8 @@ public class WebServiceImpl implements WebService {
 		Map<String, MtboxVO> map = new HashMap<String, MtboxVO>();
 
 		/* 近7日活跃的口袋房间TOP5 */
-		Date beginDate = DateUtil.getMidnight(DateUtil.getDateFormat(DateUtil.countDay(-7)));
-		Date endDate = DateUtil.getNearMidnight(DateUtil.getDateFormat(DateUtil.countDay(-1)));
+		Date beginDate = DateUtil.getMidnight(DateUtil.getDateFormat(DateUtil.countDayToStr(-7)));
+		Date endDate = DateUtil.getNearMidnight(DateUtil.getDateFormat(DateUtil.countDayToStr(-1)));
 		Map<String, Date> params = new HashMap<String, Date>();
 		params.put("beginDate", beginDate);
 		params.put("endDate", endDate);

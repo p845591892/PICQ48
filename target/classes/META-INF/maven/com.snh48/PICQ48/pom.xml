@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.snh48</groupId>
 	<artifactId>PICQ48</artifactId>
-	<version>1.0.0</version>
+	<version>1.2.0</version>
 	<name>PICQ48</name>
 	<description>基于zztyyh，使用酷Q作为发送消息的工具，重新构建的应援会机器人项目</description>
 
@@ -98,6 +98,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<!-- 消息中间键activemq -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-activemq</artifactId>
 		</dependency>
 
 		<!-- mysql驱动 -->
