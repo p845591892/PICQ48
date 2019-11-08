@@ -54,9 +54,9 @@ public class ShiroConfig {
 	@Bean
 	public SessionManager sessionManager(RedisManager redisManager) {
 		log.info("===============>> shiro-设置session管理器");
-		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 		RedisSessionDAO redisSessionDao = new RedisSessionDAO();
 		redisSessionDao.setRedisManager(redisManager);
+		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 		sessionManager.setSessionDAO(redisSessionDao);
 		// 配置监听
 		Collection<SessionListener> listeners = new ArrayList<SessionListener>();
@@ -197,6 +197,8 @@ public class ShiroConfig {
 		 */
 		filterChainDefinitionMap.put("/resource-management/quartz-confing-table", "perms[quartz-confing-table:url]");// 轮询配置列表跳转url
 		filterChainDefinitionMap.put("/quartz-config/update", "perms[quartz-config:update]");// 修改轮询配置接口
+		filterChainDefinitionMap.put("/quartz-config/start", "perms[quartz-config:start]");// 启动定时任务
+		filterChainDefinitionMap.put("/quartz-config/shutdown", "perms[quartz-config:shutdown]");// 关闭定时任务
 		/**
 		 * L可视化数据
 		 */
@@ -208,6 +210,11 @@ public class ShiroConfig {
 		 * L--L口袋房间消息数据
 		 */
 		filterChainDefinitionMap.put("/data-visualization/room-message", "anon");// 可视化口袋消息数据跳转url
+
+		/*
+		 * 德鲁伊连接池监控
+		 */
+		filterChainDefinitionMap.put("/druid/**", "roles[systemadmin]");
 
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return shiroFilterFactoryBean;

@@ -1,11 +1,15 @@
 package com.snh48.picq.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.net.ssl.HttpsURLConnection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.snh48.picq.core.QQType;
 import com.snh48.picq.entity.QQCommunity;
 import com.snh48.picq.repository.QQCommunityRepository;
 import com.snh48.picq.repository.modian.CommentMonitorRepostiory;
@@ -13,6 +17,13 @@ import com.snh48.picq.repository.snh48.RoomMonitorRepository;
 import com.snh48.picq.repository.weibo.DynamicMonitorRepository;
 import com.snh48.picq.service.QQCommunityService;
 
+import cc.moecraft.icq.PicqBotX;
+import cc.moecraft.icq.sender.IcqHttpApi;
+import cc.moecraft.icq.sender.returndata.returnpojo.get.RFriend;
+import cc.moecraft.icq.sender.returndata.returnpojo.get.RGroup;
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 @Transactional
 public class QQCommunityServiceImpl implements QQCommunityService {
@@ -41,6 +52,9 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 	@Autowired
 	private RoomMonitorRepository roomMonitorRepository;
 
+	@Autowired
+	private PicqBotX bot;
+
 	public int addQQCommunity(QQCommunity qqCommunity) {
 		if (qqCommunity.getId() == null) {
 			return 1;
@@ -48,9 +62,9 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 		if (qqCommunity.getCommunityName() == null || qqCommunity.getCommunityName().equals("")) {
 			return 2;
 		}
-		QQCommunity qq = qqCommunityRepository.findById(qqCommunity.getId()).get();
-		if (qq == null) {
-			qq = qqCommunityRepository.save(qqCommunity);
+		Optional<QQCommunity> optional = qqCommunityRepository.findById(qqCommunity.getId());
+		if (!optional.isPresent()) {
+			qqCommunityRepository.save(qqCommunity);
 			return HttpsURLConnection.HTTP_OK;
 		} else {
 			return 3;
@@ -77,6 +91,40 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 			qqCommunityRepository.deleteById(Long.parseLong(idStr));
 		}
 		return HttpsURLConnection.HTTP_OK;
+	}
+
+	@Override
+	public boolean syncQQCommunity() {
+		IcqHttpApi icqHttpApi = bot.getAccountManager().getNonAccountSpecifiedApi();
+		if (icqHttpApi.getStatus() == null) {
+			return false;
+		}
+
+		// 刷新缓存
+		bot.getAccountManager().refreshCache();
+
+		// 好友列表
+		List<RFriend> rFriendList = icqHttpApi.getFriendList().data;
+		for (RFriend rFriend : rFriendList) {
+			QQCommunity qq = new QQCommunity();
+			qq.setId(rFriend.getUserId());
+			qq.setCommunityName(rFriend.getNickname());
+			qq.setQqType(QQType.FRIEND);
+			qqCommunityRepository.save(qq);
+			log.info("同步好友[{}]", rFriend.getUserId());
+		}
+
+		// 群列表
+		List<RGroup> rGroupList = icqHttpApi.getGroupList().data;
+		for (RGroup rGroup : rGroupList) {
+			QQCommunity qq = new QQCommunity();
+			qq.setId(rGroup.getGroupId());
+			qq.setCommunityName(rGroup.getGroupName());
+			qq.setQqType(QQType.GROUP);
+			qqCommunityRepository.save(qq);
+			log.info("同步群[{}]", rGroup.getGroupId());
+		}
+		return true;
 	}
 
 }

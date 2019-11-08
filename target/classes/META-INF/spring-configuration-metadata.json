@@ -18,6 +18,12 @@
   ],
   "properties": [
     {
+      "name": "kuq.admin-id",
+      "type": "java.lang.Long",
+      "description": "管理员QQ号(必须与登录酷Q的账号是QQ好友)，默认为开发者(847109667)。",
+      "sourceType": "com.snh48.picq.config.KuqProperties"
+    },
+    {
       "name": "kuq.bot-name",
       "type": "java.lang.String",
       "description": "机器人名字",
@@ -50,19 +56,19 @@
     {
       "name": "kuq.post-port",
       "type": "java.lang.Integer",
-      "description": "发送端口",
+      "description": "发送端口(酷Q的端口)",
       "sourceType": "com.snh48.picq.config.KuqProperties"
     },
     {
       "name": "kuq.post-url",
       "type": "java.lang.String",
-      "description": "发送URL",
+      "description": "发送URL(酷Q的URL)",
       "sourceType": "com.snh48.picq.config.KuqProperties"
     },
     {
       "name": "kuq.socket-port",
       "type": "java.lang.Integer",
-      "description": "接收端口",
+      "description": "接收端口(PICQ的端口)",
       "sourceType": "com.snh48.picq.config.KuqProperties"
     },
     {

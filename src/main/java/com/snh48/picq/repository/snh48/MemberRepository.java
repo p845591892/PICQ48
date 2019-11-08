@@ -60,4 +60,11 @@ public interface MemberRepository extends JpaRepository<Member, Long>, JpaSpecif
 	@Query("select count(t) from Member t where roomMonitor != ?1")
 	Integer countByNotRoomMonitor(int roomMonitor);
 
+	/**
+	 * 获取成员信息
+	 * @param roomId 口袋房间ID
+	 * @return {@link Menber}
+	 */
+	Member findByRoomId(Long roomId);
+
 }

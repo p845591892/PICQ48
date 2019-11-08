@@ -65,10 +65,11 @@ pocket48:
 kuq:
   enabled: false
   bot-name: Bot01
-  post-url: localhost
-  post-port: 31091
-  socket-port: 31092
+  post-url: ${酷Q的IP}
+  post-port: ${酷Q的端口}
+  socket-port: ${自己应用的端口}
   log-path: null
+  admin-id: ${QQ号}
 
 #redis配置
 redis:

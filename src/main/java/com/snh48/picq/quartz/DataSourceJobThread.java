@@ -29,7 +29,6 @@ public class DataSourceJobThread extends Thread {
 	public void run() {
 		try {
 			Thread.sleep(10000);
-			log.info("---------线程启动---------");
 			QuartzManage quartzManage = (QuartzManage) SpringUtil.getBean("quartzManage");
 			List<QuartzConfig> quartzConfigs = repository.findByStatus(true);
 			// 开启任务

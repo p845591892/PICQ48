@@ -12,9 +12,8 @@ import org.springframework.http.HttpMethod;
 
 import com.snh48.picq.config.Pocket48Properties;
 import com.snh48.picq.utils.Https;
+import com.snh48.picq.utils.RedisUtil;
 import com.snh48.picq.utils.SpringUtil;
-
-import redis.clients.jedis.Jedis;
 
 /**
  * 口袋48的Https请求操作相关的类。该类提供Https请求的函数，来获取SNH48 Group相关的一些数据。
@@ -118,9 +117,8 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 	public static String getToken()
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
 		String token = "";
-		Jedis jedis = SpringUtil.getBean(Jedis.class);
-		if (jedis.exists(TOKEN_KEY)) {
-			token = jedis.get(TOKEN_KEY);
+		if (RedisUtil.exists(TOKEN_KEY)) {
+			token = (String) RedisUtil.get(TOKEN_KEY);
 		} else {
 			token = refreshToken();
 		}
@@ -141,9 +139,8 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		Pocket48Properties properties = SpringUtil.getBean(Pocket48Properties.class);
 		String jsonStr = httpsToken(properties.getUsername(), properties.getPassword());
 		JSONObject loginObj = JsonProcess.getJSONObjectByString(jsonStr);
-		Jedis jedis = SpringUtil.getBean(Jedis.class);
 		String token = loginObj.getJSONObject("content").getJSONObject("userInfo").getString("token");
-		jedis.setex(TOKEN_KEY, EXPIRE_TIME, token);
+		RedisUtil.setex(TOKEN_KEY, token, EXPIRE_TIME);
 		return token;
 	}
 

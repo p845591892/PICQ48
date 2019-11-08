@@ -17,6 +17,12 @@ import com.snh48.picq.repository.snh48.MemberRepository;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * 同步SNH48成员信息任务
+ * 
+ * @author shiro
+ *
+ */
 @Log4j2
 @Transactional
 @DisallowConcurrentExecution // 任务串行注解

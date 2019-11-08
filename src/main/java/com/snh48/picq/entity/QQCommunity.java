@@ -4,8 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.snh48.picq.core.QQType;
 
 import lombok.Data;
 
@@ -23,16 +27,23 @@ public class QQCommunity implements Serializable {
 	private static final long serialVersionUID = -8245053442842866062L;
 
 	/**
-	 * 序列(QQ群号)
+	 * ID(QQ群/QQ号)
 	 */
 	@Id
 	@Column(name = "ID")
 	private Long id;
 
 	/**
-	 * QQ群名(窗口名)
+	 * QQ群/QQ名
 	 */
-	@Column(name = "COMMUNITY_NAME", length = 500)
+	@Column(name = "COMMUNITY_NAME", length = 225)
 	private String communityName;
+
+	/**
+	 * QQ类型（group：QQ群 ， friend：QQ好友）
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(name = "QQ_TYPE", length = 20)
+	private QQType qqType;
 
 }

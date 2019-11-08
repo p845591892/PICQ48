@@ -7,9 +7,12 @@ import org.springframework.context.annotation.Configuration;
 
 import com.snh48.picq.utils.StringUtil;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-
+/**
+ * redis配置类
+ * 
+ * @author shiro
+ *
+ */
 @Configuration
 public class RedisConfig {
 
@@ -30,21 +33,6 @@ public class RedisConfig {
 		}
 		redisManager.setTimeout(properties.getTimeout());
 		return redisManager;
-	}
-
-	/**
-	 * 创建jedis的Bean
-	 * 
-	 * @param redisManager redis管理器
-	 */
-	@Bean
-	@SuppressWarnings("resource")
-	public Jedis jedis(RedisManager redisManager) {
-		String[] hostAndPort = redisManager.getHost().split(":");
-		JedisPool jedisPool = new JedisPool(redisManager.getJedisPoolConfig(), hostAndPort[0],
-				Integer.parseInt(hostAndPort[1]), redisManager.getTimeout(), redisManager.getPassword(),
-				redisManager.getDatabase());
-		return jedisPool.getResource();
 	}
 
 }

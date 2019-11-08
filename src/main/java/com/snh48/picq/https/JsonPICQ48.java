@@ -345,8 +345,8 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append("<br>详情请到口袋48App查看。");
 
 		} else if (messageType.equals("AUDIO")) {// 语音类型
+			msgContent.append("<audio>️");
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
-			msgContent.append("[语音]<br>点击➡️");
 			msgContent.append(bodysObject.getString("url"));
 
 		} else {
