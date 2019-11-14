@@ -49,7 +49,7 @@ mybatis:
     default-fetch-size: 100
     default-statement-timeout: 30
     #sql日志
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     
 #分页插件
 pagehelper:

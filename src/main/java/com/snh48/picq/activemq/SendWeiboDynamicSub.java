@@ -47,9 +47,6 @@
 //	 */
 //	@JmsListener(destination = ActivemqPhysical.QUEUE_SEND_WEIBO_DYNAMIC)
 //	public void run(byte[] bytes) throws InterruptedException, SerializationException {
-//
-//		Thread.sleep(2000);
-//
 //		Dynamic dynamic = (Dynamic) RedisUtil.deserializeObj(bytes);
 //		long userId = dynamic.getUserId();
 //		List<DynamicMonitorVO> voList = dynamicMonitorService.getCache(userId);
@@ -64,7 +61,6 @@
 //
 //		for (DynamicMonitorVO vo : voList) {
 //			QQCommunity qqCommunity = vo.getQqCommunity();
-////			log.info("[{}]的消息发送给 {}({})", dynamic.getCreatedAt(), qqCommunity.getCommunityName(), qqCommunity.getId());
 //			KuqManage.sendSyncMessage(icqHttpApi, message, qqCommunity);
 //		}
 //

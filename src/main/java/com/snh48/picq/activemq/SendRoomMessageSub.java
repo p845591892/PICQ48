@@ -88,54 +88,54 @@
 //		roomMessageRepository.save(roomMessage);
 //	}
 //
-////	/**
-////	 * Jms监听器
-////	 * 
-////	 * @param roomId 口袋房间ID
-////	 * @throws InterruptedException
-////	 * @throws JMSException
-////	 * @throws BeansException
-////	 * @throws SerializationException
-////	 */
-////	@JmsListener(destination = ActivemqPhysical.QUEUE_SEND_ROOM_MESSAGE)
-////	public void run(Long roomId) throws InterruptedException {
-////		List<RoomMessage> roomMessageList = roomMessageRepository.findByRoomIdAndIsSendOrderByMsgTimeAsc(roomId, 1);
-////		if (roomMessageList == null) {
-////			return;
-////		}
-////		// 获取缓存的成员信息和房间监控信息
-////		Member member = memberService.getCacheByRoomId(roomId);
-////		List<RoomMonitorVO> voList = roomMonitorService.getCache(roomId);
-////
-////		log.info("[{}]口袋房间有 {} 条新消息即将发送到监控QQ(群)。", member.getName(), roomMessageList.size());
-////
-////		IcqHttpApi icqHttpApi = bot.getAccountManager().getNonAccountSpecifiedApi();
-////		
-////		for (RoomMessage roomMessage : roomMessageList) {
-////			String message = deserializeMsgContent(roomMessage, member);
-////
-////			for (RoomMonitorVO vo : voList) {
-////				QQCommunity qqCommunity = vo.getQqCommunity();
-////				String keywords = vo.getRoomMonitor().getKeywords();
-////				if (StringUtil.isNotBlank(keywords)) {// 当有关键字监控时，匹配关键字
-////
-////					String[] keyword = keywords.split(",");
-////					for (String key : keyword) {
-////						if (message.indexOf(key) != -1) {// 当关键字匹配成功后，发送该消息
-////							KuqManage.sendSyncMessage(icqHttpApi, message, qqCommunity);
-////						}
-////					}
-////
-////				} else {// 当无关键字监控时，全量发送消息
-////					KuqManage.sendSyncMessage(icqHttpApi,message, qqCommunity);
-////				}
-////			}
-////
-////			// 设置为已发送
-////			roomMessage.setIsSend(2);
-////			roomMessageRepository.save(roomMessage);
-////		}
-////	}
+//	/**
+//	 * Jms监听器
+//	 * 
+//	 * @param roomId 口袋房间ID
+//	 * @throws InterruptedException
+//	 * @throws JMSException
+//	 * @throws BeansException
+//	 * @throws SerializationException
+//	 */
+//	@JmsListener(destination = ActivemqPhysical.QUEUE_SEND_ROOM_MESSAGE)
+//	public void run(Long roomId) throws InterruptedException {
+//		List<RoomMessage> roomMessageList = roomMessageRepository.findByRoomIdAndIsSendOrderByMsgTimeAsc(roomId, 1);
+//		if (roomMessageList == null) {
+//			return;
+//		}
+//		// 获取缓存的成员信息和房间监控信息
+//		Member member = memberService.getCacheByRoomId(roomId);
+//		List<RoomMonitorVO> voList = roomMonitorService.getCache(roomId);
+//
+//		log.info("[{}]口袋房间有 {} 条新消息即将发送到监控QQ(群)。", member.getName(), roomMessageList.size());
+//
+//		IcqHttpApi icqHttpApi = bot.getAccountManager().getNonAccountSpecifiedApi();
+//		
+//		for (RoomMessage roomMessage : roomMessageList) {
+//			String message = deserializeMsgContent(roomMessage, member);
+//
+//			for (RoomMonitorVO vo : voList) {
+//				QQCommunity qqCommunity = vo.getQqCommunity();
+//				String keywords = vo.getRoomMonitor().getKeywords();
+//				if (StringUtil.isNotBlank(keywords)) {// 当有关键字监控时，匹配关键字
+//
+//					String[] keyword = keywords.split(",");
+//					for (String key : keyword) {
+//						if (message.indexOf(key) != -1) {// 当关键字匹配成功后，发送该消息
+//							KuqManage.sendSyncMessage(icqHttpApi, message, qqCommunity);
+//						}
+//					}
+//
+//				} else {// 当无关键字监控时，全量发送消息
+//					KuqManage.sendSyncMessage(icqHttpApi,message, qqCommunity);
+//				}
+//			}
+//
+//			// 设置为已发送
+//			roomMessage.setIsSend(2);
+//			roomMessageRepository.save(roomMessage);
+//		}
+//	}
 //
 //	/**
 //	 * 转化消息内容

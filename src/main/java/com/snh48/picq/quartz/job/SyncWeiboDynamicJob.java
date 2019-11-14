@@ -57,7 +57,7 @@ public class SyncWeiboDynamicJob extends QuartzJobBean {
 		// 获库中保存的取所有的微博用户
 		List<WeiboUser> userList = weiboUserRepository.findAll();
 		for (WeiboUser weiboUser : userList) {
-			
+
 			log.info("同步微博用户动态==>>{}", weiboUser.getUserName());
 
 			try {
