@@ -15,6 +15,10 @@
 //import com.snh48.picq.repository.snh48.RoomMessageRepository;
 //import com.snh48.picq.service.ResourceManagementService;
 //
+//import cc.moecraft.icq.PicqBotX;
+//import cc.moecraft.icq.sender.IcqHttpApi;
+//import cc.moecraft.icq.sender.message.MessageBuilder;
+//import cc.moecraft.icq.sender.message.components.ComponentRecord;
 //import redis.clients.jedis.Jedis;
 //
 //@SpringBootTest

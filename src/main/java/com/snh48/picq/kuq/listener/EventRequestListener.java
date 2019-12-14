@@ -9,8 +9,10 @@ import com.snh48.picq.core.Common;
 import cc.moecraft.icq.event.EventHandler;
 import cc.moecraft.icq.event.IcqListener;
 import cc.moecraft.icq.event.events.request.EventFriendRequest;
+import cc.moecraft.icq.event.events.request.EventGroupInviteRequest;
 import cc.moecraft.icq.sender.IcqHttpApi;
 import cc.moecraft.icq.sender.message.MessageBuilder;
+import cc.moecraft.icq.sender.message.components.ComponentShake;
 
 /**
  * 请求事件监听器
@@ -25,18 +27,47 @@ public class EventRequestListener extends IcqListener {
 	private KuqProperties properties;
 
 	/**
+	 * 所有请求事件
+	 */
+//	@EventHandler
+//	public void onEREvent(EventRequest event) {
+//		System.out.println("所有请求事件");
+//		System.out.println(event.toString());
+//	}
+
+	/**
 	 * 加好友请求事件
 	 */
 	@EventHandler
 	public void onFRevent(EventFriendRequest event) {
 		// 构造消息
 		MessageBuilder mb = new MessageBuilder();
-		mb.add(" 有一条好友请求").add("(" + event.getFlag() + ")");
+		mb.add("有一条好友请求").add("(flag = " + event.getFlag() + ")");
 		mb.newLine().add(event.getUserId() + "：").add(event.getComment());
 		mb.newLine().add(Common.COMMAND_CAPTION_FRIEND_ADD);
 		// 获取api
-		IcqHttpApi icqHttpApi = event.getBot().getAccountManager().getNonAccountSpecifiedApi();
-		// 发送消息给管理员
+		IcqHttpApi icqHttpApi = event.getHttpApi();
+		// 抖一抖，并发送消息给管理员
+		icqHttpApi.sendPrivateMsg(properties.getAdminId(), new MessageBuilder().add(new ComponentShake()).toString(),
+				false);
+		icqHttpApi.sendPrivateMsg(properties.getAdminId(), mb.toString());
+	}
+
+	/**
+	 * 拉你入群请求事件
+	 */
+	@EventHandler
+	public void onEGIREvent(EventGroupInviteRequest event) {
+		// 构造消息
+		MessageBuilder mb = new MessageBuilder();
+		mb.add("有一条群邀请请求").add("(flag = " + event.getFlag() + ")");
+		mb.newLine().add("【" + event.getSelfId() + "】").add("邀请你加入Q群：").add(event.getGroupId());
+		mb.newLine().add(Common.COMMAND_CAPTION_GROUP_INVITE);
+		// 获取api
+		IcqHttpApi icqHttpApi = event.getHttpApi();
+		// 抖一抖，并发送消息给管理员
+		icqHttpApi.sendPrivateMsg(properties.getAdminId(), new MessageBuilder().add(new ComponentShake()).toString(),
+				false);
 		icqHttpApi.sendPrivateMsg(properties.getAdminId(), mb.toString());
 	}
 

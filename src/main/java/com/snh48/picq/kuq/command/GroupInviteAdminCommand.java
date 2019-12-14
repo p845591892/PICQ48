@@ -22,14 +22,14 @@ import cc.moecraft.icq.user.User;
  *
  */
 @Component
-public class FriendAddAdminCommand implements PrivateCommand {
+public class GroupInviteAdminCommand implements PrivateCommand {
 
 	@Autowired
 	private KuqProperties properties;
 
 	@Override
 	public CommandProperties properties() {
-		return new CommandProperties(Common.COMMAND_NAME_FRIEND_ADD, Common.COMMAND_ALIAS_FRIEND_ADD);
+		return new CommandProperties(Common.COMMAND_NAME_GROUP_INVITE, Common.COMMAND_ALIAS_GROUP_INVITE);
 	}
 
 	@Override
@@ -54,7 +54,8 @@ public class FriendAddAdminCommand implements PrivateCommand {
 			return "参数错误！";
 		}
 
-		event.getHttpApi().setFriendAndRequest(flag, approve);
+		event.getHttpApi().setGroupAndRequest(flag, "invite", approve, "");
+		event.getBot().getAccountManager().refreshCache();
 		// 不能用注解注入，会导致依赖注入死循环。
 		SpringUtil.getBean(QQCommunityService.class).syncQQCommunity();
 

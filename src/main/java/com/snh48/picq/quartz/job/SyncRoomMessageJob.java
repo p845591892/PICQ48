@@ -70,18 +70,18 @@ public class SyncRoomMessageJob extends QuartzJobBean {
 			RoomMessage sourceRoomMessage = roomMessageRepository
 					.findFirstByRoomIdOrderByMsgTimeDesc(member.getRoomId());
 
-			long sourceMsgTime = sourceRoomMessage.getMsgTime().getTime();
+			long sourceMsgTime = 0;// 原消息时间
 			int flag = 1;// while循环的flag
 			long nextTime = 0;// https请求参数
 			List<RoomMessage> sendRoomMessageList = new ArrayList<RoomMessage>();// 待发送的房间消息集合
 
 			while (flag == 1) {
-				if (sourceRoomMessage == null) {// 历史消息不存在，即，当第一次同步时，只进行本次while循环。
+				if (sourceRoomMessage == null) {// 原消息不存在，即，当第一次同步时，只进行本次while循环。
 					log.info("【{}】口袋房间消息为第一次同步。", member.getName());
 					flag = 0;// 设置flag=0，就不会进行下次while循环了。
 
-				} else {// 历史消息存在
-
+				} else {// 原消息存在
+					sourceMsgTime = sourceRoomMessage.getMsgTime().getTime();// 赋值原消息时间
 					long lineTime = DateUtil.countDayToDate(-1).getTime();
 
 //					log.info("历史消息时间为 {} , 1日时间线的时间为 {}", DateUtil.getDate(sourceRoomMessage.getMsgTime()),

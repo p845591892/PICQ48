@@ -96,7 +96,7 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 	@Override
 	public boolean syncQQCommunity() {
 		IcqHttpApi icqHttpApi = bot.getAccountManager().getNonAccountSpecifiedApi();
-		if (icqHttpApi.getStatus() == null) {
+		if (icqHttpApi == null) {
 			return false;
 		}
 

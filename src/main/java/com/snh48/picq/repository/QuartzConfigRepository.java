@@ -18,6 +18,7 @@ public interface QuartzConfigRepository extends JpaRepository<QuartzConfig, Long
 
 	/**
 	 * 根据定时任务状态查询列表
+	 * 
 	 * @param status 任务状态
 	 * @return 定时任务表的List
 	 */
