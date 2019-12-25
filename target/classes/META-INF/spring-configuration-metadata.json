@@ -36,6 +36,12 @@
       "sourceType": "com.snh48.picq.config.KuqProperties"
     },
     {
+      "name": "kuq.home-path",
+      "type": "java.lang.String",
+      "description": "酷Q客户端根目录的绝对路径（主要是用于，在同一机器部署的PICQ服务与酷Q客户端时，存放语音文件）",
+      "sourceType": "com.snh48.picq.config.KuqProperties"
+    },
+    {
       "name": "kuq.log-file-name",
       "type": "java.lang.String",
       "description": "Logger日志文件名",

@@ -40,5 +40,8 @@ public class KuqProperties {
 
 	/** 管理员QQ号(必须与登录酷Q的账号是QQ好友)，默认为开发者(847109667)。 */
 	private long adminId = 847109667;
+	
+	/** 酷Q客户端根目录的绝对路径（主要是用于，在同一机器部署的PICQ服务与酷Q客户端时，存放语音文件） */
+	private String homePath;
 
 }

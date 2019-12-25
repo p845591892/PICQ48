@@ -196,7 +196,9 @@ public class ShiroConfig {
 		 * L--L轮询配置列表
 		 */
 		filterChainDefinitionMap.put("/resource-management/quartz-confing-table", "perms[quartz-confing-table:url]");// 轮询配置列表跳转url
-		filterChainDefinitionMap.put("/quartz-config/update", "perms[quartz-config:update]");// 修改轮询配置接口
+		filterChainDefinitionMap.put("/quartz-config/add", "perms[quartz-config:add]");// 新增定时任务实例接口
+		filterChainDefinitionMap.put("/quartz-config/update", "perms[quartz-config:update]");// 修改定时任务实例接口
+		filterChainDefinitionMap.put("/quartz-config/delete", "perms[quartz-config:delete]");// 删除定时任务实例接口
 		filterChainDefinitionMap.put("/quartz-config/start", "perms[quartz-config:start]");// 启动定时任务
 		filterChainDefinitionMap.put("/quartz-config/shutdown", "perms[quartz-config:shutdown]");// 关闭定时任务
 		/**

@@ -4,9 +4,6 @@ import java.util.Optional;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.quartz.CronScheduleBuilder;
-import org.quartz.CronTrigger;
-import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,12 +13,7 @@ import com.snh48.picq.entity.QuartzConfig;
 import com.snh48.picq.quartz.QuartzManage;
 import com.snh48.picq.repository.QuartzConfigRepository;
 import com.snh48.picq.service.QuartzConfigService;
-import com.snh48.picq.utils.SpringUtil;
-import com.snh48.picq.utils.StringUtil;
 
-import lombok.extern.log4j.Log4j2;
-
-@Log4j2
 @Service
 @Transactional
 public class QuartzConfigServiceImpl implements QuartzConfigService {
@@ -35,39 +27,9 @@ public class QuartzConfigServiceImpl implements QuartzConfigService {
 	@Autowired
 	private QuartzManage quartzManage;
 
-	public int updateQuartzConfig(QuartzConfig quartzConfig) throws SchedulerException {
-		if (quartzConfig.getId() == null) {
-			return 0;
-		}
-		if (StringUtil.isEmpty(quartzConfig.getJobName())) {
-			return 1;
-		}
-		if (StringUtil.isEmpty(quartzConfig.getCronTrigger())) {
-			return 2;
-		}
-		if (StringUtil.isEmpty(quartzConfig.getCron())) {
-			return 3;
-		}
-		CronTrigger trigger = (CronTrigger) SpringUtil.getBean(quartzConfig.getCronTrigger());
-		Scheduler scheduler = (Scheduler) SpringUtil.getBean("scheduler");
-		trigger = (CronTrigger) scheduler.getTrigger(trigger.getKey());
-		String currentCron = "";
-		try {
-			currentCron = trigger.getCronExpression();// 当前Trigger使用的规则
-		} catch (NullPointerException e) {
-			log.info("JobTrigger【{}】 not in org.quartz.CronTrigger.", quartzConfig.getJobName());
-			return 4;
-		}
-		String searchCron = quartzConfig.getCron();// 从数据库查询出来的
-		if (!currentCron.equals(searchCron)) {// 如果当前使用的cron表达式和从数据库中查询出来的cron表达式一致，则不刷新任务
-			log.info("JobTrigger【{}】's cron change to [{}], resetting......", quartzConfig.getJobName(), searchCron);
-			CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(searchCron);// 表达式调度构建器
-			trigger = trigger.getTriggerBuilder().withIdentity(trigger.getKey()).withSchedule(scheduleBuilder).build();// 按新的cronExpression表达式重新构建trigger
-			scheduler.rescheduleJob(trigger.getKey(), trigger);// 按新的trigger重新设置job执行
-			log.info("Set up.");
-		}
+	public int saveQuartzConfig(QuartzConfig quartzConfig) throws SchedulerException {
 		quartzConfigRepository.save(quartzConfig);
-		return HttpsURLConnection.HTTP_OK;
+		return 1;
 	}
 
 	@Override
@@ -106,5 +68,19 @@ public class QuartzConfigServiceImpl implements QuartzConfigService {
 		job.setStatus(false);
 		quartzConfigRepository.save(job);
 		return HttpsURLConnection.HTTP_OK;
+	}
+
+	@Override
+	public QuartzConfig findById(Long id) {
+		Optional<QuartzConfig> oq = quartzConfigRepository.findById(id);
+		if (oq.isPresent()) {
+			return oq.get();
+		}
+		return null;
+	}
+
+	@Override
+	public void delete(Long id) {
+		quartzConfigRepository.deleteById(id);
 	}
 }

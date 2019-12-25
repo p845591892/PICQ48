@@ -6,7 +6,7 @@ $(document)
 					var unique_id = $.gritter
 							.add({
 								title : '友情提示',
-								text : '本页面进行的配置后，需要在服务器使用QQ打开对应的聊天窗口后，才能在同步消息的同时把微博消息发送到对应的聊天窗口中。',
+								text : '本页面进行的配置前，需要先添加机器人QQ好友或拉入Q群中。',
 								image : '../assets/img/ui-sam.jpg',
 								sticky : true,
 								time : '',

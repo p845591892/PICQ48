@@ -1,10 +1,14 @@
 package com.snh48.picq.kuq;
 
+import java.io.File;
+
+import com.snh48.picq.config.KuqProperties;
 import com.snh48.picq.core.QQType;
 import com.snh48.picq.entity.QQCommunity;
 import com.snh48.picq.entity.snh48.Member;
 import com.snh48.picq.utils.DateUtil;
-import com.snh48.picq.utils.StringUtil;
+import com.snh48.picq.utils.Https;
+import com.snh48.picq.utils.SpringUtil;
 
 import cc.moecraft.icq.PicqBotX;
 import cc.moecraft.icq.sender.IcqHttpApi;
@@ -105,25 +109,36 @@ public class KuqManage {
 			message = audioUrl[0];// 语音都在[1]
 		}
 
-		// 输入文字
+		// 构造消息对象
 		MessageBuilder mb = new MessageBuilder();
 
 		// 输入图片内容
 		if (imgUrl != null && imgUrl.length >= 2 && icqHttpApi.canSendImage()) {
 			mb.add(message);
+
 			for (int i = 1; i < imgUrl.length; i++) {// 0为文字部分，故从1开始
 				String url = imgUrl[i];
-				if (i == 1 && StringUtil.isBlank(message)) {
+				if (i == 1) {
 					mb.add(new ComponentImage(url));
 				} else {
 					mb.newLine().add(new ComponentImage(url));
 				}
 			}
+			return mb.toString();
 		}
 
 		// 输入语音内容
 		if (audioUrl != null && audioUrl.length == 2 && icqHttpApi.canSendRecord()) {
-			mb.add(new ComponentRecord(audioUrl[1]));
+			KuqProperties properties = SpringUtil.getBean(KuqProperties.class);
+			String savePath = properties.getHomePath() + File.separator + "data" + File.separator + "record";
+			String fileName = DateUtil.getDate("yyyyMMddHHmmss") + ".mp3";
+			try {
+				Https https = new Https();
+				https.setUrl(audioUrl[1]).downloadFile(savePath, fileName);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			mb.add(new ComponentRecord(fileName));
 		}
 
 		return mb.toString();

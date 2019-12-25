@@ -44,6 +44,7 @@ public class FindMemberCommand implements EverywhereCommand {
 		// 设置查询参数
 		String arg = args.get(0);
 		MemberVO vo = new MemberVO();
+
 		if (StringUtil.isChinese(arg)) {
 			vo.setName(arg);
 		} else if (StringUtil.isEnglish(arg)) {
@@ -51,19 +52,48 @@ public class FindMemberCommand implements EverywhereCommand {
 		} else {
 			return "参数错误！";
 		}
+
 		// 查询
-		Page<Member> memberPage = resourceManagementService.getMembers(1, 5, vo);
+		Page<Member> memberPage = resourceManagementService.getMembers(1, 20, vo);
 		if (memberPage.isEmpty()) {
 			return "未查找到成员！";
 		}
+
 		List<Member> memberList = memberPage.toList();
-		event.respond("查找到 " + memberList.size() + " 位成员：");
-		// 发送消息
-		for (Member member : memberList) {
-			String message = KuqManage.memberMessageBuilder(member);
+
+		if (memberList.size() >= 5) {
+			event.respond("查找到相关至少 " + memberList.size() + " 位成员，其中最接近的是：");
+
+			List<Member> responListP = new ArrayList<Member>();// 精
+			for (int i = 0; i < memberList.size(); i++) {
+				Member member = memberList.get(i);
+				if (member.getName().equals(arg) || member.getAbbr().equals(arg)) {
+					responListP.add(member);
+				}
+			}
+
+			respond(event, responListP);
+
+		} else {
+			event.respond("查找到相关 " + memberList.size() + " 位成员：");
+
+			respond(event, memberList);
+		}
+
+		return null;
+	}
+
+	/**
+	 * 回复成员资料
+	 * 
+	 * @param event 活动对象
+	 * @param list  成员列表
+	 */
+	private void respond(EventMessage event, List<Member> list) {
+		for (int i = 0; i < list.size(); i++) {
+			String message = KuqManage.memberMessageBuilder(list.get(i));
 			event.respond(message, false);
 		}
-		return null;
 	}
 
 }

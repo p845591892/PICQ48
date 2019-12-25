@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -23,7 +25,8 @@ public class QuartzConfig implements Serializable {
 	private static final long serialVersionUID = -4358118096158148570L;
 
 	@Id
-	@Column(name = "ID", length = 10)
+	@Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Column(name = "JOB_NAME", length = 50)

@@ -2,7 +2,7 @@ $(document).ready(function() {
 	/* 轮询配置表格 */
 	$("#quartz_confing_table").bootstrapTable({
 		columns : [ {
-			checkbox : true
+			radio : true
 		}, {
 			field : "id",
 			title : "ID",
@@ -14,9 +14,6 @@ $(document).ready(function() {
 			field : "jobDesc",
 			title : "任务说明"
 		}, {
-			field : "cronTrigger",
-			title : "定时任务触发器"
-		}, {
 			field : "cron",
 			title : "轮询规则"
 		}, {
@@ -27,7 +24,7 @@ $(document).ready(function() {
 			title : "操作",
 			formatter : operateHtml
 		} ],
-		// clickToSelect: true,
+		clickToSelect : true,
 		striped : true,
 		pagination : true,
 		sidePagination : "client",
@@ -54,33 +51,29 @@ function updateVideoShow() {
 	} else if (selections.length == 0) {
 		layerMsg(417, "请选择一条信息");
 	} else {
-		var quartzConfig = selections[0];
-		var html = "<div id=\"layer_add\"> <div class=\"row\"><label class=\"control-label col-xs-3 text-right\">轮询任务：</label> <div class=\"col-xs-8\"><input name=\"jobName\" class=\"form-control\" value=\""
-				+ quartzConfig.jobName
-				+ "\"></div> </div> <div class=\"row\"><label class=\"control-label col-xs-3 text-right\">定时任务触发器：</label> <div class=\"col-xs-8\"> <input name=\"cronTrigger\" class=\"form-control\" value=\""
-				+ quartzConfig.cronTrigger
-				+ "\"></div> </div> <div class=\"row\"><label class=\"control-label col-xs-3 text-right\">轮询规则：</label> <div class=\"col-xs-8\"> <input name=\"cron\" class=\"form-control\" value=\""
-				+ quartzConfig.cron + "\"></div> </div> </div>";
+		var id = selections[0].id;
 		layer.open({
-			title : "修改轮询配置",
-			type : 1,
-			content : html,
-			area : "600px",
-			scrollbar : false,
+			title : "轮询配置",
+			type : 2,
+			content : "/resource-management/quartz-confing-table/edit/" + id,
+			area : [ "400px", "360px" ],
+			maxmin : true,
 			btn : [ "保存", "取消" ],
 			yes : function(index, layero) {
 				openLoad();
-				var id = quartzConfig.id;
-				var jobName = layero.find("input[name='jobName']").val();
-				var cronTrigger = layero.find("input[name='cronTrigger']").val();
-				var cron = layero.find("input[name='cron']").val();
+				var body = layer.getChildFrame('body', index);
+				var jobName = body.find("input[name='jobName']").val();
+				var jobDesc = body.find("textarea[name='jobDesc']").val();
+				var cron = body.find("input[name='cron']").val();
+				var classPath = body.find("input[name='classPath']").val();
 				$.ajax({
 					url : "/quartz-config/update",
 					data : {
 						"id" : id,
 						"jobName" : jobName,
-						"cronTrigger" : cronTrigger,
-						"cron" : cron
+						"jobDesc" : jobDesc,
+						"cron" : cron,
+						"classPath" : classPath
 					},
 					type : "post",
 					success : function(data) {
@@ -184,5 +177,84 @@ function shutdownJob(btn, id) {
 			closeLoad();
 			layerMsg(500, "请求失败");
 		}
+	});
+}
+
+/**
+ * 新增按钮弹窗
+ */
+function addVideoShow() {
+	layer.open({
+		title : "轮询配置",
+		type : 2,
+		content : "/resource-management/quartz-confing-table/edit",
+		area : [ "400px", "360px" ],
+		maxmin : true,
+		scrollbar : false,
+		btn : [ "保存", "取消" ],
+		yes : function(index, layero) {
+			openLoad();
+			var body = layer.getChildFrame('body', index);
+			var jobName = body.find("input[name='jobName']").val();
+			var jobDesc = body.find("textarea[name='jobDesc']").val();
+			var cron = body.find("input[name='cron']").val();
+			var classPath = body.find("input[name='classPath']").val();
+			$.ajax({
+				url : "/quartz-config/add",
+				data : {
+					"jobName" : jobName,
+					"jobDesc" : jobDesc,
+					"cron" : cron,
+					"classPath" : classPath
+				},
+				type : "post",
+				success : function(data) {
+					closeLoad();
+					layerMsg(data.status, data.cause);
+					if (data.status == 200) {
+						$("#quartz_confing_table").bootstrapTable("refresh");
+						layer.close(index);
+					}
+				},
+				error : function(data) {
+					closeLoad();
+					layerMsg(500, "请求失败");
+				}
+			});
+		}
+	});
+}
+
+/**
+ * 删除按钮弹窗
+ */
+function deleteVideoShow() {
+	var selections = $("#quartz_confing_table").bootstrapTable("getSelections");
+	var id = selections[0].id;
+	var jobName = selections[0].jobName;
+	layer.confirm("是否要删除【" + jobName + "】定时任务", {
+		icon : 3,
+		title : '提示'
+	}, function(index) {
+		openLoad();
+		$.ajax({
+			url : "/quartz-config/delete",
+			type : "post",
+			data : {
+				"id" : id
+			},
+			success : function(data) {
+				closeLoad();
+				layerMsg(data.status, data.cause);
+				if (data.status == 200) {
+					$("#quartz_confing_table").bootstrapTable("refresh");
+					layer.close(index);
+				}
+			},
+			error : function(data) {
+				closeLoad();
+				layerMsg(500, "请求失败");
+			}
+		});
 	});
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>编辑定时任务</title>
+
+<!-- Bootstrap core CSS -->
+<link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet">
+</head>
+<body>
+	<div id="layer_add" class="container-fluid">
+
+		<div class="row form-group">
+			<label class="control-label col-xs-3 text-right">定时任务：</label>
+			<div class="col-xs-9">
+				<input name="jobName" class="form-control" th:if="${job != null}"
+					th:value="${job.jobName}"> <input name="jobName"
+					class="form-control" th:unless="${job != null}">
+			</div>
+		</div>
+
+		<div class="row form-group">
+			<label class="control-label col-xs-3 text-right">任务说明：</label>
+			<div class="col-xs-9">
+				<textarea name="jobDesc" class="form-control" rows="3"
+					th:if="${job != null}" th:text="${job.jobDesc}"></textarea>
+				<textarea name="jobDesc" class="form-control" rows="3"
+					th:unless="${job != null}"></textarea>
+			</div>
+		</div>
+
+		<div class="row form-group">
+			<label class="control-label col-xs-3 text-right">轮询规则：</label>
+			<div class="col-xs-9">
+				<input name="cron" class="form-control" th:if="${job != null}"
+					th:value="${job.cron}"> <input name="cron"
+					class="form-control" th:unless="${job != null}">
+			</div>
+		</div>
+
+		<div class="row form-group">
+			<label class="control-label col-xs-3 text-right">任务类：</label>
+			<div class="col-xs-9">
+				<input name="classPath" class="form-control" th:if="${job != null}"
+					th:value="${job.classPath}"> <input name="classPath"
+					class="form-control" th:unless="${job != null}">
+			</div>
+		</div>
+
+	</div>
+
+	<script th:src="@{/assets/js/jquery.js}"></script>
+	<script th:src="@{/assets/js/jquery-1.8.3.min.js}"></script>
+	<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+</body>
+</html>

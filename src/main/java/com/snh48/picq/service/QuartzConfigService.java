@@ -12,13 +12,13 @@ import com.snh48.picq.entity.QuartzConfig;
 public interface QuartzConfigService {
 
 	/**
-	 * @Description: 修改一条定时任务配置
+	 * @Description: 修改/新增一条定时任务配置
 	 *               <p>
 	 *               修改数据库数据成功后，再对定时任务调度工厂中的配置进行修改。
 	 * @author lcy
 	 * @throws SchedulerException
 	 */
-	int updateQuartzConfig(QuartzConfig quartzConfig) throws SchedulerException;
+	int saveQuartzConfig(QuartzConfig quartzConfig) throws SchedulerException;
 
 	/**
 	 * 启动一条定时任务
@@ -33,5 +33,20 @@ public interface QuartzConfigService {
 	 * @param id 任务ID
 	 */
 	int shutdownQuartzJob(Long id);
+
+	/**
+	 * 根据ID获取任务实例
+	 * 
+	 * @param id 任务ID
+	 * @return 任务实例
+	 */
+	QuartzConfig findById(Long id);
+
+	/**
+	 * 根据ID删除一条任务实例
+	 * 
+	 * @param id 任务ID
+	 */
+	void delete(Long id);
 
 }

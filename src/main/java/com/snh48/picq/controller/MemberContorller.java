@@ -3,7 +3,6 @@ package com.snh48.picq.controller;
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.snh48.picq.repository.snh48.MemberRepository;
-import com.snh48.picq.service.HttpsService;
 import com.snh48.picq.vo.ResultVO;
 
 /**
@@ -29,12 +27,6 @@ public class MemberContorller {
 
 	@Autowired
 	private MemberRepository memberRepository;
-
-	/**
-	 * Https请求服务
-	 */
-	@Autowired
-	private HttpsService httpsService;
 
 	/**
 	 * @Description: 修改房间监控状态

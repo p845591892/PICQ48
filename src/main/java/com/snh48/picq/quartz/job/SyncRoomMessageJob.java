@@ -179,6 +179,7 @@ public class SyncRoomMessageJob extends QuartzJobBean {
 				for (String key : keyword) {
 					if (message.contains(key)) {// 当关键字匹配成功后，发送该消息
 						KuqManage.sendSyncMessage(icqHttpApi, message, qqCommunity);
+						break;
 					}
 				}
 

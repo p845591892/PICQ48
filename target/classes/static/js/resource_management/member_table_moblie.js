@@ -78,7 +78,7 @@ $(document).ready(function() {
 			width : 65,
 			formatter : roomMonitorHtml
 		} ],
-		// cardView : true,
+		cardView : true,
 		striped : true,
 		pagination : true,
 		sidePagination : "server",
@@ -171,8 +171,8 @@ var responseHandler = function(res) {
  */
 var avatarHtml = function(value, row, index) {
 	var avatar = row.avatar;
-	return "<div class=\"project-wrapper\"><div class=\"project\"><div class=\"photo-wrapper img-circle\"><div class=\"photo\"><a class=\"fancybox\" href=\"" + avatar
-			+ "\"><img src=\"" + avatar + "\" class=\"img-circle\" width=\"60\" alt=\"\"/></a></div><div class=\"overlay\"></div></div></div></div>";
+	return "<div class=\"row mt\"> <div class=\"col-xs-3 col-sm-3 desc\"> <div class=\"project-wrapper\"> <div class=\"project\"> <div class=\"photo-wrapper\"> <div class=\"photo\"> <a class=\"fancybox\" href=\""
+			+ avatar + "\"><img class=\"img-responsive\" src=\"" + avatar + "\" alt=\"\"></a> </div> <div class=\"overlay\"></div> </div> </div> </div> </div> </div>";
 }
 
 /**

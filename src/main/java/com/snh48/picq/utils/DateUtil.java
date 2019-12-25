@@ -41,6 +41,16 @@ public class DateUtil {
 	}
 
 	/**
+	 * 获取指定格式的当前时间
+	 * 
+	 * @param format 时间格式
+	 * @return 时间字符串
+	 */
+	public static String getDate(String format) {
+		return getDate(new Date(), format);
+	}
+
+	/**
 	 * @Title: getDate
 	 * @Description: 获取指定格式的时间字符串
 	 * @author JuFF_白羽

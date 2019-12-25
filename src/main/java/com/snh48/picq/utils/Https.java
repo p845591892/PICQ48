@@ -2,6 +2,9 @@ package com.snh48.picq.utils;
 
 import java.awt.Image;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,6 +30,7 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import com.snh48.picq.config.MyX509TrustManager;
 import com.snh48.picq.exception.RuleException;
 
+import cn.hutool.http.ssl.TrustAnyHostnameVerifier;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -51,7 +55,7 @@ public class Https {
 	/**
 	 * 请求类型
 	 */
-	private String dataType;
+	private String dataType = "GET";
 
 	/**
 	 * 请求头
@@ -132,7 +136,7 @@ public class Https {
 	 * @Title: setDataType
 	 * @Description: 设置请求方式
 	 *               <p>
-	 *               可用"POST","GET"
+	 *               可用POST、GET等，默认是GET
 	 * @author JuFF_白羽
 	 * @param dataType
 	 * @return Https 返回类型
@@ -178,7 +182,7 @@ public class Https {
 	 * @throws IOException
 	 */
 	public String send() throws NoSuchAlgorithmException, KeyManagementException, IOException {
-		validateRule(this.url);
+		this.url = validateRule(this.url);
 		StringBuffer buffer = null;
 		// 以SSL的规则创建SSLContext
 		SSLContext sslContext = SSLContext.getInstance("SSL");
@@ -188,37 +192,58 @@ public class Https {
 		// 获取SSLSocketFactory对象
 		SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 		URL url = new URL(installParams(this.url, this.params));
-		HttpsURLConnection urlConn = (HttpsURLConnection) url.openConnection();
-		urlConn.setDoOutput(true);
-		urlConn.setDoInput(true);
-		// 请求不使用缓存
-		urlConn.setUseCaches(false);
-		// 设置请求头
-		if (requestPropertys != null) {
-			for (Map.Entry<String, String> entry : requestPropertys.entrySet()) {
-				urlConn.setRequestProperty(entry.getKey(), entry.getValue());
+		HttpsURLConnection urlConn;
+		BufferedReader br = null;
+		InputStreamReader isr = null;
+		InputStream is = null;
+		try {
+			urlConn = (HttpsURLConnection) url.openConnection();
+			urlConn.setDoOutput(true);
+			urlConn.setDoInput(true);
+			// 请求不使用缓存
+			urlConn.setUseCaches(false);
+			// 设置请求头
+			if (requestPropertys != null) {
+				for (Map.Entry<String, String> entry : requestPropertys.entrySet()) {
+					urlConn.setRequestProperty(entry.getKey(), entry.getValue());
+				}
+			}
+			// 设置请求方式
+			urlConn.setRequestMethod(this.dataType);
+			// 设置当前实例使用的SSLSoctetFactory
+			urlConn.setSSLSocketFactory(sslSocketFactory);
+			// 设置需要用流写入的请求参数
+			if (payloadJson != null && !payloadJson.equals("")) {
+				OutputStreamWriter writer = new OutputStreamWriter(urlConn.getOutputStream(), "UTF-8");
+				writer.write(payloadJson);
+				writer.close();
+			}
+			urlConn.connect();
+			// 读取服务器端返回的内容
+			is = urlConn.getInputStream();
+			isr = new InputStreamReader(is, "utf-8");
+			br = new BufferedReader(isr);
+			buffer = new StringBuffer();
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				buffer.append(line);
+			}
+		} finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+				if (isr != null) {
+					isr.close();
+				}
+				if (is != null) {
+					is.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
-		// 设置请求方式
-		urlConn.setRequestMethod(this.dataType);
-		// 设置当前实例使用的SSLSoctetFactory
-		urlConn.setSSLSocketFactory(sslSocketFactory);
-		// 设置需要用流写入的请求参数
-		if (payloadJson != null && !payloadJson.equals("")) {
-			OutputStreamWriter writer = new OutputStreamWriter(urlConn.getOutputStream(), "UTF-8");
-			writer.write(payloadJson);
-			writer.close();
-		}
-		urlConn.connect();
-		// 读取服务器端返回的内容
-		InputStream is = urlConn.getInputStream();
-		InputStreamReader isr = new InputStreamReader(is, "utf-8");
-		BufferedReader br = new BufferedReader(isr);
-		buffer = new StringBuffer();
-		String line = null;
-		while ((line = br.readLine()) != null) {
-			buffer.append(line);
-		}
+
 		refreshHttps(null, null, null, null, null);// 清空参数
 		return buffer.toString();
 	}
@@ -250,13 +275,40 @@ public class Https {
 	 * @author JuFF_白羽
 	 * @param url 请求地址
 	 */
-	public static void validateRule(String url) {
-		if (url.equals("")) {
+	public static String validateRule(String url) {
+		if (StringUtil.isBlank(url)) {
+			log.error("url不能为空！");
 			throw new RuleException("url不能为空！");
 		}
-		if (!url.startsWith("http://") && !url.startsWith("https://")) {
-			throw new RuleException("url的格式不正确！");
+
+		int http = url.indexOf("http://");
+		int https = url.indexOf("https://");
+
+		if (http == -1 && https == -1) {
+			log.error("url的格式不正确！未含有 http:// 或 https://");
+			throw new RuleException("url的格式不正确！未含有 http:// 或 https://");
 		}
+
+		if (http > 0 || https > 0) {
+			log.info("URL头包含有BOM等其他字符。");
+			url = removeBom(url);
+		}
+
+		return url;
+	}
+
+	/**
+	 * 去除URL开头的BOM
+	 * 
+	 * @param url 连接字符串
+	 * @return 去除了BOM的字符串
+	 */
+	public static String removeBom(String url) {
+		if (url.startsWith("http")) {
+			return url;
+		}
+		url = url.substring(1);
+		return removeBom(url);
 	}
 
 	/**
@@ -290,13 +342,13 @@ public class Https {
 	 * @throws IOException
 	 */
 	public Image getImage() throws IOException {
-		validateRule(this.url);
+		this.url = validateRule(this.url);
 		InputStream inputStream = null;
 		try {
 			HttpURLConnection connection = null;
 			connection = (HttpsURLConnection) new URL(this.url).openConnection();
-			connection.setReadTimeout(20000);
-			connection.setConnectTimeout(20000);
+			connection.setReadTimeout(10000);
+			connection.setConnectTimeout(10000);
 			connection.setRequestMethod("GET");
 			if (connection.getResponseCode() == HttpsURLConnection.HTTP_OK) {
 				inputStream = connection.getInputStream();
@@ -315,6 +367,89 @@ public class Https {
 			refreshHttps(null, null, null, null, null);// 清空参数
 		}
 		return null;
+	}
+
+	/**
+	 * 下载文件到指定位置
+	 * 
+	 * @param savePath 存放目录
+	 * @param fileName 文件名
+	 * @return 文件名
+	 * @throws Exception
+	 */
+	public String downloadFile(String savePath, String fileName) throws Exception {
+		this.url = validateRule(this.url);
+		FileOutputStream fos = null;
+		InputStream inputStream = null;
+		File file = new File(savePath + File.separator + fileName);
+		try {
+			// 创建SSLContext
+			SSLContext sslContext = SSLContext.getInstance("SSL");
+			TrustManager[] tm = { new MyX509TrustManager() };
+			// 初始化
+			sslContext.init(null, tm, new SecureRandom());
+			// 获取SSLSocketFactory对象
+			SSLSocketFactory ssf = sslContext.getSocketFactory();
+			// url对象
+			URL url = new URL(this.url);
+			// 打开连接
+			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+			/**
+			 * 这一步的原因: 当访问HTTPS的网址。您可能已经安装了服务器证书到您的JRE的keystore
+			 * 但是服务器的名称与证书实际域名不相等。这通常发生在你使用的是非标准网上签发的证书。
+			 * 
+			 * 解决方法：让JRE相信所有的证书和对系统的域名和证书域名。
+			 * 
+			 * 如果少了这一步会报错:java.io.IOException: HTTPS hostname wrong: should be <localhost>
+			 */
+			conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
+			// 设置一些参数
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			conn.setUseCaches(false);
+			// 设置当前实例使用的SSLSoctetFactory
+			conn.setSSLSocketFactory(ssf);
+			conn.connect();
+
+			// 得到输入流
+			inputStream = conn.getInputStream();
+			byte[] getData = readInputStream(inputStream);
+			// 文件保存位置
+			File saveDir = new File(savePath);
+			if (!saveDir.exists()) {
+				saveDir.mkdirs();
+			}
+			// 输出流
+
+			fos = new FileOutputStream(file);
+			fos.write(getData);
+		} finally {
+			if (fos != null) {
+				fos.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+		return file.getName();
+	}
+
+	/**
+	 * 从输入流中获取字节数组
+	 * 
+	 * @param inputStream
+	 * @return
+	 * @throws IOException
+	 */
+	private byte[] readInputStream(InputStream inputStream) throws IOException {
+		byte[] b = new byte[1024];
+		int len = 0;
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		while ((len = inputStream.read(b)) != -1) {
+			bos.write(b, 0, len);
+		}
+		bos.close();
+		return bos.toByteArray();
 	}
 
 }

@@ -14,7 +14,7 @@ $(document).ready(function () {
             }, {
                 field: "senderName",
                 title: "发送人",
-                width: 105
+                width: 110
             }, {
                 field: "roomId",
                 title: "所属房间ID",
@@ -31,7 +31,7 @@ $(document).ready(function () {
             }, {
                 field: "msgTime",
                 title: "消息发送时间",
-                width: 138
+                width: 145
             }, {
                 field: "isSend",
                 title: "是否发送过QQ消息",
@@ -138,6 +138,16 @@ var msgContentHtml = function (value, row, index) {
                 "<source src=\"" + temp + "\" type=\"audio/ogg\">" +
                 "您的浏览器不支持 audio 元素。" +
                 "</audio>";
+            
+        } else if (msgContent.indexOf("<audio>️") != -1) {
+            temp = msgContent.split("<audio>️");
+            temp = temp[1];
+            return "<audio controls>" +
+                "<source src=\"" + temp + "\" type=\"audio/mpeg\">" +
+                "<source src=\"" + temp + "\" type=\"audio/ogg\">" +
+                "您的浏览器不支持 audio 元素。" +
+                "</audio>";
+            
         }
 
     } else {

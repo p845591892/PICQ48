@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.snh48.picq.entity.QuartzConfig;
 import com.snh48.picq.entity.system.User;
 import com.snh48.picq.exception.ActivationAccountException;
 import com.snh48.picq.repository.system.UserRepository;
+import com.snh48.picq.service.QuartzConfigService;
 import com.snh48.picq.service.WebService;
 import com.snh48.picq.utils.IpUtil;
 import com.snh48.picq.utils.MathUtil;
@@ -52,7 +54,10 @@ public class WebContorller {
 	 */
 	@Autowired
 	private UserRepository userRepository;
-	
+
+	@Autowired
+	private QuartzConfigService quartzConfigService;
+
 	/**
 	 * @Description: 跳转到首页
 	 * @author JuFF_白羽
@@ -82,7 +87,7 @@ public class WebContorller {
 	@PostMapping("/doLogin")
 	public ModelAndView doLogin(HttpServletRequest request, ModelAndView mav) {
 		log.info(IpUtil.getIpAddr(request));
-		
+
 		Subject subject = SecurityUtils.getSubject();
 		String username = request.getParameter("username");
 //		String password = request.getParameter("password");
@@ -176,8 +181,12 @@ public class WebContorller {
 	 * @author JuFF_白羽
 	 */
 	@GetMapping("/resource-management/member-table")
-	public ModelAndView toMemberTable(ModelAndView mav) {
-		mav.setViewName("resource_management/member_table");
+	public ModelAndView toMemberTable(ModelAndView mav, HttpServletRequest request) {
+		if (isMoblieBrowser(request)) {
+			mav.setViewName("resource_management/member_table_moblie");
+		} else {
+			mav.setViewName("resource_management/member_table");
+		}
 		return mav;
 	}
 
@@ -217,8 +226,7 @@ public class WebContorller {
 	/**
 	 * @Description: 跳转到可视化数据-摩点项目
 	 * @author JuFF_白羽
-	 * @param projectIds
-	 *            摩点项目ID，可用英文的“,”连接多个ID
+	 * @param projectIds 摩点项目ID，可用英文的“,”连接多个ID
 	 */
 	@GetMapping("/data-visualization/modian-visual")
 	public ModelAndView toModianVisual(ModelAndView mav, String projectIds) {
@@ -254,6 +262,33 @@ public class WebContorller {
 	}
 
 	/**
+	 * 跳转定时任务的编辑页面（修改）
+	 * 
+	 * @param id 定时任务ID
+	 */
+	@GetMapping(value = "/resource-management/quartz-confing-table/edit/{id}")
+	public ModelAndView toQuartzConfingTableEdit(ModelAndView mav, @PathVariable Long id) {
+		QuartzConfig quartzConfig = quartzConfigService.findById(id);
+		if (quartzConfig == null) {
+			mav.addObject("msg", "该任务实例不存在！");
+			mav.setViewName("/error");
+		} else {
+			mav.addObject("job", quartzConfig);
+			mav.setViewName("resource_management/quartz_confing_table_edit");
+		}
+		return mav;
+	}
+
+	/**
+	 * 跳转定时任务的编辑页面（新增）
+	 */
+	@GetMapping(value = "/resource-management/quartz-confing-table/edit")
+	public ModelAndView toQuartzConfingTableEdit(ModelAndView mav) {
+		mav.setViewName("/resource_management/quartz_confing_table_edit");
+		return mav;
+	}
+
+	/**
 	 * @Description: 跳转到系统配置-用户管理
 	 * @author JuFF_白羽
 	 */
@@ -276,8 +311,7 @@ public class WebContorller {
 	/**
 	 * @Description: 跳转到系统配置-用户管理-设置角色
 	 * @author JuFF_白羽
-	 * @param uid
-	 *            用户ID
+	 * @param uid 用户ID
 	 */
 	@GetMapping("/system-manage/system-user/role/set/{uid}")
 	public ModelAndView toSystemUserSetRole(ModelAndView mav, @PathVariable Long uid) {
@@ -289,8 +323,7 @@ public class WebContorller {
 	/**
 	 * @Description: 跳转到系统配置-角色管理-设置权限
 	 * @author JuFF_白羽
-	 * @param rid
-	 *            角色ID
+	 * @param rid 角色ID
 	 */
 	@GetMapping("/system-manage/system-role/permission/set/{rid}")
 	public ModelAndView toSystemRoleSetPermission(ModelAndView mav, @PathVariable Long rid) {
@@ -318,7 +351,7 @@ public class WebContorller {
 		mav.setViewName("register");
 		return mav;
 	}
-	
+
 	/**
 	 * @Description: 跳转到帮助
 	 * @author JuFF_白羽
@@ -328,7 +361,7 @@ public class WebContorller {
 		mav.setViewName("help");
 		return mav;
 	}
-	
+
 	/**
 	 * @Description: 跳转到可视化数据-口袋房间消息
 	 * @author JuFF_白羽
@@ -338,5 +371,37 @@ public class WebContorller {
 		mav.setViewName("data_visualization/room_message_table");
 		return mav;
 	}
-	
+
+	/**
+	 * 判断是否为移动端访问
+	 */
+	private Boolean isMoblieBrowser(HttpServletRequest request) {
+		Boolean isMoblie = false;
+		String[] mobileAgents = { "iphone", "ipad", "android", "phone", "mobile", "wap", "netfront", "java",
+				"opera mobi", "opera mini", "ucweb", "windows ce", "symbian", "series", "webos", "sony", "blackberry",
+				"dopod", "nokia", "samsung", "palmsource", "xda", "pieplus", "meizu", "midp", "cldc", "motorola",
+				"foma", "docomo", "up.browser", "up.link", "blazer", "helio", "hosin", "huawei", "novarra", "coolpad",
+				"webos", "techfaith", "palmsource", "alcatel", "amoi", "ktouch", "nexian", "ericsson", "philips",
+				"sagem", "wellcom", "bunjalloo", "maui", "smartphone", "iemobile", "spice", "bird", "zte-", "longcos",
+				"pantech", "gionee", "portalmmm", "jig browser", "hiptop", "benq", "haier", "^lct", "320x320",
+				"240x320", "176x220", "w3c ", "acs-", "alav", "alca", "amoi", "audi", "avan", "benq", "bird", "blac",
+				"blaz", "brew", "cell", "cldc", "cmd-", "dang", "doco", "eric", "hipt", "inno", "ipaq", "java", "jigs",
+				"kddi", "keji", "leno", "lg-c", "lg-d", "lg-g", "lge-", "maui", "maxo", "midp", "mits", "mmef", "mobi",
+				"mot-", "moto", "mwbp", "nec-", "newt", "noki", "oper", "palm", "pana", "pant", "phil", "play", "port",
+				"prox", "qwap", "sage", "sams", "sany", "sch-", "sec-", "send", "seri", "sgh-", "shar", "sie-", "siem",
+				"smal", "smar", "sony", "sph-", "symb", "t-mo", "teli", "tim-", "tsm-", "upg1", "upsi", "vk-v", "voda",
+				"wap-", "wapa", "wapi", "wapp", "wapr", "webc", "winw", "winw", "xda", "xda-", "Googlebot-Mobile" };
+		String ua = request.getHeader("user-agent");
+		if (StringUtil.isNotBlank(ua)) {
+			for (String mobileAgent : mobileAgents) {
+				if (ua.toLowerCase().indexOf(mobileAgent) >= 0) {
+					isMoblie = true;
+					break;
+				}
+			}
+		}
+
+		return isMoblie;
+	}
+
 }

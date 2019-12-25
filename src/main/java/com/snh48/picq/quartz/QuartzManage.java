@@ -36,14 +36,22 @@ public class QuartzManage {
 	SchedulerFactoryBean schedulerFactoryBean;
 
 	/**
-	 * true 存在 false 不存在
+	 * 判断任务是否执行中，执行中返回true，否则返回false。
 	 *
-	 * @param
-	 * @return
+	 * @param 任务实例
 	 */
 	public boolean checkJob(QuartzConfig job) {
+		return checkJob(job.getId());
+	}
+
+	/**
+	 * 判断任务是否执行中，执行中返回true，否则返回false。
+	 *
+	 * @param 任务ID
+	 */
+	public boolean checkJob(Long id) {
 		Scheduler scheduler = schedulerFactoryBean.getScheduler();
-		TriggerKey triggerKey = TriggerKey.triggerKey(String.valueOf(job.getId()), Scheduler.DEFAULT_GROUP);
+		TriggerKey triggerKey = TriggerKey.triggerKey(String.valueOf(id), Scheduler.DEFAULT_GROUP);
 		try {
 			if (scheduler.checkExists(triggerKey)) {
 				return true;

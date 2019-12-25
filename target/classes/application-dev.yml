@@ -83,6 +83,7 @@ kuq:
   socket-port: ${自己应用的端口}
   log-path: null
   admin-id: ${QQ号}
+  home-path: ${酷Q根目录绝对路径}
 
 #redis配置
 redis:

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.snh48.picq.entity.QuartzConfig;
 import com.snh48.picq.quartz.QuartzManage;
 import com.snh48.picq.service.QuartzConfigService;
+import com.snh48.picq.utils.StringUtil;
 import com.snh48.picq.vo.ResultVO;
 
 /**
@@ -34,6 +35,23 @@ public class QuartzConfigContorller {
 	private QuartzManage quartzManage;
 
 	/**
+	 * 新增一条定时任务
+	 * 
+	 * @param quartzConfig 任务实例
+	 */
+	@PostMapping("/add")
+	public ResultVO addQuartzConfig(QuartzConfig quartzConfig) {
+		ResultVO result = new ResultVO();
+		try {
+			quartzConfigService.saveQuartzConfig(quartzConfig);
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+		result.setStatus(HttpsURLConnection.HTTP_OK);
+		return result;
+	}
+
+	/**
 	 * @Description: 修改定时任务配置
 	 * @author JuFF_白羽
 	 * @throws SchedulerException
@@ -45,19 +63,22 @@ public class QuartzConfigContorller {
 			result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
 			result.setCause("任务进行中，无法修改。");
 		} else {
-			int i = quartzConfigService.updateQuartzConfig(quartzConfig);
-			if (i == 0) {
-				result.setCause("轮询配置ID不能为空");
-			} else if (i == 1) {
-				result.setCause("轮询任务名不能为空");
-			} else if (i == 2) {
-				result.setCause("定时任务触发器名不能为空");
-			} else if (i == 3) {
+			if (quartzConfig.getId() == null) {
+				result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
+				result.setCause("任务ID不能为空");
+			} else if (StringUtil.isEmpty(quartzConfig.getJobName())) {
+				result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
+				result.setCause("任务名不能为空");
+			} else if (StringUtil.isEmpty(quartzConfig.getClassPath())) {
+				result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
+				result.setCause("定时任务类不能为空");
+			} else if (StringUtil.isEmpty(quartzConfig.getCron())) {
+				result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
 				result.setCause("定时公式不能为空");
-			} else if (i == 4) {
-				result.setCause("定时任务不在调度工厂中");
+			} else {
+				quartzConfigService.saveQuartzConfig(quartzConfig);
+				result.setStatus(HttpsURLConnection.HTTP_OK);
 			}
-			result.setStatus(i);
 		}
 		return result;
 	}
@@ -107,6 +128,24 @@ public class QuartzConfigContorller {
 		}
 		result.setStatus(i);
 		result.setCause("success");
+		return result;
+	}
+
+	/**
+	 * 根据ID删除一条任务实例
+	 * 
+	 * @param id 任务ID
+	 */
+	@PostMapping("/delete")
+	public ResultVO deleteQuartzConfig(Long id) {
+		ResultVO result = new ResultVO();
+		if (quartzManage.checkJob(id)) {
+			result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
+			result.setCause("任务进行中，无法删除！");
+		} else {
+			quartzConfigService.delete(id);
+			result.setStatus(HttpsURLConnection.HTTP_OK);
+		}
 		return result;
 	}
 
