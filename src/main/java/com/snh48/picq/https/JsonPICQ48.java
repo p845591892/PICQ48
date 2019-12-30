@@ -14,6 +14,7 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import com.snh48.picq.entity.snh48.Member;
 import com.snh48.picq.entity.snh48.RoomMessage;
+import com.snh48.picq.entity.snh48.Trip;
 import com.snh48.picq.entity.weibo.Dynamic;
 import com.snh48.picq.entity.weibo.WeiboUser;
 import com.snh48.picq.exception.HttpsPocketAuthenticateException;
@@ -157,6 +158,37 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		}
 		throw new HttpsPocketAuthenticateException("HttpsURL.ROOM_MESSAGE_FLIPCARD：" + flipcardObj.getString("message")
 				+ "。参数：{questionId = " + questionId + ", answerId = " + answerId + "}");
+	}
+
+	/**
+	 * 发送HTTPS请求，获取口袋房间的行程列表。
+	 * <p>
+	 * 参数详细说明：
+	 * 
+	 * <pre>
+	 * {@link lastTime}：时间戳，默认当前页时参数为0，即不会查询出历史行程。
+	 * {@link groupId}：团体ID，例如SNH8、GNZ48，默认全团时参数为0，即查询整个48GROUP的行程。
+	 * {@link isMore}：是否更多，当为true时，配合{@link lastTime}，将向下翻页，即查询更未来的行程，否则相反。
+	 * </pre>
+	 * 
+	 * @param lastTime 时间戳
+	 * @param groupId  团体ID
+	 * @param isMore   是否更多
+	 * @return 返回行程列表的JSON对象。
+	 * @throws IOException
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyManagementException
+	 * @throws JSONException
+	 */
+	public static JSONObject jsonTrip(long lastTime, int groupId, boolean isMore)
+			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+		String jsonStr = httpsTrip(lastTime, groupId, isMore);
+		JSONObject tripObj = JsonProcess.getJSONObjectByString(jsonStr);
+		if (tripObj.getBoolean("success")) {
+			return tripObj.getJSONObject("content");
+		}
+		throw new HttpsPocketAuthenticateException("HttpsURL.GROUP_TRIP：" + tripObj.getString("message")
+				+ "。参数：{lastTime = " + lastTime + ", groupId = " + groupId + ", isMore = " + isMore + "}");
 	}
 
 	/**
@@ -359,6 +391,56 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 	}
 
 	/**
+	 * 解析SNH48 Group行程的json对象，将信息设置到{@link Trip}中。
+	 * 
+	 * @param trip     行程表
+	 * @param indexObj 行程json对象
+	 * @throws JSONException
+	 */
+	protected static void setTrip(Trip trip, JSONObject indexObj) throws JSONException {
+		long tripId = indexObj.getLong("tripId");
+		int type = indexObj.getInt("type");
+		String title = indexObj.getString("title");
+		String subTitle = indexObj.getString("subTitle");
+		String content = indexObj.getString("content");
+		String joinMemberName = indexObj.getString("joinMemberName");
+		long timestamp = indexObj.getLong("timestamp");
+
+		trip.setId(tripId);
+		trip.setType(type);
+		trip.setTitle(title);
+		trip.setSubTitle(subTitle);
+		trip.setContent(content);
+		trip.setJoinMemberName(joinMemberName);
+		trip.setShowTime(DateUtil.getDateFormat(timestamp));
+
+		if (indexObj.has("ticketInfo")) {
+			JSONObject ticketInfo = indexObj.getJSONObject("ticketInfo");
+			String ticketContent = ticketInfo.getString("content");
+
+			trip.setTicketContent(ticketContent);
+		}
+
+		if (indexObj.has("liveInfo")) {
+			JSONObject liveInfo = indexObj.getJSONObject("liveInfo");
+			String liveContent = liveInfo.getString("content");
+			int liveType = liveInfo.getInt("type");
+
+			trip.setLiveContent(liveContent);
+			trip.setLiveType(liveType);
+		}
+
+		if (indexObj.has("locationInfo")) {
+			JSONObject locationInfo = indexObj.getJSONObject("locationInfo");
+			String locationDetails = locationInfo.getString("details");
+			String locationKeyword = locationInfo.getString("keyword");
+
+			trip.setLocationDetails(locationDetails);
+			trip.setLocationKeyword(locationKeyword);
+		}
+	}
+
+	/**
 	 * 解析微博用户信息的json对象，将信息设置到{@link WeiboUser}中。
 	 * 
 	 * @param weiboUser 微博用户对象
@@ -435,6 +517,9 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			JSONArray pics = mblog.getJSONArray("pics");
 			for (int i = 0; i < pics.length(); i++) {
 				JSONObject pic = pics.getJSONObject(i);
+				if (i == 0) {
+					sb.append("<br>");
+				}
 				sb.append("<img>");
 				sb.append(pic.getString("url"));
 			}

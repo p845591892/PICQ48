@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.snh48.picq.annotation.Log;
+import com.snh48.picq.annotation.OperationType;
 import com.snh48.picq.entity.QuartzConfig;
 import com.snh48.picq.quartz.QuartzManage;
 import com.snh48.picq.service.QuartzConfigService;
@@ -39,6 +41,7 @@ public class QuartzConfigContorller {
 	 * 
 	 * @param quartzConfig 任务实例
 	 */
+	@Log(desc = "新增定时任务", type = OperationType.ADD)
 	@PostMapping("/add")
 	public ResultVO addQuartzConfig(QuartzConfig quartzConfig) {
 		ResultVO result = new ResultVO();
@@ -56,6 +59,7 @@ public class QuartzConfigContorller {
 	 * @author JuFF_白羽
 	 * @throws SchedulerException
 	 */
+	@Log(desc = "修改定时任务", type = OperationType.UPDATE)
 	@PostMapping("/update")
 	public ResultVO updateQuartzConfig(QuartzConfig quartzConfig) throws SchedulerException {
 		ResultVO result = new ResultVO();
@@ -88,6 +92,7 @@ public class QuartzConfigContorller {
 	 * 
 	 * @param id 任务ID
 	 */
+	@Log(desc = "启动定时任务", type = OperationType.UPDATE)
 	@PostMapping("/start")
 	public ResultVO startQuartzJob(Long id) {
 		int i = quartzConfigService.startQuartzJob(id);
@@ -112,6 +117,7 @@ public class QuartzConfigContorller {
 	 * 
 	 * @param id 任务ID
 	 */
+	@Log(desc = "关闭定时任务", type = OperationType.UPDATE)
 	@PostMapping("/shutdown")
 	public ResultVO shutdownQuartzJob(Long id) {
 		int i = quartzConfigService.shutdownQuartzJob(id);
@@ -136,6 +142,7 @@ public class QuartzConfigContorller {
 	 * 
 	 * @param id 任务ID
 	 */
+	@Log(desc = "删除定时任务", type = OperationType.DEL)
 	@PostMapping("/delete")
 	public ResultVO deleteQuartzConfig(Long id) {
 		ResultVO result = new ResultVO();

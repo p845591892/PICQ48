@@ -5,8 +5,18 @@ import java.net.UnknownHostException;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @author shiro
+ *
+ */
 public class IpUtil {
 
+	/**
+	 * 获取请求来源的IP地址。该方法会对本地请求解析时间过长。
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public static String getIpAddr(HttpServletRequest request) {
 		String ipAddress = request.getHeader("x-forwarded-for");
 		if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
@@ -38,6 +48,7 @@ public class IpUtil {
 				ipAddress = ipAddress.substring(0, ipAddress.indexOf(ipSeparate));
 			}
 		}
+
 		return ipAddress;
 	}
 

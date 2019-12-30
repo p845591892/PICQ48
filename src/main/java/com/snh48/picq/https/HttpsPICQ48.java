@@ -69,8 +69,11 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		/* 请求参数 */
 		String payloadJson = "{\"memberId\":\"" + String.valueOf(memberId) + "\"}";
 		/* 发送请求 */
-		String memberJson = https.setUrl(HttpsURL.MEMBER).setDataType(HttpMethod.POST.name())
-				.setRequestProperty(requestPropertys).setPayloadJson(payloadJson).send();
+		String memberJson = https.setUrl(HttpsURL.MEMBER)
+													.setDataType(HttpMethod.POST.name())
+													.setRequestProperty(requestPropertys)
+													.setPayloadJson(payloadJson)
+													.send();
 		return memberJson;
 	}
 
@@ -100,8 +103,11 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		String payloadJson = "{\"sourceId\":\"" + String.valueOf(sourceId) + "\",\"type\":\"" + String.valueOf(type)
 				+ "\"}";
 		/* 发送请求 */
-		String roomJson = https.setUrl(HttpsURL.MEMBER_ROOM).setDataType(HttpMethod.POST.name())
-				.setRequestProperty(requestPropertys).setPayloadJson(payloadJson).send();
+		String roomJson = https.setUrl(HttpsURL.MEMBER_ROOM)
+												.setDataType(HttpMethod.POST.name())
+												.setRequestProperty(requestPropertys)
+												.setPayloadJson(payloadJson)
+												.send();
 		return roomJson;
 	}
 
@@ -167,8 +173,11 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		/* 请求参数 */
 		String payloadJson = "{\"mobile\":\"" + username + "\",\"pwd\":\"" + password + "\"}";
 		/* 发送请求 */
-		String loginJson = https.setUrl(HttpsURL.TOKEN).setDataType(HttpMethod.POST.name()).setPayloadJson(payloadJson)
-				.setRequestProperty(requestPropertys).send();
+		String loginJson = https.setUrl(HttpsURL.TOKEN)
+													.setDataType(HttpMethod.POST.name())
+													.setPayloadJson(payloadJson)
+													.setRequestProperty(requestPropertys)
+													.send();
 		return loginJson;
 	}
 
@@ -198,8 +207,11 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		String payloadJson = "{\"ownerId\":\"" + memberId + "\",\"needTop1Msg\":\"false\",\"nextTime\":\""
 				+ String.valueOf(nextTime) + "\",\"roomId\":\"" + roomId + "\"}";
 		/* 发送请求 */
-		String messageStr = https.setDataType(HttpMethod.POST.name()).setRequestProperty(requestPropertys)
-				.setPayloadJson(payloadJson).setUrl(HttpsURL.ROOM_MESSAGE).send();
+		String messageStr = https.setDataType(HttpMethod.POST.name())
+													.setRequestProperty(requestPropertys)
+													.setPayloadJson(payloadJson)
+													.setUrl(HttpsURL.ROOM_MESSAGE)
+													.send();
 		return messageStr;
 	}
 
@@ -229,8 +241,52 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		/* 请求参数 */
 		String payloadJson = "{\"questionId\":\"" + questionId + "\",\"answerId\":\"" + answerId + "\"}";
 		/* 发送请求 */
-		String jsonStr = https.setDataType(HttpMethod.POST.name()).setRequestProperty(requestPropertys)
-				.setPayloadJson(payloadJson).setUrl(HttpsURL.ROOM_MESSAGE_FLIPCARD).send();
+		String jsonStr = https.setDataType(HttpMethod.POST.name())
+												.setRequestProperty(requestPropertys)
+												.setPayloadJson(payloadJson)
+												.setUrl(HttpsURL.ROOM_MESSAGE_FLIPCARD)
+												.send();
+		return jsonStr;
+	}
+
+	/**
+	 * 发送HTTPS请求，获取口袋房间的行程列表。
+	 * <p>
+	 * 参数详细说明：
+	 * 
+	 * <pre>
+	 * {@link lastTime}：时间戳，默认当前页时参数为0，即不会查询出历史行程。
+	 * {@link groupId}：团体ID，例如SNH8、GNZ48，默认全团时参数为0，即查询整个48GROUP的行程。
+	 * {@link isMore}：是否更多，当为true时，配合{@link lastTime}，将向下翻页，即查询更未来的行程，否则相反。
+	 * </pre>
+	 * 
+	 * @param lastTime 时间戳
+	 * @param groupId  团体ID
+	 * @param isMore   是否更多
+	 * @return 返回行程列表的JSON字符串。
+	 * @throws IOException
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyManagementException
+	 */
+	@SuppressWarnings("deprecation")
+	public static String httpsTrip(long lastTime, int groupId, boolean isMore)
+			throws KeyManagementException, NoSuchAlgorithmException, IOException {
+		Https https = new Https();
+		/* 请求头 */
+		Map<String, String> requestPropertys = new HashMap<String, String>();
+		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
+		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
+		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPHONE);
+		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
+		/* 请求参数 */
+		String payloadJson = "{\"lastTime\":\"" + lastTime + "\",\"groupId\":" + groupId + ",\"isMore\":" + isMore
+				+ "}";
+		/* 发送请求 */
+		String jsonStr = https.setDataType(HttpMethod.POST.name())
+												.setRequestProperty(requestPropertys)
+												.setPayloadJson(payloadJson)
+												.setUrl(HttpsURL.TRIP)
+												.send();
 		return jsonStr;
 	}
 
@@ -268,8 +324,11 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("containerid", String.valueOf(containerUserId));
 		/* 发送请求 */
-		String jsonStr = https.setDataType(HttpMethod.GET.name()).setUrl(HttpsURL.WEIBO).setParams(params)
-				.setRequestProperty(requestPropertys).send();
+		String jsonStr = https.setDataType(HttpMethod.GET.name())
+												.setUrl(HttpsURL.WEIBO)
+												.setParams(params)
+												.setRequestProperty(requestPropertys)
+												.send();
 		return jsonStr;
 	}
 

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.snh48.picq.annotation.Log;
+import com.snh48.picq.annotation.OperationType;
 import com.snh48.picq.entity.modian.MoDianPoolProject;
 import com.snh48.picq.repository.modian.MoDianPoolProjectRepository;
 import com.snh48.picq.service.MoDianService;
@@ -38,6 +40,7 @@ public class MoDianContorller {
 	 * @author JuFF_白羽
 	 * @param id URL中的ID
 	 */
+	@Log(desc = "新增摩点监控对象", type = OperationType.ADD)
 	@PostMapping("/add")
 	public ResultVO addMoDianPoolProject(Long id) {
 		ResultVO result = new ResultVO();
@@ -61,6 +64,7 @@ public class MoDianContorller {
 	 * @author JuFF_白羽
 	 * @param id ID集合
 	 */
+	@Log(desc = "删除摩点监控对象", type = OperationType.DEL)
 	@PostMapping("/delete")
 	public ResultVO deleteMoDianPoolProject(String id) {
 		ResultVO result = new ResultVO();

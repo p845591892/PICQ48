@@ -50,6 +50,7 @@ public class Common {
 	public static final String COMMAND_NAME_VERSION = "version";
 	public static final String COMMAND_NAME_SET_ROOM_MONITOR = "setRoomMonitor";
 	public static final String COMMAND_NAME_FIND_MEMBER = "findMember";
+	public static final String COMMAND_NAME_FIND_TRIP = "findTrip";
 	public static final String COMMAND_NAME_FRIEND_ADD = "friendAdd";
 	public static final String COMMAND_NAME_GROUP_INVITE = "groupInvite";
 
@@ -57,6 +58,7 @@ public class Common {
 	public static final String[] COMMAND_ALIAS_VERSION = new String[] { "v", "版本" };
 	public static final String[] COMMAND_ALIAS_SET_ROOM_MONITOR = new String[] { "setrm", "设置房间监控" };
 	public static final String[] COMMAND_ALIAS_FIND_MEMBER = new String[] { "findm", "查找成员" };
+	public static final String[] COMMAND_ALIAS_FIND_TRIP = new String[] { "findt", "查看行程" };
 	public static final String[] COMMAND_ALIAS_FRIEND_ADD = new String[] { "fadd", "好友请求" };
 	public static final String[] COMMAND_ALIAS_GROUP_INVITE = new String[] { "ginv", "群邀请" };
 
@@ -65,6 +67,7 @@ public class Common {
 	public static final String COMMAND_CAPTION_VERSION = "version(v/版本) | 无 | 获取版本。";
 	public static final String COMMAND_CAPTION_SET_ROOM_MONITOR = "setRoomMonitor(setrm/设置房间监控) | [成员名字] [关键字] | 设置口袋房间监控。在群聊使用该指令则消息发向群，在好友聊天使用该指令则消息发向好友。多个关键字使用英文逗号分割，无关键字则全量发送，否则只有包含关键字的消息才会发送。";
 	public static final String COMMAND_CAPTION_FIND_MEMBER = "findMember(findm/查找成员) | [名字]/[拼音缩写] | 根据名字或拼音缩写查找成员信息。";
+	public static final String COMMAND_CAPTION_FIND_TRIP = "findTrip(findt/查看行程) | [北京/上海/广州/冷餐/公演] | 根据北上广/行程类型查看行程，无参数默认查看全团公演行程。";
 	public static final String COMMAND_CAPTION_FRIEND_ADD = "friendAdd(fadd/好友请求) | [flag码] [YES/NO] | 处理好友请求。flag码由上报好友请求时发送，同意填yes/y，不同意填no/n。（该功能仅限管理员）";
 	public static final String COMMAND_CAPTION_GROUP_INVITE = "groupInvite(ginv/群邀请) | [flag码] [YES/NO] | 处理群邀请。flag码由上报邀请请求时发送，同意填yes/y，不同意填no/n。（该功能仅限管理员）";
 

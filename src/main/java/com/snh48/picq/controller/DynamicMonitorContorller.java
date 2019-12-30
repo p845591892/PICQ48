@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.snh48.picq.annotation.Log;
+import com.snh48.picq.annotation.OperationType;
 import com.snh48.picq.entity.weibo.DynamicMonitor;
 import com.snh48.picq.service.DynamicMonitorService;
 import com.snh48.picq.vo.ResultVO;
@@ -26,6 +28,7 @@ public class DynamicMonitorContorller {
 	 * @author: JuFF_白羽
 	 * @date: 2018年9月20日 下午10:33:07
 	 */
+	@Log(desc = "新增微博监控配置", type = OperationType.ADD)
 	@PostMapping("/dynamic-monitor/add")
 	public ResultVO addDynamicMonitor(DynamicMonitor dynamicMonitor) {
 		ResultVO result = new ResultVO();
@@ -45,6 +48,7 @@ public class DynamicMonitorContorller {
 	 * @author JuFF_白羽
 	 * @param id 配置ID
 	 */
+	@Log(desc = "删除微博监控配置", type = OperationType.DEL)
 	@PostMapping("/dynamic-monitor/delete")
 	public ResultVO deleteDynamicMonitor(Long id) {
 		ResultVO result = new ResultVO();
@@ -63,6 +67,7 @@ public class DynamicMonitorContorller {
 	 * @author JuFF_白羽
 	 * @param containerId 容器ID
 	 */
+	@Log(desc = "新增微博监控对象", type = OperationType.ADD)
 	@PostMapping("/weibo/add")
 	public ResultVO addWeiboUser(Long containerId) {
 		ResultVO result = new ResultVO();
@@ -81,6 +86,7 @@ public class DynamicMonitorContorller {
 	 * @author JuFF_白羽
 	 * @param id 微博用户ID
 	 */
+	@Log(desc = "删除微博监控对象及配置", type = OperationType.DEL)
 	@PostMapping("/weibo/delete")
 	public ResultVO deleteWeiboUser(String id) {
 		ResultVO result = new ResultVO();

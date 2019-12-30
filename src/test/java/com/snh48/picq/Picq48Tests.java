@@ -1,17 +1,20 @@
 //package com.snh48.picq;
 //
+//import java.io.IOException;
+//import java.security.KeyManagementException;
+//import java.security.NoSuchAlgorithmException;
 //import java.util.concurrent.Callable;
 //import java.util.concurrent.ExecutorService;
 //import java.util.concurrent.Executors;
 //import java.util.concurrent.ThreadFactory;
 //import java.util.concurrent.atomic.AtomicInteger;
+//import java.util.regex.Pattern;
 //
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.BeanUtils;
 //
 //import com.snh48.picq.entity.snh48.Member;
-//import com.snh48.picq.utils.DateUtil;
-//import com.snh48.picq.utils.Https;
+//import com.snh48.picq.https.HttpsPICQ48;
 //
 //public class Picq48Tests {
 //
@@ -42,24 +45,31 @@
 //
 //	@Test
 //	public void httpsTest() {
-//		String text = "<audio>️https://nim.nosdn.127.net/NDA5MzEwOA==/bmltYV83MjUxODk2NTEyXzE1NzY4NjAzMzkyMDJfOTQ4Mjc4MWUtYzEyOC00ZDZjLWJiMGMtOGRjYjc0NGI3NmVi";
-//		String[] urlArray = text.split("<audio>");
-//		String url = urlArray[1];
-//		Https https = new Https();
 //		try {
-//			https.setUrl(url).downloadFile("/Users/shiro/Downloads", DateUtil.getDate("yyyyMMddHHmmss") + ".mp3");
-//		} catch (Exception e) {
+//			System.out.println(HttpsPICQ48.httpsTrip(0, 0, false));
+//		} catch (KeyManagementException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (NoSuchAlgorithmException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //	}
 //
 //	@Test
 //	public void test2() {
-//		String test = "abcdefg";
-//		String test2 = "abc";
-//		System.out.println(test.startsWith(test2));
-//		System.out.println(test2.startsWith(test));
-//
+//		String regex = "北京|上海|广州";
+//		String str1 = "北京";
+//		String str2 = "上海";
+//		String str3 = "广州";
+//		String str4 = "湖南";
+//		System.out.println(Pattern.matches(regex, str1));
+//		System.out.println(Pattern.matches(regex, str2));
+//		System.out.println(Pattern.matches(regex, str3));
+//		System.out.println(Pattern.matches(regex, str4));
 //	}
 //
 //	@Test
@@ -112,8 +122,9 @@
 //		int max = 100;
 //		for (int i = 0; i < max; i++) {
 //			fixedPool.execute(() -> {
-//				Thread t = Thread.currentThread();
+//				Thread t = new MyThread();
 //				System.out.println("线程名称：" + t.getName() + " 线程优先级：" + t.getPriority());
+//				t.start();
 //			});
 //		}
 //		fixedPool.shutdown();

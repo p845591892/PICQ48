@@ -49,7 +49,9 @@ public class HelpCommand implements EverywhereCommand {
 		// Line 9
 		mb.newLine().add(Common.COMMAND_CAPTION_FRIEND_ADD).newLine();
 		// Line 10
-		mb.newLine().add(Common.COMMAND_CAPTION_GROUP_INVITE);
+		mb.newLine().add(Common.COMMAND_CAPTION_GROUP_INVITE).newLine();
+		// Line 11
+		mb.newLine().add(Common.COMMAND_CAPTION_FIND_TRIP);
 		return mb.toString();
 	}
 

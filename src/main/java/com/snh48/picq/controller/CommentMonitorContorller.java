@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.snh48.picq.annotation.Log;
+import com.snh48.picq.annotation.OperationType;
 import com.snh48.picq.entity.modian.CommentMonitor;
 import com.snh48.picq.repository.modian.CommentMonitorRepostiory;
 import com.snh48.picq.vo.ResultVO;
@@ -39,6 +41,7 @@ public class CommentMonitorContorller {
 	 * @author: JuFF_白羽
 	 * @date: 2018年9月20日 下午10:33:07
 	 */
+	@Log(desc = "新增摩点监控配置", type = OperationType.ADD)
 	@PostMapping("/add")
 	public ResultVO addCommentMonitor(CommentMonitor commentMonitor) {
 		ResultVO result = new ResultVO();
@@ -63,6 +66,7 @@ public class CommentMonitorContorller {
 	 * @author JuFF_白羽
 	 * @param id 配置ID
 	 */
+	@Log(desc = "删除摩点监控配置", type = OperationType.DEL)
 	@PostMapping("/delete")
 	public ResultVO deleteRoomMonitor(Long id) {
 		ResultVO result = new ResultVO();

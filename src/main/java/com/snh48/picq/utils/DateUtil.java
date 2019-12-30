@@ -8,12 +8,15 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * @ClassName: DateUtil
  * @Description: 时间相关工具类
  * @author JuFF_白羽
  * @date 2018年3月19日 上午9:22:04
  */
+@Log4j2
 public class DateUtil {
 
 	public DateUtil() {
@@ -48,6 +51,16 @@ public class DateUtil {
 	 */
 	public static String getDate(String format) {
 		return getDate(new Date(), format);
+	}
+
+	/**
+	 * 获取时间戳对应的时间字符串。默认格式为"yyyy-MM-dd HH:mm:ss"
+	 * 
+	 * @param timestamp 时间戳
+	 * @return "yyyy-MM-dd HH:mm:ss"格式的时间字符串
+	 */
+	public static String getDate(Long timestamp) {
+		return getDate(getDateFormat(timestamp));
 	}
 
 	/**
@@ -128,10 +141,15 @@ public class DateUtil {
 	 * @throws ParseException
 	 * @return Date 返回类型
 	 */
-	public static Date getDateFormat(Long timestamp) throws ParseException {
+	public static Date getDateFormat(Long timestamp) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
 		String d = sdf.format(timestamp);
-		Date date = sdf.parse(d);
+		Date date = null;
+		try {
+			date = sdf.parse(d);
+		} catch (ParseException e) {
+			log.error("将时间戳转换成Date发生异常：{}", e.getMessage());
+		}
 		return date;
 	}
 

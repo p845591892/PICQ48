@@ -1,11 +1,13 @@
 package com.snh48.picq.kuq;
 
 import java.io.File;
+import java.util.List;
 
 import com.snh48.picq.config.KuqProperties;
 import com.snh48.picq.core.QQType;
 import com.snh48.picq.entity.QQCommunity;
 import com.snh48.picq.entity.snh48.Member;
+import com.snh48.picq.entity.snh48.Trip;
 import com.snh48.picq.utils.DateUtil;
 import com.snh48.picq.utils.Https;
 import com.snh48.picq.utils.SpringUtil;
@@ -93,7 +95,7 @@ public class KuqManage {
 	 * @param message    原消息
 	 * @return 符合酷Q的消息字符串
 	 */
-	private static String messageBuilder(IcqHttpApi icqHttpApi, String message) {
+	public static String messageBuilder(IcqHttpApi icqHttpApi, String message) {
 		String[] imgUrl = null;// 图片
 		String[] audioUrl = null;// 语音
 
@@ -167,6 +169,41 @@ public class KuqManage {
 		mb.newLine().add("口袋房间话题：").add(member.getTopic());
 		mb.newLine().add("监控状态：")
 				.add(member.getRoomMonitor() == 1 ? "监控中" : member.getRoomMonitor() == 2 ? "未监控" : "房间已关闭");
+		return mb.toString();
+	}
+
+	/**
+	 * 构造行程列表消息。
+	 * 
+	 * @param list 行程列表
+	 * @return 转化后的字符串
+	 */
+	public static String tripMessageBuilder(List<Trip> list) {
+		MessageBuilder mb = new MessageBuilder();
+		int size = list.size();
+		for (int i = 0; i < size; i++) {
+			Trip trip = list.get(i);
+			int type = trip.getType();
+
+			if (type == 1) {// 公演
+				mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd HH:mm")).add(" " + trip.getSubTitle());
+				mb.newLine();
+				mb.add(trip.getContent());
+			} else if (type == 3) {// 冷餐
+				mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd HH:mm")).add(" " + trip.getTitle());
+				mb.newLine();
+				mb.add(trip.getContent());
+			} else if (type == 0) {
+				mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd")).add(" " + trip.getTitle());
+				mb.newLine();
+				mb.add(trip.getSubTitle());
+			}
+
+			if (i < (size - 1)) {
+				mb.newLine().add("_____________________________").newLine();
+			}
+
+		}
 		return mb.toString();
 	}
 

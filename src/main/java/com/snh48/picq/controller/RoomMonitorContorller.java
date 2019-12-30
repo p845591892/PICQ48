@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.snh48.picq.annotation.Log;
+import com.snh48.picq.annotation.OperationType;
 import com.snh48.picq.entity.snh48.RoomMonitor;
 import com.snh48.picq.service.RoomMonitorService;
 import com.snh48.picq.vo.ResultVO;
@@ -30,6 +32,7 @@ public class RoomMonitorContorller {
 	 * @author JuFF_白羽
 	 * @param roomMonitor 配置信息
 	 */
+	@Log(desc = "新增口袋房间监控配置", type = OperationType.ADD)
 	@PostMapping("/add")
 	public ResultVO addRoomMonitor(RoomMonitor roomMonitor) {
 		ResultVO vo = new ResultVO();
@@ -50,6 +53,7 @@ public class RoomMonitorContorller {
 	 * @param id      监控配置ID
 	 * @param keyword 过滤关键字
 	 */
+	@Log(desc = "修改口袋房间监控的关键字配置", type = OperationType.UPDATE)
 	@PostMapping("/update/keyword")
 	public ResultVO updateKeyword(Long id, String keyword) {
 		ResultVO vo = new ResultVO();
@@ -69,6 +73,7 @@ public class RoomMonitorContorller {
 	 * @author JuFF_白羽
 	 * @param id 配置ID
 	 */
+	@Log(desc = "删除口袋房间监控配置", type = OperationType.UPDATE)
 	@PostMapping("/delete")
 	public ResultVO deleteRoomMonitor(Long id) {
 		ResultVO vo = new ResultVO();

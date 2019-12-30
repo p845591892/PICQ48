@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.snh48.picq.annotation.Log;
+import com.snh48.picq.annotation.OperationType;
 import com.snh48.picq.service.RegisterService;
 import com.snh48.picq.vo.ResultVO;
 import com.snh48.picq.vo.UserVO;
@@ -53,10 +55,11 @@ public class RegisterContorller {
 	 * @Description: 注册账号
 	 * @author JuFF_白羽
 	 */
+	@Log(desc = "注册账号", type = OperationType.ADD)
 	@PostMapping("/doRegister")
 	public ResultVO doRegister(UserVO user, HttpServletRequest request) {
 		ResultVO result = new ResultVO();
-		int i = registerService.doRegister(user,request);
+		int i = registerService.doRegister(user, request);
 		result.setStatus(400);
 		if (i == 1) {
 			result.setStatus(HttpsURLConnection.HTTP_OK);
@@ -77,12 +80,11 @@ public class RegisterContorller {
 	/**
 	 * @Description: 激活账号
 	 * @author JuFF_白羽
-	 * @param username
-	 *            用户名
-	 * @param emailCaptcha
-	 *            邮箱验证码
+	 * @param username     用户名
+	 * @param emailCaptcha 邮箱验证码
 	 * @throws IOException
 	 */
+	@Log(desc = "激活账号", type = OperationType.UPDATE)
 	@GetMapping("/register/activation")
 	public ResultVO activation(String username, String emailCaptcha, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {

@@ -14,6 +14,7 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import com.snh48.picq.entity.snh48.Member;
 import com.snh48.picq.entity.snh48.RoomMessage;
+import com.snh48.picq.entity.snh48.Trip;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -100,6 +101,41 @@ public class Pocket48Tool extends JsonPICQ48 {
 			return messageList;
 		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException | ParseException e) {
 			log.error("获取List<RoomMessage>发生异常：{}", e.getMessage());
+		}
+		return null;
+	}
+
+	/**
+	 * 获取SNH48 Group的行程单。通过Https的方式发送请求，获得json结果，解析后生成{@link Trip}的集合。
+	 * <p>
+	 * 参数详细说明：
+	 * 
+	 * <pre>
+	 * {@link lastTime}：时间戳，默认当前页时参数为0，即不会查询出历史行程。
+	 * {@link groupId}：团体ID，例如SNH8、GNZ48，默认全团时参数为0，即查询整个48GROUP的行程。
+	 * {@link isMore}：是否更多，当为true时，配合{@link lastTime}，将向下翻页，即查询更未来的行程，否则相反。
+	 * </pre>
+	 * 
+	 * @param lastTime 时间戳
+	 * @param groupId  团体ID
+	 * @param isMore   是否更多
+	 * @return {@link Trip}集合
+	 */
+	public static List<Trip> getTripList(long lastTime, int groupId, boolean isMore) {
+		try {
+			JSONObject tripObj = jsonTrip(lastTime, groupId, isMore);
+			// 遍历数组
+			JSONArray tripArray = tripObj.getJSONArray("data");
+			List<Trip> tripList = new ArrayList<Trip>();
+			for (int i = 0; i < tripArray.length(); i++) {
+				JSONObject indexObj = tripArray.getJSONObject(i);
+				Trip trip = new Trip();
+				setTrip(trip, indexObj);
+				tripList.add(trip);
+			}
+			return tripList;
+		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
+			log.error("获取List<Trip>发生异常：{}", e.getMessage());
 		}
 		return null;
 	}

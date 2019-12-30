@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.snh48.picq.annotation.Log;
+import com.snh48.picq.annotation.OperationType;
 import com.snh48.picq.repository.snh48.MemberRepository;
 import com.snh48.picq.vo.ResultVO;
 
@@ -32,6 +34,7 @@ public class MemberContorller {
 	 * @Description: 修改房间监控状态
 	 * @author JuFF_白羽
 	 */
+	@Log(desc = "修改口袋房间监控状态", type = OperationType.UPDATE)
 	@PostMapping("/update/room-monitor")
 	public ResultVO updateRoomMonitor(@RequestParam Long id, @RequestParam int roomMonitor) {
 		ResultVO result = new ResultVO();
@@ -50,6 +53,7 @@ public class MemberContorller {
 	 * @Description: 同步成员信息到最新
 	 * @author JuFF_白羽
 	 */
+	@Log(desc = "更新全体成员信息", type = OperationType.UPDATE)
 	@GetMapping("/refresh")
 	public ResultVO refreshMember(HttpServletRequest request) {
 		ResultVO result = new ResultVO();

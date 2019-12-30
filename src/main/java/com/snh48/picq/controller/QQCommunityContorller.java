@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.snh48.picq.annotation.Log;
+import com.snh48.picq.annotation.OperationType;
 import com.snh48.picq.entity.QQCommunity;
 import com.snh48.picq.service.QQCommunityService;
 import com.snh48.picq.vo.ResultVO;
@@ -13,26 +15,27 @@ import com.snh48.picq.vo.ResultVO;
  * @ClassName: QQCommunityApi
  * @Description: QQ列表操作控制类
  *               <p>
- * 				提供QQ列表页面的操作请求接口。
+ *               提供QQ列表页面的操作请求接口。
  * @author JuFF_白羽
  * @date 2018年8月10日 下午3:19:06
  */
 @RestController
 @RequestMapping("/qq-community")
 public class QQCommunityContorller {
-	
+
 	/**
 	 * QQ列表操作服务类
 	 */
 	@Autowired
 	private QQCommunityService qqCommunityService;
-	
+
 	/**
 	 * @Description: 新增/修改QQ信息接口
 	 * @author JuFF_白羽
 	 */
+	@Log(desc = "新增QQ好友/群信息", type = OperationType.ADD)
 	@PostMapping("/add")
-	public ResultVO addQQCommunity(QQCommunity qqCommunity){
+	public ResultVO addQQCommunity(QQCommunity qqCommunity) {
 		ResultVO result = new ResultVO();
 		int i = qqCommunityService.addQQCommunity(qqCommunity);
 		if (i == 1) {
@@ -47,13 +50,14 @@ public class QQCommunityContorller {
 		result.setStatus(i);
 		return result;
 	}
-	
+
 	/**
 	 * @Description: 修改QQ信息接口
 	 * @author JuFF_白羽
 	 */
+	@Log(desc = "修改QQ好友/群信息", type = OperationType.UPDATE)
 	@PostMapping("/update")
-	public ResultVO updateQQCommunity(QQCommunity qqCommunity){
+	public ResultVO updateQQCommunity(QQCommunity qqCommunity) {
 		ResultVO result = new ResultVO();
 		int i = qqCommunityService.updateQQCommunity(qqCommunity);
 		if (i == 1) {
@@ -65,11 +69,12 @@ public class QQCommunityContorller {
 		result.setStatus(i);
 		return result;
 	}
-	
+
 	/**
-	 * @Description: 修改QQ信息接口
+	 * @Description: 删除QQ好友/群信息
 	 * @author JuFF_白羽
 	 */
+	@Log(desc = "删除QQ好友/群信息", type = OperationType.DEL)
 	@PostMapping("/delete")
 	public ResultVO deleteQQCommunity(String id) {
 		ResultVO result = new ResultVO();

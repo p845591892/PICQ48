@@ -37,11 +37,11 @@ public class VersionCommand implements EverywhereCommand {
 		// 消息构造器
 		MessageBuilder mb = new MessageBuilder();
 		// Line 1
-		mb.add("最后更新时间：2019-12-23").newLine();
+		mb.add("最后更新时间：2019-12-29").newLine();
 		// Line 2
 		mb.newLine().add("系统版本信息：");
 		// Line 3
-		mb.newLine().add("【PQIC48版本】  1.3.2");
+		mb.newLine().add("【PQIC48版本】  1.3.3");
 		// Line 4
 		mb.newLine().add("【PicqBotX版本】  4.12.0.1015.PRE").newLine();
 		// Line 5

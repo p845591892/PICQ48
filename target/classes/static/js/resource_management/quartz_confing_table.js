@@ -190,7 +190,6 @@ function addVideoShow() {
 		content : "/resource-management/quartz-confing-table/edit",
 		area : [ "400px", "360px" ],
 		maxmin : true,
-		scrollbar : false,
 		btn : [ "保存", "取消" ],
 		yes : function(index, layero) {
 			openLoad();

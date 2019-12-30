@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.snh48.picq.annotation.Log;
+import com.snh48.picq.annotation.OperationType;
 import com.snh48.picq.entity.QuartzConfig;
 import com.snh48.picq.entity.system.User;
 import com.snh48.picq.exception.ActivationAccountException;
@@ -84,6 +86,7 @@ public class WebContorller {
 	 * @Description: 登录
 	 * @author JuFF_白羽
 	 */
+	@Log(desc = "登录", type = OperationType.LOGIN)
 	@PostMapping("/doLogin")
 	public ModelAndView doLogin(HttpServletRequest request, ModelAndView mav) {
 		log.info(IpUtil.getIpAddr(request));
@@ -228,6 +231,7 @@ public class WebContorller {
 	 * @author JuFF_白羽
 	 * @param projectIds 摩点项目ID，可用英文的“,”连接多个ID
 	 */
+	@Log(desc = "查询摩点项目的集资详情", type = OperationType.SELECT)
 	@GetMapping("/data-visualization/modian-visual")
 	public ModelAndView toModianVisual(ModelAndView mav, String projectIds) {
 		mav.setViewName("data_visualization/modian_visual");
@@ -284,7 +288,7 @@ public class WebContorller {
 	 */
 	@GetMapping(value = "/resource-management/quartz-confing-table/edit")
 	public ModelAndView toQuartzConfingTableEdit(ModelAndView mav) {
-		mav.setViewName("/resource_management/quartz_confing_table_edit");
+		mav.setViewName("resource_management/quartz_confing_table_edit");
 		return mav;
 	}
 
