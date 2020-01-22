@@ -62,7 +62,7 @@ public class FindMemberCommand implements EverywhereCommand {
 		List<Member> memberList = memberPage.toList();
 
 		if (memberList.size() >= 5) {
-			event.respond("查找到相关至少 " + memberList.size() + " 位成员，其中最接近的是：");
+			event.respond("查找到相关至少 " + memberList.size() + " 位成员！");
 
 			List<Member> responListP = new ArrayList<Member>();// 精
 			for (int i = 0; i < memberList.size(); i++) {
@@ -90,6 +90,12 @@ public class FindMemberCommand implements EverywhereCommand {
 	 * @param list  成员列表
 	 */
 	private void respond(EventMessage event, List<Member> list) {
+		if (list.size() < 1) {
+			event.respond("由于相关成员过多，提高参数精确度。");
+			return;
+		}
+		
+		event.respond("其中最接近的是：");
 		for (int i = 0; i < list.size(); i++) {
 			String message = KuqManage.memberMessageBuilder(list.get(i));
 			event.respond(message, false);

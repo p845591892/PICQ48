@@ -13,7 +13,9 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import com.snh48.picq.entity.snh48.Member;
+import com.snh48.picq.entity.snh48.PocketUser;
 import com.snh48.picq.entity.snh48.RoomMessage;
+import com.snh48.picq.entity.snh48.RoomMessageAll;
 import com.snh48.picq.entity.snh48.Trip;
 import com.snh48.picq.entity.weibo.Dynamic;
 import com.snh48.picq.entity.weibo.WeiboUser;
@@ -137,6 +139,39 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 	}
 
 	/**
+	 * 发送Https请求，获取口袋48成员房间的留言板消息列表。
+	 * <p>
+	 * 参数详细说明：
+	 * 
+	 * <pre>
+	 * {@link nextTime}：下条消息的时间戳，默认当前页时参数为0，即最新消息。
+	 * {@link needTop1Msg}：是否需要最新一条数据，当为true且{@link nextTime}为0时返回第一页，为false即为向上翻页，时间戳{@link nextTime}也从0开始。
+	 * {@link roomId}：口袋房间ID，用于指定查找的房间。
+	 * </pre>
+	 * 
+	 * @param nextTime    下条消息的时间戳。
+	 * @param needTop1Msg 是否需要最新一条数据。
+	 * @param roomId      口袋房间ID。
+	 * @return 房间留言板消息的json对象。
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public static JSONObject jsonRoomMessageALL(long nextTime, boolean needTop1Msg, long roomId)
+			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+		String jsonStr = httpsRoomMessageALL(nextTime, needTop1Msg, roomId);
+		JSONObject messageObj = JsonProcess.getJSONObjectByString(jsonStr);
+		if (messageObj.getBoolean("success")) {
+			return messageObj;
+		}
+		refreshToken();
+		throw new HttpsPocketAuthenticateException("HttpsURL.ROOM_MESSAGE_ALL：" + messageObj.getString("message")
+				+ "。参数：{nextTime = " + String.valueOf(nextTime) + ", needTop1Msg = " + String.valueOf(needTop1Msg)
+				+ ", roomId = " + String.valueOf(roomId) + "}");
+	}
+
+	/**
 	 * 发送Https请求，获取口袋房间翻牌详情信息。
 	 * <p>
 	 * 本请求返回值包括问题、回答、提问人昵称、回答人昵称（重要）等。
@@ -189,6 +224,28 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		}
 		throw new HttpsPocketAuthenticateException("HttpsURL.GROUP_TRIP：" + tripObj.getString("message")
 				+ "。参数：{lastTime = " + lastTime + ", groupId = " + groupId + ", isMore = " + isMore + "}");
+	}
+
+	/**
+	 * 发送HTTPS请求，获取口袋48的用户（部分）信息。
+	 * 
+	 * @param needMuteInfo
+	 * @param userId       用户ID
+	 * @return 返回用户（部分）信息的json对象。
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public static JSONObject jsonPocketUser(int needMuteInfo, long userId)
+			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+		String jsonStr = httpsPocketUser(needMuteInfo, userId);
+		JSONObject userObj = JsonProcess.getJSONObjectByString(jsonStr);
+		if (userObj.getBoolean("success")) {
+			return userObj.getJSONObject("content");
+		}
+		throw new HttpsPocketAuthenticateException("HttpsURL.USER_SMALL：" + userObj.getString("message")
+				+ "。参数：{needMuteInfo = " + needMuteInfo + ", userId = " + userId + "}");
 	}
 
 	/**
@@ -381,12 +438,111 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append(bodysObject.getString("url"));
 
+		} else if (messageType.equals("PASSWORD_REDPACKAGE")) {// 口令红包
+			msgContent.append("口令红包：");
+			msgContent.append(extInfoObject.getString("redPackageTitle"));
+			msgContent.append("<img>");
+			msgContent.append(getSourceUrl(extInfoObject.getString("redPackageCover")));
+			
 		} else {
 			msgContent.append("type error.");
 			log.info("本条消息为未知的新类型: {}", messageType);
 			log.info(indexObj.toString());
 		}
 
+		return msgContent.toString();
+	}
+
+	/**
+	 * 解析SNH48成员口袋48房间留言板消息的json对象，将信息设置到{@link RoomMessageAll}中。
+	 * 
+	 * @param roomMessage 房间留言板消息对象
+	 * @param indexObj    留言板消息实例json对象
+	 * @throws JSONException
+	 * @throws ParseException
+	 */
+	protected static void setRoomMessageAll(RoomMessageAll roomMessageAll, JSONObject indexObj) throws JSONException {
+		JSONObject extInfoObj = new JSONObject(indexObj.getString("extInfo"));// 消息内容的主体对象
+		JSONObject userObj = extInfoObj.getJSONObject("user");// 发送的用户对象
+		String messageType = extInfoObj.getString("messageType");// 消息类型
+
+		roomMessageAll.setId(indexObj.getString("msgidClient"));// 消息ID
+		roomMessageAll.setMessageType(messageType);// 消息类型
+		roomMessageAll.setRoomId(extInfoObj.getLong("roomId"));// 房间ID
+		roomMessageAll.setSenderUserId(userObj.getLong("userId"));// 发送人ID
+		roomMessageAll.setMessageTime(DateUtil.getDateFormat(indexObj.getLong("msgTime")));// 发送时间
+		roomMessageAll.setMessageContent(getMessageContent(indexObj));// 消息内容
+
+		if (messageType.equals("REPLY")) {// 回复
+			roomMessageAll.setReplyMessageId(extInfoObj.getString("replyMessageId"));// 回复的消息ID
+			roomMessageAll.setReplyName(extInfoObj.getString("replyName"));// 被回复人昵称
+
+		} else if (messageType.equals("FLIPCARD")) {// 翻牌
+			String questionId = extInfoObj.getString("questionId");
+			String answerId = extInfoObj.getString("answerId");
+			try {
+				JSONObject contentObject = jsonFlipcardContent(questionId, answerId);// 获取翻牌详情，目的是拿到这个翻牌是谁发的
+				roomMessageAll.setReplyName(contentObject.getString("userName"));// 被翻牌人昵称
+			} catch (KeyManagementException | NoSuchAlgorithmException | IOException e) {
+				log.error("获取翻牌消息异常questionId={}, answerId={} : {}", questionId, answerId, e.getMessage());
+			}
+		}
+	}
+
+	/**
+	 * 获取留言板的消息(只取消息内容，不构造消息格式)。
+	 * 
+	 * @param indexObj 消息主体json对象
+	 * @return 处理后的消息字符串
+	 * @throws JSONException
+	 */
+	private static String getMessageContent(JSONObject indexObj) throws JSONException {
+		StringBuilder msgContent = new StringBuilder();
+		JSONObject extInfoObject = new JSONObject(indexObj.getString("extInfo"));// 消息内容的主体对象
+		String messageType = extInfoObject.getString("messageType");// 消息类型
+
+		if (messageType.equals("TEXT")) {// 普通文本类型
+			msgContent.append(indexObj.getString("bodys"));
+
+		} else if (messageType.equals("REPLY")) {// 回复类型
+			msgContent.append(indexObj.getString("bodys"));
+
+		} else if (messageType.equals("IMAGE")) {// 图片类型
+			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
+			msgContent.append(bodysObject.getString("url"));
+
+		} else if (messageType.equals("LIVEPUSH")) {// 生放送类型
+			msgContent.append(HttpsURL.LIVE);
+			msgContent.append(extInfoObject.getString("liveId"));
+
+		} else if (messageType.equals("FLIPCARD")) {// 翻牌类型
+			msgContent.append(extInfoObject.getString("answer"));
+
+		} else if (messageType.equals("EXPRESS")) {// 特殊表情类型
+			msgContent.append(extInfoObject.getString("emotionName"));
+
+		} else if (messageType.equals("VIDEO")) {// 视频类型
+			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
+			msgContent.append(bodysObject.getString("url"));
+
+		} else if (messageType.equals("VOTE")) {// 投票类型
+			msgContent.append(extInfoObject.getString("text"));
+
+		} else if (messageType.equals("AUDIO")) {// 语音类型
+			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
+			msgContent.append(bodysObject.getString("url"));
+
+		} else if (messageType.equals("PRESENT_TEXT")) {// 礼物类型
+			msgContent.append(extInfoObject.getJSONObject("giftInfo").getString("giftName"));
+
+		} else if (messageType.equals("SPECICAL_REDPACKAGE")) {// 新春红包
+			msgContent.append(extInfoObject.getString("redPackageTitle"));
+			
+		}  else {
+			msgContent.append("Unknown message type.");
+			log.info("本条消息为未知的新类型: {}", messageType);
+			log.info(indexObj.toString());
+		}
 		return msgContent.toString();
 	}
 
@@ -438,6 +594,31 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			trip.setLocationDetails(locationDetails);
 			trip.setLocationKeyword(locationKeyword);
 		}
+	}
+
+	/**
+	 * 解析口袋48用户信息的json对象，将信息设置到{@link PocketUser}中。
+	 * 
+	 * @param pocketUser 口袋48用户表
+	 * @param userObj    口袋48用户信息json对象
+	 * @throws JSONException
+	 */
+	protected static void setPocketUser(PocketUser pocketUser, JSONObject userObj) throws JSONException {
+		JSONObject userInfo = userObj.getJSONObject("userInfo");
+
+		long id = userInfo.getLong("userId");
+		String nickname = userInfo.getString("nickname");
+		String avatar = userInfo.getString("avatar");
+		int level = userInfo.getInt("level");
+		boolean vip = userInfo.getBoolean("vip");
+		int role = userInfo.getInt("userRole");
+
+		pocketUser.setId(id);// 用户ID
+		pocketUser.setNickname(nickname);// 昵称
+		pocketUser.setAvatar(getSourceUrl(avatar));// 头像地址
+		pocketUser.setLevel(level);// 用户等级
+		pocketUser.setVip(vip);// 是否是vip用户
+		pocketUser.setRole(role);// 用户类型
 	}
 
 	/**

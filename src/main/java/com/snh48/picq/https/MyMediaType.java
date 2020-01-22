@@ -8,12 +8,12 @@ public class MyMediaType extends MediaType {
 	/**
 	 * User-Agent请求头(iPhone)
 	 */
-	public static final String USER_AGENT_IPHONE = "PocketFans201807/6.0.0 (iPhone; iOS 12.2; Scale/2.00)";
+	public static final String USER_AGENT_IPHONE = "PocketFans201807/6.0.9 (iPad; iOS 13.3; Scale/2.00)";
 
 	/**
 	 * Appinfo实例相关参数
 	 */
-	public static final String APPINFO = "{\"vendor\":\"apple\",\"deviceId\":\"0\",\"appVersion\":\"6.0.0\",\"appBuild\":\"190409\",\"osVersion\":\"12.2.0\",\"osType\":\"ios\",\"deviceName\":\"iphone\",\"os\":\"ios\"}";
+	public static final String APPINFO = "{\"vendor\":\"apple\",\"deviceId\":\"9C6385C2-C4F6-4840-B284-65AA9A1F2F44\",\"appVersion\":\"6.0.9\",\"appBuild\":\"191230\",\"osVersion\":\"13.3.0\",\"osType\":\"ios\",\"deviceName\":\"iPad Air 2\",\"os\":\"ios\"}";
 
 	/**
 	 * ACCEPT的safari浏览器值

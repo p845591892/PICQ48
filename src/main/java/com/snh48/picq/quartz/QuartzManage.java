@@ -133,10 +133,10 @@ public class QuartzManage {
 	 * 删除
 	 */
 	public boolean remove(QuartzConfig job) {
-		Scheduler scheduler = schedulerFactoryBean.getScheduler();
-		TriggerKey triggerKey = TriggerKey.triggerKey(String.valueOf(job.getId()), Scheduler.DEFAULT_GROUP);
 		try {
 			if (checkJob(job)) {
+				Scheduler scheduler = schedulerFactoryBean.getScheduler();
+				TriggerKey triggerKey = TriggerKey.triggerKey(String.valueOf(job.getId()), Scheduler.DEFAULT_GROUP);
 				scheduler.pauseTrigger(triggerKey);
 				scheduler.unscheduleJob(triggerKey);
 				scheduler.deleteJob(JobKey.jobKey(String.valueOf(job.getId()), Scheduler.DEFAULT_GROUP));

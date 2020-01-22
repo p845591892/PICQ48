@@ -29,6 +29,9 @@ public class HttpsURL {
 	/** SNH48成员个人信息接口。请求方式为POST。 */
 	public static final String MEMBER = POCKET_API + "/user/api/v1/user/star/archives";
 
+	/** 口袋48个(部分)用户息接口。请求方式为POST。 */
+	public static final String USER_SMALL = POCKET_API + "/user/api/v1/user/info/home/small";
+
 	/** 登录口袋48接口。请求方式为POST。 */
 	public static final String TOKEN = POCKET_API + "/user/api/v1/login/app/mobile";
 
@@ -37,6 +40,9 @@ public class HttpsURL {
 
 	/** SNH48成员的口袋房间消息接口。请求方式为POST。 */
 	public static final String ROOM_MESSAGE = POCKET_API + "/im/api/v1/chatroom/msg/list/homeowner";
+
+	/** SNH48成员的口袋房间留言板消息接口。请求方式为POST。 */
+	public static final String ROOM_MESSAGE_ALL = POCKET_API + "/im/api/v1/chatroom/msg/list/all";
 
 	/** SNH48成员的口袋房间翻牌消息接口。请求方式为POST。 */
 	public static final String ROOM_MESSAGE_FLIPCARD = POCKET_API

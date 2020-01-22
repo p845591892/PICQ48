@@ -110,7 +110,7 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 												.send();
 		return roomJson;
 	}
-
+	
 	/**
 	 * 获取口袋48认证凭据，即登录口袋48后要设置在请求头中的Token。
 	 * 
@@ -214,6 +214,47 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 													.send();
 		return messageStr;
 	}
+	
+	/**
+	 * 发送Https请求，获取口袋48成员房间的留言板消息列表。
+	 * <p>
+	 * 参数详细说明：
+	 * 
+	 * <pre>
+	 * {@link nextTime}：下条消息的时间戳，默认当前页时参数为0，即最新消息。
+	 * {@link needTop1Msg}：是否需要最新一条数据，当为true且{@link nextTime}为0时返回第一页，为false即为向上翻页，时间戳{@link nextTime}也从0开始。
+	 * {@link roomId}：口袋房间ID，用于指定查找的房间。
+	 * </pre>
+	 * 
+	 * @param nextTime 下条消息的时间戳。
+	 * @param needTop1Msg 是否需要最新一条数据。
+	 * @param roomId 口袋房间ID。
+	 * @return 房间留言板消息的json字符串。
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	@SuppressWarnings("deprecation")
+	public static String httpsRoomMessageALL(long nextTime, boolean needTop1Msg, long roomId) throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+		Https https = new Https();
+		/* 请求头 */
+		Map<String, String> requestPropertys = new HashMap<String, String>();
+		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
+		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
+		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPHONE);
+		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
+		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
+		/* 请求参数 */
+		String payloadJson = "{\"nextTime\":" + String.valueOf(nextTime) + ",\"needTop1Msg\":" + String.valueOf(needTop1Msg) + ",\"roomId\":\"" + roomId + "\"}";
+		/* 发送请求 */
+		String messageStr = https.setDataType(HttpMethod.POST.name())
+													.setRequestProperty(requestPropertys)
+													.setPayloadJson(payloadJson)
+													.setUrl(HttpsURL.ROOM_MESSAGE_ALL)
+													.send();
+		return messageStr;
+	}
 
 	/**
 	 * 发送Https请求，获取口袋房间翻牌详情信息。
@@ -286,6 +327,38 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 												.setRequestProperty(requestPropertys)
 												.setPayloadJson(payloadJson)
 												.setUrl(HttpsURL.TRIP)
+												.send();
+		return jsonStr;
+	}
+	
+	/**
+	 * 发送HTTPS请求，获取口袋48的用户（部分）信息。
+	 * 
+	 * @param needMuteInfo
+	 * @param userId 用户ID
+	 * @return 返回用户（部分）信息的json字符串。
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	@SuppressWarnings("deprecation")
+	public static String httpsPocketUser(int needMuteInfo, long userId) throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+		Https https = new Https();
+		/* 请求头 */
+		Map<String, String> requestPropertys = new HashMap<String, String>();
+		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
+		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
+		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPHONE);
+		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
+		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
+		/* 请求参数 */
+		String payloadJson = "{\"needMuteInfo\":" + String.valueOf(needMuteInfo) + ",\"userId\":\"" + String.valueOf(userId) + "\"}";
+		/* 发送请求 */
+		String jsonStr = https.setDataType(HttpMethod.POST.name())
+												.setRequestProperty(requestPropertys)
+												.setPayloadJson(payloadJson)
+												.setUrl(HttpsURL.USER_SMALL)
 												.send();
 		return jsonStr;
 	}

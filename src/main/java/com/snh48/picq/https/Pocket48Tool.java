@@ -13,7 +13,9 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import com.snh48.picq.entity.snh48.Member;
+import com.snh48.picq.entity.snh48.PocketUser;
 import com.snh48.picq.entity.snh48.RoomMessage;
+import com.snh48.picq.entity.snh48.RoomMessageAll;
 import com.snh48.picq.entity.snh48.Trip;
 
 import lombok.extern.log4j.Log4j2;
@@ -106,6 +108,45 @@ public class Pocket48Tool extends JsonPICQ48 {
 	}
 
 	/**
+	 * 发送Https请求，获取口袋48成员房间的留言板消息列表。
+	 * <p>
+	 * 参数详细说明：
+	 * 
+	 * <pre>
+	 * {@link nextTime}：下条消息的时间戳，默认当前页时参数为0，即最新消息。
+	 * {@link needTop1Msg}：是否需要最新一条数据，当为true且{@link nextTime}为0时返回第一页，为false即为向上翻页，时间戳{@link nextTime}也从0开始。
+	 * {@link roomId}：口袋房间ID，用于指定查找的房间。
+	 * </pre>
+	 * 
+	 * @param nextTime    下条消息的时间戳。
+	 * @param needTop1Msg 是否需要最新一条数据。
+	 * @param roomId      口袋房间ID。
+	 * @return {@link RoomMessageAll}集合。
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public static List<RoomMessageAll> getRoomMessageAllList(long nextTime, boolean needTop1Msg, long roomId) {
+		try {
+			JSONObject messageObj = jsonRoomMessageALL(nextTime, needTop1Msg, roomId);
+			// 遍历消息json数组
+			JSONArray messageArray = messageObj.getJSONObject("content").getJSONArray("message");
+			List<RoomMessageAll> messageList = new ArrayList<RoomMessageAll>();
+			for (int i = 0; i < messageArray.length(); i++) {
+				JSONObject indexObj = messageArray.getJSONObject(i);
+				RoomMessageAll roomMessageAll = new RoomMessageAll();
+				setRoomMessageAll(roomMessageAll, indexObj);
+				messageList.add(roomMessageAll);
+			}
+			return messageList;
+		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
+			log.error("获取List<RoomMessageAll>发生异常：{}", e.getMessage());
+		}
+		return null;
+	}
+
+	/**
 	 * 获取SNH48 Group的行程单。通过Https的方式发送请求，获得json结果，解析后生成{@link Trip}的集合。
 	 * <p>
 	 * 参数详细说明：
@@ -137,6 +178,31 @@ public class Pocket48Tool extends JsonPICQ48 {
 		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
 			log.error("获取List<Trip>发生异常：{}", e.getMessage());
 		}
+		return null;
+	}
+
+	/**
+	 * 获取口袋48用户信息。通过Https的方式发送请求，获得json结果，解析后生成{@link PocketUser}的对象。
+	 * 
+	 * @param needMuteInfo
+	 * @param userId       用户
+	 * @return 返回{@link PocketUser}
+	 */
+	public static PocketUser getPocketUser(int needMuteInfo, long userId) {
+		try {
+			JSONObject userObj = jsonPocketUser(needMuteInfo, userId);
+			PocketUser pocketUser = new PocketUser();
+			setPocketUser(pocketUser, userObj);
+			return pocketUser;
+		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
+			log.error("获取PocketUser发生异常：{}", e.getMessage());
+		}
+		return null;
+	}
+
+	@Override
+	public <T> List<T> get(Class<T> clazz) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
