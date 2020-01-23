@@ -129,7 +129,7 @@ var select_team = {
 	"SHY48" : [ "ALL", "TEAM SIII", "TEAM HIII", "预备生" ],
 	"IDFT" : [ "ALL" ],
 	"海外练习生" : [ "ALL" ],
-	"青春有你" ["青春有你"]
+	"青春有你" : [ "ALL" ]
 };
 
 /**

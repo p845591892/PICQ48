@@ -51,11 +51,13 @@ public class RoomMonitorServiceImpl implements RoomMonitorService {
 
 	@Override
 	public void deleteRoomMonitor(Long id) {
+		// 获取roomId
+		RoomMonitor roomMonitor = roomMonitorRepository.findById(id).get();
+		long roomId = roomMonitor.getRoomId();
 		// 删除配置
 		roomMonitorRepository.deleteById(id);
-		// 设置缓存
-		RoomMonitor roomMonitor = roomMonitorRepository.findById(id).get();
-		setCache(roomMonitor.getRoomId());
+		// 刷新缓存
+		setCache(roomId);
 	}
 
 	@Override
