@@ -1,29 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="Dashboard">
-    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="Dashboard">
+<meta name="keyword"
+	content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>GNZ48-章泽婷应援会</title>
+<title>PICQ48</title>
 
-    <!-- Bootstrap core CSS -->
-    <link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet">
-    <!--external css-->
-    <link th:href="@{/assets/font-awesome/css/font-awesome.css}" rel="stylesheet" />
+<!-- Bootstrap core CSS -->
+<link th:href="@{/assets/css/bootstrap.css}" rel="stylesheet">
+<!--external css-->
+<link th:href="@{/assets/font-awesome/css/font-awesome.css}"
+	rel="stylesheet" />
 
-    <!-- Custom styles for this template -->
-    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-    <link th:href="@{/assets/css/style-responsive.css}" rel="stylesheet">
-    <link th:href="@{/assets/css/bootstrap-table.min.css}" rel="stylesheet" />
+<!-- Custom styles for this template -->
+<link th:href="@{/assets/css/style.css}" rel="stylesheet">
+<link th:href="@{/assets/css/style-responsive.css}" rel="stylesheet">
+<link th:href="@{/assets/css/bootstrap-table.min.css}" rel="stylesheet" />
 
-    <link th:href="@{/css/system_manage/system_user.css}" rel="stylesheet" />
+<link th:href="@{/css/system_manage/system_user.css}" rel="stylesheet" />
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
@@ -31,252 +34,259 @@
 
 <body>
 
-    <section id="container">
-        <!-- **********************************************************************************************************************************************************
+	<section id="container">
+		<!-- **********************************************************************************************************************************************************
       TOP BAR CONTENT & NOTIFICATIONS
       *********************************************************************************************************************************************************** -->
-        <!--header start-->
-        <header class="header black-bg">
-            <div class="sidebar-toggle-box">
-                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="展开/收起"></div>
-            </div>
-            <!--logo start-->
-            <a href="/index" class="logo"><b>GNZ48-章泽婷应援会</b></a>
-            <!--logo end-->
-            <div class="top-menu" shiro:guest>
-                <ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="/login">登录</a></li>
-                </ul>
-            </div>
-            <div class="top-menu" shiro:authenticated>
-                <ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="/logout">退出</a></li>
-                </ul>
-            </div>
-        </header>
-        <!--header end-->
+		<!--header start-->
+		<header class="header black-bg">
+			<div class="sidebar-toggle-box">
+				<div class="fa fa-bars tooltips" data-placement="right"
+					data-original-title="展开/收起"></div>
+			</div>
+			<!--logo start-->
+			<a href="/index" class="logo"><b>PICQ48</b></a>
+			<!--logo end-->
+			<div class="top-menu" shiro:guest>
+				<ul class="nav pull-right top-menu">
+					<li><a class="logout" href="/login">登录</a></li>
+				</ul>
+			</div>
+			<div class="top-menu" shiro:authenticated>
+				<ul class="nav pull-right top-menu">
+					<li><a class="logout" href="/logout">退出</a></li>
+				</ul>
+			</div>
+		</header>
+		<!--header end-->
 
-        <!-- **********************************************************************************************************************************************************
+		<!-- **********************************************************************************************************************************************************
       MAIN SIDEBAR MENU
       *********************************************************************************************************************************************************** -->
-        <!--sidebar start-->
-        <aside>
-            <div id="sidebar" class="nav-collapse ">
-                <!-- sidebar menu start-->
-                <ul class="sidebar-menu" id="nav-accordion">
+		<!--sidebar start-->
+		<aside>
+			<div id="sidebar" class="nav-collapse ">
+				<!-- sidebar menu start-->
+				<ul class="sidebar-menu" id="nav-accordion">
 
-                    <p class="centered">
-                        <a href="javascript:void(0);"> <img th:src="@{/assets/img/ui-sam.jpg}" class="img-circle"
-                                width="60" />
-                        </a>
-                    </p>
-                    <h5 class="centered">
-                        <span th:if="${session.user != null}" th:text="${session.user.nickname}"></span> <span
-                            th:unless="${session.user != null}">章泽婷应援会</span>
-                    </h5>
+					<p class="centered">
+						<a href="javascript:void(0);"> <img
+							th:src="@{/assets/img/ui-sam.jpg}" class="img-circle" width="60" />
+						</a>
+					</p>
+					<h5 class="centered">
+						<span th:if="${session.user != null}"
+							th:text="${session.user.nickname}"></span> <span
+							th:unless="${session.user != null}">PICQ48</span>
+					</h5>
 
-                    <li class="mt"><a href="/index"> <i class="fa fa-university"></i> <span>主页</span>
-                        </a></li>
-                    <li class="sub-menu"><a href="javascript:;"> <i class="fa fa-th-large"></i> <span>系统配置</span>
-                        </a>
-                        <ul class="sub">
-                            <li class="active" shiro:hasPermission="system-user:url"><a
-                                    href="/system-manage/system-user">用户管理</a></li>
-                            <li shiro:hasPermission="system-role:url"><a href="/system-manage/system-role">角色管理</a></li>
-                            <li shiro:hasPermission="system-permission:url"><a
-                                    href="/system-manage/system-permission">资源管理</a></li>
-                        </ul>
-                    </li>
-                    <li class="sub-menu"><a href="javascript:;"> <i class="fa fa-cogs"></i> <span>机器人配置</span>
-                        </a>
-                        <ul class="sub">
-                            <li><a href="/resource-management/member-table">成员列表</a></li>
-                            <li><a href="/resource-management/modian-table">摩点项目列表</a></li>
-                            <li><a href="/resource-management/weibo-table">微博用户列表</a></li>
-                            <li shiro:hasPermission="qq-table:url"><a href="/resource-management/qq-table">QQ列表</a></li>
-                            <li shiro:hasPermission="quartz-confing-table:url"><a
-                                    href="/resource-management/quartz-confing-table">轮询配置列表</a></li>
-                        </ul>
-                    </li>
-                    <li class="sub-menu"><a href="javascript:;"> <i class="fa fa-desktop"></i> <span>可视化数据</span>
-                        </a>
-                        <ul class="sub">
-                            <li shiro:hasPermission="modian-visual:url"><a
-                                    href="/data-visualization/modian-visual">摩点项目数据</a></li>
-                            <li>
-                                <a href="/data-visualization/room-message">口袋房间消息</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="sub-menu"><a class="active" href="/help"> <i class="fa fa-question-circle"></i>
-                            <span>帮助</span>
-                        </a></li>
-                </ul>
-                <!-- sidebar menu end-->
-            </div>
-        </aside>
-        <!--sidebar end-->
-        <div class="copyrights">
-            Collect from <a href="http://www.cssmoban.com/">网页模板</a>
-        </div>
+					<li class="mt"><a href="/index"> <i
+							class="fa fa-university"></i> <span>主页</span>
+					</a></li>
+					<li class="sub-menu"><a href="javascript:;"> <i
+							class="fa fa-th-large"></i> <span>系统配置</span>
+					</a>
+						<ul class="sub">
+							<li class="active" shiro:hasPermission="system-user:url"><a
+								href="/system-manage/system-user">用户管理</a></li>
+							<li shiro:hasPermission="system-role:url"><a
+								href="/system-manage/system-role">角色管理</a></li>
+							<li shiro:hasPermission="system-permission:url"><a
+								href="/system-manage/system-permission">资源管理</a></li>
+						</ul></li>
+					<li class="sub-menu"><a href="javascript:;"> <i
+							class="fa fa-cogs"></i> <span>机器人配置</span>
+					</a>
+						<ul class="sub">
+							<li><a href="/resource-management/member-table">成员列表</a></li>
+							<li><a href="/resource-management/modian-table">摩点项目列表</a></li>
+							<li><a href="/resource-management/weibo-table">微博用户列表</a></li>
+							<li shiro:hasPermission="qq-table:url"><a
+								href="/resource-management/qq-table">QQ列表</a></li>
+							<li shiro:hasPermission="quartz-confing-table:url"><a
+								href="/resource-management/quartz-confing-table">轮询配置列表</a></li>
+						</ul></li>
+					<li class="sub-menu"><a href="javascript:;"> <i
+							class="fa fa-desktop"></i> <span>可视化数据</span>
+					</a>
+						<ul class="sub">
+							<li shiro:hasPermission="modian-visual:url"><a
+								href="/data-visualization/modian-visual">摩点项目数据</a></li>
+							<li><a href="/data-visualization/room-message">口袋房间消息</a></li>
+						</ul></li>
+					<li class="sub-menu"><a class="active" href="/help"> <i
+							class="fa fa-question-circle"></i> <span>帮助</span>
+					</a></li>
+				</ul>
+				<!-- sidebar menu end-->
+			</div>
+		</aside>
+		<!--sidebar end-->
+		<div class="copyrights">
+			Collect from <a href="http://www.cssmoban.com/">网页模板</a>
+		</div>
 
-        <!-- **********************************************************************************************************************************************************
+		<!-- **********************************************************************************************************************************************************
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
-        <!--main content start-->
-        <section id="main-content">
-            <section class="wrapper">
-                <h3>
-                    <i class="fa fa-angle-right"></i> 帮助
-                </h3>
-                <div id="morris">
-                    <div class="row mt">
-                        <div class="col-lg-3">
-                            <div class="content-panel">
-                                <h4>
-                                    <a href="#help_room"><i class="fa fa-angle-right"></i>
-                                        如何配置口袋48房间监控？</a>
-                                </h4>
-                                <h4>
-                                    <a href="#help_modian"><i class="fa fa-angle-right"></i>
-                                        如何配置摩点集资监控？</a>
-                                </h4>
-                                <h4>
-                                    <a href="#help_weibo"><i class="fa fa-angle-right"></i>
-                                        如何配置微博监控？</a>
-                                </h4>
-                                <div class="panel-body">
-                                    <div id="hero-graph" class="graph"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-9">
-                            <div class="content-panel">
-                                <h3 id="help_room">&nbsp;</h3>
-                                <h2>
-                                    <i class="fa fa-angle-right"></i> 如何配置口袋48房间监控？
-                                </h2>
-                                <div class="panel-body">
-                                    <div id="hero-bar" class="graph">
-                                        <div class="row">
-                                            <p>1.点击左侧菜单栏中的成员列表进入对应配置页面。</p>
-                                            <img src="/assets/img/help/01.png">
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <p>2.进入成员列表页面后，可以看到列表中右侧列中的监控状态，使用有权限的账号可对成员房间的监控状态进行更改。
-                                                注意，这里的监控只是对房间消息进行监控，即系统会去主动获取房间的消息，但若要将获取到的房间消息发送到QQ群中需接下来第三步。</p>
-                                            <img src="/assets/img/help/02.png">
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <p>3.点击第一列的+号可展开发送消息的相关配置，可新增和删除消息发送到的QQ，并且还可以配置关键字监控。
-                                                关键字监控可针对多个关键字对房间消息进行判断，一条消息中如果含有其中一个关键字，该消息将被正常发送到指定QQ，若不包含关键字则忽略该条消息，
-                                                多个关键字使用英文逗号进行分隔，当关键字监控为空时消息是全量发送的。此功能适用监控成员的好友房间，可获取该成员在其他成员房间的发言。
-                                                有一点要注意的是，在第一次新增接收消息的QQ(群)时，需要联系管理员在服务器打开该QQ(群)的聊天窗口。</p>
-                                            <img src="/assets/img/help/03.png">
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <p>4.当第一次配置接收消息的QQ(群)时一般是没有需要的QQ(群)可选择的，这个时候可点击下方链接，到QQ列表去新增。</p>
-                                            <img src="/assets/img/help/04.png">
-                                        </div>
-                                    </div>
-                                </div>
+		<!--main content start-->
+		<section id="main-content">
+			<section class="wrapper">
+				<h3>
+					<i class="fa fa-angle-right"></i> 帮助
+				</h3>
+				<div id="morris">
+					<div class="row mt">
+						<div class="col-lg-3">
+							<div class="content-panel">
+								<h4>
+									<a href="#help_room"><i class="fa fa-angle-right"></i>
+										如何配置口袋48房间监控？</a>
+								</h4>
+								<h4>
+									<a href="#help_modian"><i class="fa fa-angle-right"></i>
+										如何配置摩点集资监控？</a>
+								</h4>
+								<h4>
+									<a href="#help_weibo"><i class="fa fa-angle-right"></i>
+										如何配置微博监控？</a>
+								</h4>
+								<div class="panel-body">
+									<div id="hero-graph" class="graph"></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-9">
+							<div class="content-panel">
+								<h3 id="help_room">&nbsp;</h3>
+								<h2>
+									<i class="fa fa-angle-right"></i> 如何配置口袋48房间监控？
+								</h2>
+								<div class="panel-body">
+									<div id="hero-bar" class="graph">
+										<div class="row">
+											<p>1.点击左侧菜单栏中的成员列表进入对应配置页面。</p>
+											<img src="/assets/img/help/01.png">
+										</div>
+										<br>
+										<div class="row">
+											<p>2.进入成员列表页面后，可以看到列表中右侧列中的监控状态，使用有权限的账号可对成员房间的监控状态进行更改。
+												注意，这里的监控只是对房间消息进行监控，即系统会去主动获取房间的消息，但若要将获取到的房间消息发送到QQ群中需接下来第三步。</p>
+											<img src="/assets/img/help/02.png">
+										</div>
+										<br>
+										<div class="row">
+											<p>3.点击第一列的+号可展开发送消息的相关配置，可新增和删除消息发送到的QQ，并且还可以配置关键字监控。
+												关键字监控可针对多个关键字对房间消息进行判断，一条消息中如果含有其中一个关键字，该消息将被正常发送到指定QQ，若不包含关键字则忽略该条消息，
+												多个关键字使用英文逗号进行分隔，当关键字监控为空时消息是全量发送的。此功能适用监控成员的好友房间，可获取该成员在其他成员房间的发言。
+												有一点要注意的是，在第一次新增接收消息的QQ(群)时，需要联系管理员在服务器打开该QQ(群)的聊天窗口。</p>
+											<img src="/assets/img/help/03.png">
+										</div>
+										<br>
+										<div class="row">
+											<p>4.当第一次配置接收消息的QQ(群)时一般是没有需要的QQ(群)可选择的，这个时候可点击下方链接，到QQ列表去新增。</p>
+											<img src="/assets/img/help/04.png">
+										</div>
+									</div>
+								</div>
 
-                                <h3 id="help_modian">&nbsp;</h3>
-                                <h2>
-                                    <i class="fa fa-angle-right"></i> 如何配置摩点集资监控？
-                                </h2>
-                                <div class="panel-body">
-                                    <div id="hero-bar" class="graph">
-                                        <div class="row">
-                                            <p>1.点击左侧菜单栏的摩点项目列表。</p>
-                                            <img src="/assets/img/help/05.png">
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <p>2.新增摩点项目监控，需要手动输入摩点项目ID，该ID可从项目网址中获取。具体例子如下图，要注意，在新增后不会马上有数据，需要等待系统进行数据
-                                                同步后才会在列表中看到数据。这里配置后同样只是获取数据，并不会发送消息，发送消息需要查看第3步的具体操作。众筹中的项目和已结束的项目都能配置进来，
-                                                方便后期对数据的统计，具体功能在可视化数据菜单中提供。</p>
-                                            <img src="/assets/img/help/06.png"> <img src="/assets/img/help/07.png">
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <p>3.点击第一列的+号可展开发送摩点消息的相关配置，可新增和删除消息发送到的QQ。在第一次新增接收消息的QQ(群)时，需要联系管理员在服务器打开该QQ(群)的聊天窗口。
-                                            </p>
-                                            <img src="/assets/img/help/08.png">
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <p>4.当第一次配置接收消息的QQ(群)时一般是没有需要的QQ(群)可选择的，这个时候可点击下方链接，到QQ列表去新增。</p>
-                                            <img src="/assets/img/help/09.png">
-                                        </div>
-                                    </div>
-                                </div>
+								<h3 id="help_modian">&nbsp;</h3>
+								<h2>
+									<i class="fa fa-angle-right"></i> 如何配置摩点集资监控？
+								</h2>
+								<div class="panel-body">
+									<div id="hero-bar" class="graph">
+										<div class="row">
+											<p>1.点击左侧菜单栏的摩点项目列表。</p>
+											<img src="/assets/img/help/05.png">
+										</div>
+										<br>
+										<div class="row">
+											<p>2.新增摩点项目监控，需要手动输入摩点项目ID，该ID可从项目网址中获取。具体例子如下图，要注意，在新增后不会马上有数据，需要等待系统进行数据
+												同步后才会在列表中看到数据。这里配置后同样只是获取数据，并不会发送消息，发送消息需要查看第3步的具体操作。众筹中的项目和已结束的项目都能配置进来，
+												方便后期对数据的统计，具体功能在可视化数据菜单中提供。</p>
+											<img src="/assets/img/help/06.png"> <img
+												src="/assets/img/help/07.png">
+										</div>
+										<br>
+										<div class="row">
+											<p>3.点击第一列的+号可展开发送摩点消息的相关配置，可新增和删除消息发送到的QQ。在第一次新增接收消息的QQ(群)时，需要联系管理员在服务器打开该QQ(群)的聊天窗口。
+											</p>
+											<img src="/assets/img/help/08.png">
+										</div>
+										<br>
+										<div class="row">
+											<p>4.当第一次配置接收消息的QQ(群)时一般是没有需要的QQ(群)可选择的，这个时候可点击下方链接，到QQ列表去新增。</p>
+											<img src="/assets/img/help/09.png">
+										</div>
+									</div>
+								</div>
 
-                                <h3 id="help_weibo">&nbsp;</h3>
-                                <h2>
-                                    <i class="fa fa-angle-right"></i> 如何配置微博监控？
-                                </h2>
-                                <div class="panel-body">
-                                    <div id="hero-bar" class="graph">
-                                        <div class="row">
-                                            <p>1.点击左侧菜单栏中的微博用户列表。</p>
-                                            <img src="/assets/img/help/10.png">
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <p>2.新增微博用户监控，需要手动输入微博用户的容器ID才能进行配置，具体的容器ID获取方式见下图。要注意的是，这里只是对微博用户做监控，
-                                                并不会发送消息到QQ(群)，若要发送消息详见第3步。</p>
-                                            <img src="/assets/img/help/11.png"> <img src="/assets/img/help/12.png"> <img
-                                                src="/assets/img/help/13.png">
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <p>3.点击第一列的+号可展开发送微博动态的相关配置，可新增和删除消息发送到的QQ。在第一次新增接收消息的QQ(群)时，需要联系管理员在服务器打开该QQ(群)的聊天窗口。
-                                            </p>
-                                            <img src="/assets/img/help/14.png">
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <p>4.当第一次配置接收消息的QQ(群)时一般是没有需要的QQ(群)可选择的，这个时候可点击下方链接，到QQ列表去新增。</p>
-                                            <img src="/assets/img/help/09.png">
-                                        </div>
-                                    </div>
-                                </div>
+								<h3 id="help_weibo">&nbsp;</h3>
+								<h2>
+									<i class="fa fa-angle-right"></i> 如何配置微博监控？
+								</h2>
+								<div class="panel-body">
+									<div id="hero-bar" class="graph">
+										<div class="row">
+											<p>1.点击左侧菜单栏中的微博用户列表。</p>
+											<img src="/assets/img/help/10.png">
+										</div>
+										<br>
+										<div class="row">
+											<p>2.新增微博用户监控，需要手动输入微博用户的容器ID才能进行配置，具体的容器ID获取方式见下图。要注意的是，这里只是对微博用户做监控，
+												并不会发送消息到QQ(群)，若要发送消息详见第3步。</p>
+											<img src="/assets/img/help/11.png"> <img
+												src="/assets/img/help/12.png"> <img
+												src="/assets/img/help/13.png">
+										</div>
+										<br>
+										<div class="row">
+											<p>3.点击第一列的+号可展开发送微博动态的相关配置，可新增和删除消息发送到的QQ。在第一次新增接收消息的QQ(群)时，需要联系管理员在服务器打开该QQ(群)的聊天窗口。
+											</p>
+											<img src="/assets/img/help/14.png">
+										</div>
+										<br>
+										<div class="row">
+											<p>4.当第一次配置接收消息的QQ(群)时一般是没有需要的QQ(群)可选择的，这个时候可点击下方链接，到QQ列表去新增。</p>
+											<img src="/assets/img/help/09.png">
+										</div>
+									</div>
+								</div>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!--/wrapper -->
-        </section>
-        <!-- /MAIN CONTENT -->
-        <!--main content end-->
-        <!--footer start-->
-        <footer class="site-footer">
-            <div class="text-center">
-                2018 - GNZ48-章泽婷应援会 - QQ：<a href="javascript:void(0);" title="777095721">777095721</a> <a
-                    href="#container" class="go-top">
-                    <i class="fa fa-angle-up"></i>
-                </a>
-            </div>
-        </footer>
-        <!--footer end-->
-    </section>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!--/wrapper -->
+		</section>
+		<!-- /MAIN CONTENT -->
+		<!--main content end-->
+		<!--footer start-->
+		<footer class="site-footer">
+			<div class="text-center">
+				2019 - PICQ48 - 机器人QQ：<a href="javascript:void(0);"
+					title="2965741174">2965741174</a> <a href="index.html#"
+					class="go-top"> <i class="fa fa-angle-up"></i>
+				</a>
+			</div>
+		</footer>
+		<!--footer end-->
+	</section>
 
-    <!-- js placed at the end of the document so the pages load faster -->
-    <script th:src="@{/assets/js/jquery.js}"></script>
-    <script th:src="@{/assets/js/jquery-1.8.3.min.js}"></script>
-    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
-    <script class="include" type="text/javascript" th:src="@{/assets/js/jquery.dcjqaccordion.2.7.js}"></script>
-    <script th:src="@{/assets/js/jquery.scrollTo.min.js}"></script>
-    <script th:src="@{/assets/js/jquery.nicescroll.js}" type="text/javascript"></script>
+	<!-- js placed at the end of the document so the pages load faster -->
+	<script th:src="@{/assets/js/jquery.js}"></script>
+	<script th:src="@{/assets/js/jquery-1.8.3.min.js}"></script>
+	<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+	<script class="include" type="text/javascript"
+		th:src="@{/assets/js/jquery.dcjqaccordion.2.7.js}"></script>
+	<script th:src="@{/assets/js/jquery.scrollTo.min.js}"></script>
+	<script th:src="@{/assets/js/jquery.nicescroll.js}"
+		type="text/javascript"></script>
 
-    <!--common script for all pages-->
-    <script th:src="@{/assets/js/common-scripts.js}"></script>
+	<!--common script for all pages-->
+	<script th:src="@{/assets/js/common-scripts.js}"></script>
 
 </body>
 

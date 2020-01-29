@@ -177,10 +177,10 @@
 //	@Test
 //	void pocket48ToolTest() {
 //		try {
-//			System.out.println(HttpsPICQ48.httpsMemberRoom(327567, 0));
+//			System.out.println(HttpsPICQ48.httpsRoomMessage("19", "67333101", 0));
 //		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
 //			e.printStackTrace();
 //		}
 //	}
-//
+//	
 //}

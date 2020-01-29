@@ -94,14 +94,20 @@ public class Pocket48Tool extends JsonPICQ48 {
 			// 遍历消息json数组
 			JSONArray messageArray = messageObj.getJSONObject("content").getJSONArray("message");
 			List<RoomMessage> messageList = new ArrayList<RoomMessage>();
-			for (int i = 0; i < messageArray.length(); i++) {
+			
+			int messageArraySize = messageArray.length();
+			if (messageArraySize < 1) {
+				throw new NullPointerException("获取到的口袋房间消息列表为空");
+			}
+			
+			for (int i = 0; i < messageArraySize; i++) {
 				JSONObject indexObj = messageArray.getJSONObject(i);
 				RoomMessage roomMessage = new RoomMessage();
 				setRoomMessage(roomMessage, indexObj);
 				messageList.add(roomMessage);
 			}
 			return messageList;
-		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException | ParseException e) {
+		} catch (Exception e) {
 			log.error("获取List<RoomMessage>发生异常：{}", e.getMessage());
 		}
 		return null;
@@ -199,7 +205,7 @@ public class Pocket48Tool extends JsonPICQ48 {
 		}
 		return null;
 	}
-
+	
 	@Override
 	public <T> List<T> get(Class<T> clazz) {
 		// TODO Auto-generated method stub

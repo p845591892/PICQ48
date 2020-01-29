@@ -1,33 +1,37 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="" />
-    <meta name="author" content="Dashboard" />
-    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="author" content="Dashboard" />
+<meta name="keyword"
+	content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina" />
 
-    <title>GNZ48-章泽婷应援会</title>
+<title>PICQ48</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.css" rel="stylesheet" />
-    <!--external css-->
-    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="assets/css/zabuto_calendar.css" />
-    <link rel="stylesheet" type="text/css" href="assets/js/gritter/css/jquery.gritter.css" />
-    <link rel="stylesheet" type="text/css" href="assets/lineicons/style.css" />
+<!-- Bootstrap core CSS -->
+<link href="assets/css/bootstrap.css" rel="stylesheet" />
+<!--external css-->
+<link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css"
+	href="assets/css/zabuto_calendar.css" />
+<link rel="stylesheet" type="text/css"
+	href="assets/js/gritter/css/jquery.gritter.css" />
+<link rel="stylesheet" type="text/css" href="assets/lineicons/style.css" />
 
-    <!-- Custom styles for this template -->
-    <link href="assets/css/style.css" rel="stylesheet" />
-    <link href="assets/css/style-responsive.css" rel="stylesheet" />
+<!-- Custom styles for this template -->
+<link href="assets/css/style.css" rel="stylesheet" />
+<link href="assets/css/style-responsive.css" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
+<link rel="stylesheet" type="text/css" href="css/index.css" />
 
-    <script src="assets/js/chart-master/Chart.js"></script>
+<script src="assets/js/chart-master/Chart.js"></script>
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
@@ -35,85 +39,90 @@
 
 <body>
 
-    <section id="container">
-        <!-- **********************************************************************************************************************************************************
+	<section id="container">
+		<!-- **********************************************************************************************************************************************************
       TOP BAR CONTENT & NOTIFICATIONS
       *********************************************************************************************************************************************************** -->
-        <!--header start-->
-        <header class="header black-bg">
-            <div class="sidebar-toggle-box">
-                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="展开/收起"></div>
-            </div>
-            <!--logo start-->
-            <a href="/index" class="logo"><b>GNZ48-章泽婷应援会</b></a>
-            <!--logo end-->
-            <div class="top-menu" shiro:guest>
-                <ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="/login">登录</a></li>
-                </ul>
-            </div>
-            <div class="top-menu" shiro:authenticated>
-                <ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="/logout">退出</a></li>
-                </ul>
-            </div>
-        </header>
-        <!--header end-->
+		<!--header start-->
+		<header class="header black-bg">
+			<div class="sidebar-toggle-box">
+				<div class="fa fa-bars tooltips" data-placement="right"
+					data-original-title="展开/收起"></div>
+			</div>
+			<!--logo start-->
+			<a href="/index" class="logo"><b>PICQ48</b></a>
+			<!--logo end-->
+			<div class="top-menu" shiro:guest>
+				<ul class="nav pull-right top-menu">
+					<li><a class="logout" href="/login">登录</a></li>
+				</ul>
+			</div>
+			<div class="top-menu" shiro:authenticated>
+				<ul class="nav pull-right top-menu">
+					<li><a class="logout" href="/logout">退出</a></li>
+				</ul>
+			</div>
+		</header>
+		<!--header end-->
 
-        <!-- **********************************************************************************************************************************************************
+		<!-- **********************************************************************************************************************************************************
       MAIN SIDEBAR MENU
       *********************************************************************************************************************************************************** -->
-        <!--sidebar start-->
-        <aside>
-            <div id="sidebar" class="nav-collapse ">
-                <!-- sidebar menu start-->
-                <ul class="sidebar-menu" id="nav-accordion">
+		<!--sidebar start-->
+		<aside>
+			<div id="sidebar" class="nav-collapse ">
+				<!-- sidebar menu start-->
+				<ul class="sidebar-menu" id="nav-accordion">
 
-                    <p class="centered">
-                        <a href="javascript:void(0);"><img src="assets/img/ui-sam.jpg" class="img-circle"
-                                width="60" /></a>
-                    </p>
-                    <h5 class="centered">
-                        <span th:if="${session.user != null}" th:text="${session.user.nickname}"></span> <span
-                            th:unless="${session.user != null}">章泽婷应援会</span>
-                    </h5>
-                    <li class="mt"><a class="active" href="/index"> <i class="fa fa-university"></i> <span>主页</span>
-                        </a></li>
-                    <li class="sub-menu"><a href="javascript:;"> <i class="fa fa-th-large"></i> <span>系统配置</span>
-                        </a>
-                        <ul class="sub">
-                            <li shiro:hasPermission="system-user:url"><a href="/system-manage/system-user">用户管理</a></li>
-                            <li shiro:hasPermission="system-role:url"><a href="/system-manage/system-role">角色管理</a></li>
-                            <li shiro:hasPermission="system-permission:url"><a
-                                    href="/system-manage/system-permission">资源管理</a></li>
-                        </ul>
-                    </li>
-                    <li class="sub-menu"><a href="javascript:;"> <i class="fa fa-cogs"></i> <span>机器人配置</span>
-                        </a>
-                        <ul class="sub">
-                            <li><a href="/resource-management/member-table">成员列表</a></li>
-                            <li><a href="/resource-management/modian-table">摩点项目列表</a></li>
-                            <li><a href="/resource-management/weibo-table">微博用户列表</a></li>
-                            <li shiro:hasPermission="qq-table:url"><a href="/resource-management/qq-table">QQ列表</a></li>
-                            <li shiro:hasPermission="quartz-confing-table:url"><a
-                                    href="/resource-management/quartz-confing-table">轮询配置列表</a></li>
-                        </ul>
-                    </li>
-                    <li class="sub-menu"><a href="javascript:;"> <i class="fa fa-desktop"></i> <span>可视化数据</span>
-                        </a>
-                        <ul class="sub">
-                            <li shiro:hasPermission="modian-visual:url"><a
-                                    href="/data-visualization/modian-visual">摩点项目数据</a></li>
-                            <li>
-                                <a href="/data-visualization/room-message">口袋房间消息</a>
-                            </li>
-                            <!-- <li><a href="gallery.html">Gallery</a></li>
+					<p class="centered">
+						<a href="javascript:void(0);"><img src="assets/img/ui-sam.jpg"
+							class="img-circle" width="60" /></a>
+					</p>
+					<h5 class="centered">
+						<span th:if="${session.user != null}"
+							th:text="${session.user.nickname}"></span> <span
+							th:unless="${session.user != null}">PICQ48</span>
+					</h5>
+					<li class="mt"><a class="active" href="/index"> <i
+							class="fa fa-university"></i> <span>主页</span>
+					</a></li>
+					<li class="sub-menu"><a href="javascript:;"> <i
+							class="fa fa-th-large"></i> <span>系统配置</span>
+					</a>
+						<ul class="sub">
+							<li shiro:hasPermission="system-user:url"><a
+								href="/system-manage/system-user">用户管理</a></li>
+							<li shiro:hasPermission="system-role:url"><a
+								href="/system-manage/system-role">角色管理</a></li>
+							<li shiro:hasPermission="system-permission:url"><a
+								href="/system-manage/system-permission">资源管理</a></li>
+						</ul></li>
+					<li class="sub-menu"><a href="javascript:;"> <i
+							class="fa fa-cogs"></i> <span>机器人配置</span>
+					</a>
+						<ul class="sub">
+							<li><a href="/resource-management/member-table">成员列表</a></li>
+							<li><a href="/resource-management/modian-table">摩点项目列表</a></li>
+							<li><a href="/resource-management/weibo-table">微博用户列表</a></li>
+							<li shiro:hasPermission="qq-table:url"><a
+								href="/resource-management/qq-table">QQ列表</a></li>
+							<li shiro:hasPermission="quartz-confing-table:url"><a
+								href="/resource-management/quartz-confing-table">轮询配置列表</a></li>
+						</ul></li>
+					<li class="sub-menu"><a href="javascript:;"> <i
+							class="fa fa-desktop"></i> <span>可视化数据</span>
+					</a>
+						<ul class="sub">
+							<li shiro:hasPermission="modian-visual:url"><a
+								href="/data-visualization/modian-visual">摩点项目数据</a></li>
+							<li><a href="/data-visualization/room-message">口袋房间消息</a></li>
+							<!-- <li><a href="gallery.html">Gallery</a></li>
 							<li><a href="todo_list.html">Todo List</a></li> -->
-                        </ul>
-                    </li>
-                    <li class="sub-menu"><a href="/help"> <i class="fa fa-question-circle"></i> <span>帮助</span>
-                        </a></li>
-                    <!--  <li class="sub-menu">
+						</ul></li>
+					<li class="sub-menu"><a href="/help"> <i
+							class="fa fa-question-circle"></i> <span>帮助</span>
+					</a></li>
+					<!--  <li class="sub-menu">
                       <a href="javascript:;" >
                           <i class="fa fa-tasks"></i>
                           <span>Forms</span>
@@ -143,155 +152,152 @@
                       </ul>
                   </li> -->
 
-                </ul>
-                <!-- sidebar menu end-->
-            </div>
-        </aside>
-        <!--sidebar end-->
-        <div class="copyrights">
-            Collect from <a href="http://www.cssmoban.com/">网页模板</a>
-        </div>
+				</ul>
+				<!-- sidebar menu end-->
+			</div>
+		</aside>
+		<!--sidebar end-->
+		<div class="copyrights">
+			Collect from <a href="http://www.cssmoban.com/">网页模板</a>
+		</div>
 
-        <section id="container">
-            <!-- **********************************************************************************************************************************************************
+		<section id="container">
+			<!-- **********************************************************************************************************************************************************
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
-            <!--main content start-->
-            <section id="main-content">
-                <section class="wrapper">
+			<!--main content start-->
+			<section id="main-content">
+				<section class="wrapper">
 
-                    <div class="row">
-                        <div class="col-lg-9 main-chart">
+					<div class="row">
+						<div class="col-lg-9 main-chart">
 
-                            <div class="row mtbox">
-                                <div class="col-md-2 col-sm-2 col-md-offset-1 box0">
-                                    <div class="box1">
-                                        <span th:utext=${mtbox.mtbox1.icon}></span>
-                                        <h3 th:text="${mtbox.mtbox1.data}"></h3>
-                                    </div>
-                                    <p th:text="${mtbox.mtbox1.name}"></p>
-                                </div>
-                                <div class="col-md-2 col-sm-2 box0">
-                                    <div class="box1">
-                                        <span th:utext=${mtbox.mtbox2.icon}></span>
-                                        <h3 th:text="${mtbox.mtbox2.data}"></h3>
-                                    </div>
-                                    <p th:text="${mtbox.mtbox2.name}"></p>
-                                </div>
-                                <div class="col-md-2 col-sm-2 box0">
-                                    <div class="box1">
-                                        <span th:utext=${mtbox.mtbox3.icon}></span>
-                                        <h3 th:text="${mtbox.mtbox3.data}"></h3>
-                                    </div>
-                                    <p th:text="${mtbox.mtbox3.name}"></p>
-                                </div>
-                                <div class="col-md-2 col-sm-2 box0">
-                                    <div class="box1">
-                                        <span th:utext=${mtbox.mtbox4.icon}></span>
-                                        <h3 th:text="${mtbox.mtbox4.data}"></h3>
-                                    </div>
-                                    <p th:text="${mtbox.mtbox4.name}"></p>
-                                </div>
-                                <div class="col-md-2 col-sm-2 box0">
-                                    <div class="box1">
-                                        <span th:utext=${mtbox.mtbox5.icon}></span>
-                                        <h3 th:text="${mtbox.mtbox5.data}"></h3>
-                                    </div>
-                                    <p th:text="${mtbox.mtbox5.name}"></p>
-                                </div>
+							<div class="row mtbox">
+								<div class="col-md-2 col-sm-2 col-md-offset-1 box0">
+									<div class="box1">
+										<span th:utext=${mtbox.mtbox1.icon}></span>
+										<h3 th:text="${mtbox.mtbox1.data}"></h3>
+									</div>
+									<p th:text="${mtbox.mtbox1.name}"></p>
+								</div>
+								<div class="col-md-2 col-sm-2 box0">
+									<div class="box1">
+										<span th:utext=${mtbox.mtbox2.icon}></span>
+										<h3 th:text="${mtbox.mtbox2.data}"></h3>
+									</div>
+									<p th:text="${mtbox.mtbox2.name}"></p>
+								</div>
+								<div class="col-md-2 col-sm-2 box0">
+									<div class="box1">
+										<span th:utext=${mtbox.mtbox3.icon}></span>
+										<h3 th:text="${mtbox.mtbox3.data}"></h3>
+									</div>
+									<p th:text="${mtbox.mtbox3.name}"></p>
+								</div>
+								<div class="col-md-2 col-sm-2 box0">
+									<div class="box1">
+										<span th:utext=${mtbox.mtbox4.icon}></span>
+										<h3 th:text="${mtbox.mtbox4.data}"></h3>
+									</div>
+									<p th:text="${mtbox.mtbox4.name}"></p>
+								</div>
+								<div class="col-md-2 col-sm-2 box0">
+									<div class="box1">
+										<span th:utext=${mtbox.mtbox5.icon}></span>
+										<h3 th:text="${mtbox.mtbox5.data}"></h3>
+									</div>
+									<p th:text="${mtbox.mtbox5.name}"></p>
+								</div>
 
-                            </div>
-                            <!-- /row mt -->
+							</div>
+							<!-- /row mt -->
 
-                            <div class="row mt">
-                                <!-- SERVER STATUS PANELS -->
-                                <!-- 1-1窗 -->
-                                <div class="col-md-4 col-sm-4 mb">
-                                    <div class="white-panel pn donut-chart">
-                                        <div class="white-header">
-                                            <h5>暂无数据展示</h5>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6 col-xs-6 goleft">
-                                                <p>
-                                                    <i class="fa fa-database"></i> 70%
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <canvas id="serverstatus01" height="120" width="120"></canvas>
-                                        <script>
-                                            var doughnutData = [{
-                                                value: 70,
-                                                color: "#68dff0"
-                                            }, {
-                                                value: 30,
-                                                color: "#fdfdfd"
-                                            }];
-                                            var myDoughnut = new Chart(document
-                                                .getElementById(
-                                                    "serverstatus01")
-                                                .getContext("2d"))
-                                                .Doughnut(doughnutData);
-                                        </script>
-                                    </div>
-                                </div>
-                                <!-- /col-md-4-->
+							<div class="row mt">
+								<!-- SERVER STATUS PANELS -->
+								<!-- 1-1窗 -->
+								<div class="col-md-4 col-sm-4 mb">
+									<div class="white-panel pn donut-chart">
+										<div class="white-header">
+											<h5>暂无数据展示</h5>
+										</div>
+										<div class="row">
+											<div class="col-sm-6 col-xs-6 goleft">
+												<p>
+													<i class="fa fa-database"></i> 70%
+												</p>
+											</div>
+										</div>
+										<canvas id="serverstatus01" height="120" width="120"></canvas>
+										<script>
+											var doughnutData = [ {
+												value : 70,
+												color : "#68dff0"
+											}, {
+												value : 30,
+												color : "#fdfdfd"
+											} ];
+											var myDoughnut = new Chart(document.getElementById("serverstatus01").getContext("2d")).Doughnut(doughnutData);
+										</script>
+									</div>
+								</div>
+								<!-- /col-md-4-->
 
-                                <!-- 1-2窗 -->
-                                <div class="col-md-4 col-sm-4 mb">
-                                    <div class="white-panel pn">
-                                        <div class="white-header">
-                                            <h5>暂无数据展示</h5>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6 col-xs-6 goleft">
-                                                <p>
-                                                    <i class="fa fa-heart"></i> 122
-                                                </p>
-                                            </div>
-                                            <div class="col-sm-6 col-xs-6"></div>
-                                        </div>
-                                        <div class="centered">
-                                            <img src="assets/img/product.png" width="120" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /col-md-4 -->
+								<!-- 1-2窗 -->
+								<div class="col-md-4 col-sm-4 mb">
+									<div class="white-panel pn">
+										<div class="white-header">
+											<h5>暂无数据展示</h5>
+										</div>
+										<div class="row">
+											<div class="col-sm-6 col-xs-6 goleft">
+												<p>
+													<i class="fa fa-heart"></i> 122
+												</p>
+											</div>
+											<div class="col-sm-6 col-xs-6"></div>
+										</div>
+										<div class="centered">
+											<img src="assets/img/product.png" width="120" />
+										</div>
+									</div>
+								</div>
+								<!-- /col-md-4 -->
 
-                                <!-- 1-3窗 -->
-                                <div class="col-md-4 mb">
-                                    <div class="white-panel pn">
-                                        <div class="white-header">
-                                            <h5>暂无数据展示</h5>
-                                        </div>
-                                        <p>
-                                            <img src="assets/img/ui-zac.jpg" class="img-circle" width="80" />
-                                        </p>
-                                        <p>
-                                            <b>Zac Snider</b>
-                                        </p>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <p class="small mt">MEMBER SINCE</p>
-                                                <p>2012</p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p class="small mt">TOTAL SPEND</p>
-                                                <p>$ 47,60</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /col-md-4 -->
+								<!-- 1-3窗 -->
+								<div class="col-md-4 mb">
+									<div class="white-panel pn">
+										<div class="white-header">
+											<h5>暂无数据展示</h5>
+										</div>
+										<p>
+											<img src="assets/img/ui-zac.jpg" class="img-circle"
+												width="80" />
+										</p>
+										<p>
+											<b>Zac Snider</b>
+										</p>
+										<div class="row">
+											<div class="col-md-6">
+												<p class="small mt">MEMBER SINCE</p>
+												<p>2012</p>
+											</div>
+											<div class="col-md-6">
+												<p class="small mt">TOTAL SPEND</p>
+												<p>$ 47,60</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- /col-md-4 -->
 
-                            </div>
-                            <!-- /row -->
+							</div>
+							<!-- /row -->
 
 
-                            <div class="row">
-                                <!-- TWITTER PANEL -->
-                                <!-- 2-1窗 -->
-                                <!-- <div class="col-md-4 mb">
+							<div class="row">
+								<!-- TWITTER PANEL -->
+								<!-- 2-1窗 -->
+								<!-- <div class="col-md-4 mb">
 									<div class="darkblue-panel pn">
 										<div class="darkblue-header">
 											<h5>暂无数据展示</h5>
@@ -325,10 +331,10 @@
 									</div>
 									/darkblue panel
 								</div> -->
-                                <!-- /col-md-4 -->
+								<!-- /col-md-4 -->
 
-                                <!-- 2-2窗 -->
-                                <!-- <div class="col-md-4 mb">
+								<!-- 2-2窗 -->
+								<!-- <div class="col-md-4 mb">
 									INSTAGRAM PANEL
 									<div class="instagram-panel pn">
 										<i class="fa fa-instagram fa-4x"></i>
@@ -339,10 +345,10 @@
 										</p>
 									</div>
 								</div> -->
-                                <!-- /col-md-4 -->
+								<!-- /col-md-4 -->
 
-                                <!-- 2-3窗 -->
-                                <!-- <div class="col-md-4 col-sm-4 mb">
+								<!-- 2-3窗 -->
+								<!-- <div class="col-md-4 col-sm-4 mb">
 									<div class="darkblue-panel pn">
 										<div class="darkblue-header">
 											<h5>暂无数据展示</h5>
@@ -360,268 +366,283 @@
 										</p>
 									</div>
 								</div> -->
-                                <!-- /col-md-4 -->
+								<!-- /col-md-4 -->
 
-                            </div>
-                            <!-- /row -->
+							</div>
+							<!-- /row -->
 
-                            <div class="row mt">
-                                <!--CUSTOM CHART START -->
-                                <div class="border-head">
-                                    <h3>暂无数据展示</h3>
-                                </div>
-                                <div class="custom-bar-chart">
-                                    <ul class="y-axis">
-                                        <li><span>10.000</span></li>
-                                        <li><span>8.000</span></li>
-                                        <li><span>6.000</span></li>
-                                        <li><span>4.000</span></li>
-                                        <li><span>2.000</span></li>
-                                        <li><span>0</span></li>
-                                    </ul>
-                                    <div class="bar">
-                                        <div class="title">JAN</div>
-                                        <div class="value tooltips" data-original-title="8.500" data-toggle="tooltip"
-                                            data-placement="top">85%</div>
-                                    </div>
-                                    <div class="bar ">
-                                        <div class="title">FEB</div>
-                                        <div class="value tooltips" data-original-title="5.000" data-toggle="tooltip"
-                                            data-placement="top">50%</div>
-                                    </div>
-                                    <div class="bar ">
-                                        <div class="title">MAR</div>
-                                        <div class="value tooltips" data-original-title="6.000" data-toggle="tooltip"
-                                            data-placement="top">60%</div>
-                                    </div>
-                                    <div class="bar ">
-                                        <div class="title">APR</div>
-                                        <div class="value tooltips" data-original-title="4.500" data-toggle="tooltip"
-                                            data-placement="top">45%</div>
-                                    </div>
-                                    <div class="bar">
-                                        <div class="title">MAY</div>
-                                        <div class="value tooltips" data-original-title="3.200" data-toggle="tooltip"
-                                            data-placement="top">32%</div>
-                                    </div>
-                                    <div class="bar ">
-                                        <div class="title">JUN</div>
-                                        <div class="value tooltips" data-original-title="6.200" data-toggle="tooltip"
-                                            data-placement="top">62%</div>
-                                    </div>
-                                    <div class="bar">
-                                        <div class="title">JUL</div>
-                                        <div class="value tooltips" data-original-title="7.500" data-toggle="tooltip"
-                                            data-placement="top">75%</div>
-                                    </div>
-                                </div>
-                                <!--custom chart end-->
-                            </div>
-                            <!-- /row -->
+							<div class="row mt">
+								<!--CUSTOM CHART START -->
+								<div class="border-head">
+									<h3>暂无数据展示</h3>
+								</div>
+								<div class="custom-bar-chart">
+									<ul class="y-axis">
+										<li><span>10.000</span></li>
+										<li><span>8.000</span></li>
+										<li><span>6.000</span></li>
+										<li><span>4.000</span></li>
+										<li><span>2.000</span></li>
+										<li><span>0</span></li>
+									</ul>
+									<div class="bar">
+										<div class="title">JAN</div>
+										<div class="value tooltips" data-original-title="8.500"
+											data-toggle="tooltip" data-placement="top">85%</div>
+									</div>
+									<div class="bar ">
+										<div class="title">FEB</div>
+										<div class="value tooltips" data-original-title="5.000"
+											data-toggle="tooltip" data-placement="top">50%</div>
+									</div>
+									<div class="bar ">
+										<div class="title">MAR</div>
+										<div class="value tooltips" data-original-title="6.000"
+											data-toggle="tooltip" data-placement="top">60%</div>
+									</div>
+									<div class="bar ">
+										<div class="title">APR</div>
+										<div class="value tooltips" data-original-title="4.500"
+											data-toggle="tooltip" data-placement="top">45%</div>
+									</div>
+									<div class="bar">
+										<div class="title">MAY</div>
+										<div class="value tooltips" data-original-title="3.200"
+											data-toggle="tooltip" data-placement="top">32%</div>
+									</div>
+									<div class="bar ">
+										<div class="title">JUN</div>
+										<div class="value tooltips" data-original-title="6.200"
+											data-toggle="tooltip" data-placement="top">62%</div>
+									</div>
+									<div class="bar">
+										<div class="title">JUL</div>
+										<div class="value tooltips" data-original-title="7.500"
+											data-toggle="tooltip" data-placement="top">75%</div>
+									</div>
+								</div>
+								<!--custom chart end-->
+							</div>
+							<!-- /row -->
 
-                        </div>
-                        <!-- /col-lg-9 END SECTION MIDDLE -->
+						</div>
+						<!-- /col-lg-9 END SECTION MIDDLE -->
 
 
-                        <!-- **********************************************************************************************************************************************************
+						<!-- **********************************************************************************************************************************************************
 						      RIGHT SIDEBAR CONTENT
 						      *********************************************************************************************************************************************************** -->
 
-                        <div class="col-lg-3 ds">
+						<div class="col-lg-3 ds">
 
-                            <!-- 今日口袋房间活跃成员 -->
-                            <h3>今日口袋房间活跃成员</h3>
-                            <!-- First Member -->
-                            <div class="desc">
-                                <div class="thumb">
-                                    <img class="img-circle" th:src="${ds.ds6.icon}" width="40px" align="" />
-                                </div>
-                                <div class="details">
-                                    <p>
-                                        &emsp;<a href="javascript:;" th:text="${ds.ds6.name}"></a><br />&emsp;活跃度：
-                                        <muted th:text="${ds.ds6.data}"></muted>
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- Second Member -->
-                            <div class="desc">
-                                <div class="thumb">
-                                    <img class="img-circle" th:src="${ds.ds7.icon}" width="40px" align="" />
-                                </div>
-                                <div class="details">
-                                    <p>
-                                        &emsp;<a href="javascript:;" th:text="${ds.ds7.name}"></a><br />&emsp;活跃度：
-                                        <muted th:text="${ds.ds7.data}"></muted>
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- Third Member -->
-                            <div class="desc">
-                                <div class="thumb">
-                                    <img class="img-circle" th:src="${ds.ds8.icon}" width="40px" align="" />
-                                </div>
-                                <div class="details">
-                                    <p>
-                                        &emsp;<a href="javascript:;" th:text="${ds.ds8.name}"></a><br />&emsp;活跃度：
-                                        <muted th:text="${ds.ds8.data}"></muted>
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- Fourth Member -->
-                            <div class="desc">
-                                <div class="thumb">
-                                    <img class="img-circle" th:src="${ds.ds9.icon}" width="40px" align="" />
-                                </div>
-                                <div class="details">
-                                    <p>
-                                        &emsp;<a href="javascript:;" th:text="${ds.ds9.name}"></a><br />&emsp;活跃度：
-                                        <muted th:text="${ds.ds9.data}"></muted>
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- Fifth Member -->
-                            <div class="desc">
-                                <div class="thumb">
-                                    <img class="img-circle" th:src="${ds.ds10.icon}" width="40px" align="" />
-                                </div>
-                                <div class="details">
-                                    <p>
-                                        &emsp;<a href="javascript:;" th:text="${ds.ds10.name}"></a><br />&emsp;活跃度：
-                                        <muted th:text="${ds.ds10.data}"></muted>
-                                    </p>
-                                </div>
-                            </div>
+							<!-- 今日口袋房间活跃成员 -->
+							<h3>今日口袋房间活跃成员</h3>
+							<!-- First Member -->
+							<div class="desc">
+								<div class="thumb">
+									<img class="img-circle" th:src="${ds.ds6.icon}" width="40px"
+										align="" />
+								</div>
+								<div class="details">
+									<p>
+										&emsp;<a href="javascript:;" th:text="${ds.ds6.name}"></a><br />&emsp;活跃度：
+										<muted th:text="${ds.ds6.data}"></muted>
+									</p>
+								</div>
+							</div>
+							<!-- Second Member -->
+							<div class="desc">
+								<div class="thumb">
+									<img class="img-circle" th:src="${ds.ds7.icon}" width="40px"
+										align="" />
+								</div>
+								<div class="details">
+									<p>
+										&emsp;<a href="javascript:;" th:text="${ds.ds7.name}"></a><br />&emsp;活跃度：
+										<muted th:text="${ds.ds7.data}"></muted>
+									</p>
+								</div>
+							</div>
+							<!-- Third Member -->
+							<div class="desc">
+								<div class="thumb">
+									<img class="img-circle" th:src="${ds.ds8.icon}" width="40px"
+										align="" />
+								</div>
+								<div class="details">
+									<p>
+										&emsp;<a href="javascript:;" th:text="${ds.ds8.name}"></a><br />&emsp;活跃度：
+										<muted th:text="${ds.ds8.data}"></muted>
+									</p>
+								</div>
+							</div>
+							<!-- Fourth Member -->
+							<div class="desc">
+								<div class="thumb">
+									<img class="img-circle" th:src="${ds.ds9.icon}" width="40px"
+										align="" />
+								</div>
+								<div class="details">
+									<p>
+										&emsp;<a href="javascript:;" th:text="${ds.ds9.name}"></a><br />&emsp;活跃度：
+										<muted th:text="${ds.ds9.data}"></muted>
+									</p>
+								</div>
+							</div>
+							<!-- Fifth Member -->
+							<div class="desc">
+								<div class="thumb">
+									<img class="img-circle" th:src="${ds.ds10.icon}" width="40px"
+										align="" />
+								</div>
+								<div class="details">
+									<p>
+										&emsp;<a href="javascript:;" th:text="${ds.ds10.name}"></a><br />&emsp;活跃度：
+										<muted th:text="${ds.ds10.data}"></muted>
+									</p>
+								</div>
+							</div>
 
-                            <!-- 口袋房间活跃度 -->
-                            <h3>近7日口袋房间活跃度</h3>
-                            <!-- 第一名 -->
-                            <div class="desc">
-                                <div class="thumb">
-                                    <span class="badge bg-no1">No.1</span>
-                                </div>
-                                <div class="details">
-                                    <p>
-                                        &emsp;
-                                        <muted> <a href="javascript:;" th:text="${ds.ds1.name}"></a></muted>
-                                        <br /> 所属成员：&nbsp;<span th:text="${ds.ds1.icon}"></span> <br />活跃度：&nbsp;<span
-                                            th:text="${ds.ds1.data}"></span><br />
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- 第二名 -->
-                            <div class="desc">
-                                <div class="thumb">
-                                    <span class="badge bg-no2">No.2</span>
-                                </div>
-                                <div class="details">
-                                    <p>
-                                        &emsp;
-                                        <muted> <a href="javascript:;" th:text="${ds.ds2.name}"></a></muted>
-                                        <br /> 所属成员：&nbsp;<span th:text="${ds.ds2.icon}"></span> <br />活跃度：&nbsp;<span
-                                            th:text="${ds.ds2.data}"></span><br />
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- 第三名 -->
-                            <div class="desc">
-                                <div class="thumb">
-                                    <span class="badge bg-no3">No.3</span>
-                                </div>
-                                <div class="details">
-                                    <p>
-                                        &emsp;
-                                        <muted> <a href="javascript:;" th:text="${ds.ds3.name}"></a></muted>
-                                        <br /> 所属成员：&nbsp;<span th:text="${ds.ds3.icon}"></span> <br />活跃度：&nbsp;<span
-                                            th:text="${ds.ds3.data}"></span><br />
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- 第四名 -->
-                            <div class="desc">
-                                <div class="thumb">
-                                    <span class="badge bg-theme">No.4</span>
-                                </div>
-                                <div class="details">
-                                    <p>
-                                        &emsp;
-                                        <muted> <a href="javascript:;" th:text="${ds.ds4.name}"></a></muted>
-                                        <br /> 所属成员：&nbsp;<span th:text="${ds.ds4.icon}"></span> <br />活跃度：&nbsp;<span
-                                            th:text="${ds.ds4.data}"></span><br />
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- 第五名 -->
-                            <div class="desc">
-                                <div class="thumb">
-                                    <span class="badge bg-theme">No.5</span>
-                                </div>
-                                <div class="details">
-                                    <p>
-                                        &emsp;
-                                        <muted> <a href="javascript:;" th:text="${ds.ds5.name}"></a></muted>
-                                        <br /> 所属成员：&nbsp;<span th:text="${ds.ds5.icon}"></span> <br />活跃度：&nbsp;<span
-                                            th:text="${ds.ds5.data}"></span><br />
-                                    </p>
-                                </div>
-                            </div>
+							<!-- 口袋房间活跃度 -->
+							<h3>近7日口袋房间活跃度</h3>
+							<!-- 第一名 -->
+							<div class="desc">
+								<div class="thumb">
+									<span class="badge bg-no1">No.1</span>
+								</div>
+								<div class="details">
+									<p>
+										&emsp;
+										<muted> <a href="javascript:;"
+											th:text="${ds.ds1.name}"></a></muted>
+										<br /> 所属成员：&nbsp;<span th:text="${ds.ds1.icon}"></span> <br />活跃度：&nbsp;<span
+											th:text="${ds.ds1.data}"></span><br />
+									</p>
+								</div>
+							</div>
+							<!-- 第二名 -->
+							<div class="desc">
+								<div class="thumb">
+									<span class="badge bg-no2">No.2</span>
+								</div>
+								<div class="details">
+									<p>
+										&emsp;
+										<muted> <a href="javascript:;"
+											th:text="${ds.ds2.name}"></a></muted>
+										<br /> 所属成员：&nbsp;<span th:text="${ds.ds2.icon}"></span> <br />活跃度：&nbsp;<span
+											th:text="${ds.ds2.data}"></span><br />
+									</p>
+								</div>
+							</div>
+							<!-- 第三名 -->
+							<div class="desc">
+								<div class="thumb">
+									<span class="badge bg-no3">No.3</span>
+								</div>
+								<div class="details">
+									<p>
+										&emsp;
+										<muted> <a href="javascript:;"
+											th:text="${ds.ds3.name}"></a></muted>
+										<br /> 所属成员：&nbsp;<span th:text="${ds.ds3.icon}"></span> <br />活跃度：&nbsp;<span
+											th:text="${ds.ds3.data}"></span><br />
+									</p>
+								</div>
+							</div>
+							<!-- 第四名 -->
+							<div class="desc">
+								<div class="thumb">
+									<span class="badge bg-theme">No.4</span>
+								</div>
+								<div class="details">
+									<p>
+										&emsp;
+										<muted> <a href="javascript:;"
+											th:text="${ds.ds4.name}"></a></muted>
+										<br /> 所属成员：&nbsp;<span th:text="${ds.ds4.icon}"></span> <br />活跃度：&nbsp;<span
+											th:text="${ds.ds4.data}"></span><br />
+									</p>
+								</div>
+							</div>
+							<!-- 第五名 -->
+							<div class="desc">
+								<div class="thumb">
+									<span class="badge bg-theme">No.5</span>
+								</div>
+								<div class="details">
+									<p>
+										&emsp;
+										<muted> <a href="javascript:;"
+											th:text="${ds.ds5.name}"></a></muted>
+										<br /> 所属成员：&nbsp;<span th:text="${ds.ds5.icon}"></span> <br />活跃度：&nbsp;<span
+											th:text="${ds.ds5.data}"></span><br />
+									</p>
+								</div>
+							</div>
 
-                            <!-- CALENDAR-->
-                            <div id="calendar" class="mb">
-                                <div class="panel green-panel no-margin">
-                                    <div class="panel-body">
-                                        <div id="date-popover" class="popover top"
-                                            style="cursor: pointer; disadding: block; margin-left: 33%; margin-top: -50px; width: 175px;">
-                                            <div class="arrow"></div>
-                                            <h3 class="popover-title" style="disadding: none;"></h3>
-                                            <div id="date-popover-content" class="popover-content"></div>
-                                        </div>
-                                        <div id="my-calendar"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- / calendar -->
+							<!-- CALENDAR-->
+							<div id="calendar" class="mb">
+								<div class="panel green-panel no-margin">
+									<div class="panel-body">
+										<div id="date-popover" class="popover top"
+											style="cursor: pointer; disadding: block; margin-left: 33%; margin-top: -50px; width: 175px;">
+											<div class="arrow"></div>
+											<h3 class="popover-title" style="disadding: none;"></h3>
+											<div id="date-popover-content" class="popover-content"></div>
+										</div>
+										<div id="my-calendar"></div>
+									</div>
+								</div>
+							</div>
+							<!-- / calendar -->
 
-                        </div>
-                        <!-- /col-lg-3 -->
-                    </div>
-                    <!--/row -->
-                </section>
-            </section>
+						</div>
+						<!-- /col-lg-3 -->
+					</div>
+					<!--/row -->
+				</section>
+			</section>
 
-        </section>
-        <!--main content end-->
-        <!--footer start-->
-        <footer class="site-footer">
-            <div class="text-center">
-                2018 - GNZ48-章泽婷应援会 - QQ：<a href="javascript:void(0);" title="777095721">777095721</a> <a
-                    href="index.html#" class="go-top"> <i class="fa fa-angle-up"></i>
-                </a>
-            </div>
-        </footer>
-        <!--footer end-->
-    </section>
+		</section>
+		<!--main content end-->
+		<!--footer start-->
+		<footer class="site-footer">
+			<div class="text-center">
+				2019 - PICQ48 - 机器人QQ：<a href="javascript:void(0);"
+					title="2965741174">2965741174</a> <a href="index.html#"
+					class="go-top"> <i class="fa fa-angle-up"></i>
+				</a>
+			</div>
+		</footer>
+		<!--footer end-->
+	</section>
 
-    <!-- js placed at the end of the document so the pages load faster -->
-    <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/jquery-1.8.3.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
-    <script src="assets/js/jquery.scrollTo.min.js"></script>
-    <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
-    <script src="assets/js/jquery.sparkline.js"></script>
+	<!-- js placed at the end of the document so the pages load faster -->
+	<script src="assets/js/jquery.js"></script>
+	<script src="assets/js/jquery-1.8.3.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script class="include" type="text/javascript"
+		src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+	<script src="assets/js/jquery.scrollTo.min.js"></script>
+	<script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+	<script src="assets/js/jquery.sparkline.js"></script>
 
 
-    <!--common script for all pages-->
-    <script src="assets/js/common-scripts.js"></script>
+	<!--common script for all pages-->
+	<script src="assets/js/common-scripts.js"></script>
 
-    <script type="text/javascript" src="assets/js/gritter/js/jquery.gritter.js"></script>
-    <script type="text/javascript" src="assets/js/gritter-conf.js"></script>
+	<script type="text/javascript"
+		src="assets/js/gritter/js/jquery.gritter.js"></script>
+	<script type="text/javascript" src="assets/js/gritter-conf.js"></script>
 
-    <!--script for this page-->
-    <script src="assets/js/sparkline-chart.js"></script>
-    <script src="assets/js/zabuto_calendar.js"></script>
+	<!--script for this page-->
+	<script src="assets/js/sparkline-chart.js"></script>
+	<script src="assets/js/zabuto_calendar.js"></script>
 
-    <script type="application/javascript">
+	<script type="application/javascript">
+		
+		
 
 
 
@@ -710,7 +731,9 @@
 
 
 
-    </script>
+    
+	
+	</script>
 
 </body>
 

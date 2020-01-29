@@ -67,14 +67,14 @@
 //		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPHONE);
 //		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
 //		/* 请求参数 */
-//		String payloadJson = "{\"mobile\":\"\",\"pwd\":\"\"}";
+//		String payloadJson = "{\"mobile\":\"15676101104\",\"pwd\":\"2d3m9rQmxsz34VYV\"}";
 //		/* 发送请求 */
 //		String loginJson = https.setUrl(HttpsURL.TOKEN).setDataType(HttpMethod.POST.name()).setPayloadJson(payloadJson)
 //				.setRequestProperty(requestPropertys).send();
 //		System.out.println(loginJson);
 //	}
 //
-//	private String token = "RElms9gB3ZvrtE69+zZffUqG+dXnvGJSLf4qPA8PgW1F2O4tlNv9CP1oQbHqUK+1ZuDAkFmZTgYA8znPgGnZz5J8BOB67jFxeGXAMaXoHaHz+48Oo3NNwgXGUfkv5g8R";
+//	private String token = "OTN7Hto/EX7i3FZIynB4yfQ2jN+4S8FsB03BQX9B0g1F2O4tlNv9CP1oQbHqUK+1ZuDAkFmZTgYA8znPgGnZz3Sru84SBiLjiQNEWLqmWlAjDfFrYEYscvaYbZm0tjVx";
 //
 //	/**
 //	 * 获取用户信息
@@ -102,10 +102,10 @@
 //	}
 //
 //	@Test
-//	public void https() throws ParseException {
-//		long nextTime = DateUtil.getDateFormat("2020-01-0100:00:00").getTime();
-//		boolean needTop1Msg = false;
-//		long roomId = 67342057;
+//	public void https() {
+//		String memberId = "19";
+//		long roomId = 67333101;
+//		long nextTime = 1579930408196l;
 //
 //		Https https = new Https();
 //		/* 请求头 */
@@ -113,15 +113,17 @@
 //		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
 //		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
 //		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPHONE);
-//		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
 //		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, token);
 //		/* 请求参数 */
-//		String payloadJson = "{\"nextTime\":" + String.valueOf(nextTime) + ",\"needTop1Msg\":"
-//				+ String.valueOf(needTop1Msg) + ",\"roomId\":\"" + roomId + "\"}";
+//		String payloadJson = "{\"ownerId\":\"" + memberId + "\",\"needTop1Msg\":\"false\",\"nextTime\":\""
+//				+ String.valueOf(nextTime) + "\",\"roomId\":\"" + roomId + "\"}";
 //		/* 发送请求 */
 //		try {
-//			String messageStr = https.setDataType(HttpMethod.POST.name()).setRequestProperty(requestPropertys)
-//					.setPayloadJson(payloadJson).setUrl(HttpsURL.ROOM_MESSAGE_ALL).send();
+//			String messageStr = https.setDataType(HttpMethod.POST.name())
+//														.setRequestProperty(requestPropertys)
+//														.setPayloadJson(payloadJson)
+//														.setUrl(HttpsURL.ROOM_MESSAGE)
+//														.send();
 //			System.out.println(messageStr);
 //		} catch (KeyManagementException | NoSuchAlgorithmException | IOException e) {
 //			e.printStackTrace();

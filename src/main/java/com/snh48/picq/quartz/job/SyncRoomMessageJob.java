@@ -101,6 +101,11 @@ public class SyncRoomMessageJob extends QuartzJobBean {
 
 				List<RoomMessage> messageList = Pocket48Tool.getRoomMessageList(String.valueOf(member.getId()),
 						String.valueOf(member.getRoomId()), nextTime);
+				
+				if (null == messageList) {
+					break;
+				}
+				
 				// 遍历保存
 				for (RoomMessage message : messageList) {
 					long newMsgTime = message.getMsgTime().getTime();
