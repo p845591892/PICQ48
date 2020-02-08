@@ -478,3 +478,32 @@ function getTeam(group) {
 		$("#select2").append("<option value='" + team + "'>" + team + "</option>");
 	}
 }
+
+/**
+ * 新增成员弹窗
+ */
+function addVideoShow() {
+	layer.prompt({
+		formType : 0,
+		title : "请输要新增的成员ID"
+	}, function(val, index) {
+		openLoad();
+		$.ajax({
+			url : "/member/add",
+			type : "put",
+			data : {
+				id : val
+			},
+			success : function(data) {
+				closeLoad();
+				layerMsg(data.status, data.cause);
+				$("#member_table").bootstrapTable("refresh");
+			},
+			error : function(data) {
+				closeLoad();
+				layerMsg(500, "请求失败");
+			}
+		});
+		layer.close(index);
+	});
+}

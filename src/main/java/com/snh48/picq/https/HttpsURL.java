@@ -20,8 +20,11 @@ public class HttpsURL {
 	/** 口袋48接口域名地址 */
 	public static final String POCKET_API = "https://pocketapi.48.cn";
 
-	/** SNH48 Group全体成员列表接口。 请求方式为GET。 */
-	public static final String ALL_MEMBER_LIST = H5_48 + "/memberPage/member_mapping.json";
+	/** SNH48 Group全体成员列表接口。 请求方式为GET。(V1版) */
+	public static final String ALL_MEMBER_LIST_V1 = H5_48 + "/memberPage/member_mapping.json";
+
+	/** SNH48 Group全体成员列表接口。 请求方式为GET。(V2版) */
+	public static final String ALL_MEMBER_LIST_V2 = H5_48 + "/resource/jsonp/allmembers.php";
 
 	/** SNH48 Group成员口袋房间生放送地址 */
 	public static final String LIVE = H5_48 + "/2019appshare/memberLiveShare/?id=";

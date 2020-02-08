@@ -160,7 +160,7 @@
 		<footer class="site-footer">
 			<div class="text-center">
 				2019 - PICQ48 - 机器人QQ：<a href="javascript:void(0);"
-					title="2965741174">"2965741174"</a> <a href="index.html#"
+					title="2965741174">"2965741174"</a> <a href="#container"
 					class="go-top"> <i class="fa fa-angle-up"></i>
 				</a>
 			</div>
@@ -206,12 +206,17 @@
 				</select>
 			</div>
 			<button id="btn_select" class="btn btn-info" type="button">
-				<i class="fa fa-search fa-lg"></i>
+				<i class="fa fa-search fa-lg"></i> 查询
 			</button>
 			<button id="btn_refresh" class="btn btn-success"
 				onclick="refreshVideoShow();" type="button"
 				shiro:hasPermission="member:refresh">
 				<i class="fa fa-retweet fa-lg"></i> 更新
+			</button>
+			<button id="btn_add" class="btn btn-primary"
+				onclick="addVideoShow();" type="button"
+				shiro:hasPermission="member:add">
+				<i class="fa fa-plus-circle fa-lg"></i> 新增
 			</button>
 		</form>
 

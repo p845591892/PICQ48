@@ -34,7 +34,7 @@ import lombok.extern.log4j.Log4j2;
 public abstract class JsonPICQ48 extends HttpsPICQ48 {
 
 	/**
-	 * 发送Https请求，获取SNH48 Group全体成员列表。
+	 * 发送Https请求，获取SNH48 Group全体成员列表。（V1版接口）
 	 * 
 	 * @return 全体成员列表的json对象
 	 * @throws KeyManagementException
@@ -46,6 +46,31 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
 		String jsonStr = httpsAllMember();
 		return JsonProcess.getJSONObjectByString(jsonStr);
+	}
+
+	/**
+	 * 发送Https请求，获取SNH48 Group全体成员列表。（V2版接口）
+	 * <p>
+	 * 该版本添加了可分别团体查询的参数 gid。全体 gid=00，SNH48 gid=10， BEJ48 gid=11，GNZ48 gid=12...
+	 * </p>
+	 * 
+	 * @param gid 团体ID，建议参数00
+	 * @return 成员列表的json对象
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public static JSONObject jsonAllMemberV2(String gid)
+			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+		String result = httpsAllMemberV2(gid);
+//		String startStr = "get_members_success(";
+//		String endStr = ");";
+//		if (result.startsWith(startStr) && result.endsWith(endStr)) {
+//			result = result.substring(startStr.length());// 去头
+//			result = result.substring(0, result.length() - endStr.length());// 去尾
+//		}
+		return JsonProcess.getJSONObjectByString(result);
 	}
 
 	/**
@@ -443,7 +468,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append(extInfoObject.getString("redPackageTitle"));
 			msgContent.append("<img>");
 			msgContent.append(getSourceUrl(extInfoObject.getString("redPackageCover")));
-			
+
 		} else {
 			msgContent.append("type error.");
 			log.info("本条消息为未知的新类型: {}", messageType);
@@ -537,8 +562,8 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 
 		} else if (messageType.equals("SPECICAL_REDPACKAGE")) {// 新春红包
 			msgContent.append(extInfoObject.getString("redPackageTitle"));
-			
-		}  else {
+
+		} else {
 			msgContent.append("Unknown message type.");
 			log.info("本条消息为未知的新类型: {}", messageType);
 			log.info(indexObj.toString());

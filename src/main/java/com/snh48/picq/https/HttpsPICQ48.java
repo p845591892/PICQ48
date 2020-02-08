@@ -34,7 +34,7 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 	public static final int EXPIRE_TIME = 60 * 60 * 24 * 30;
 
 	/**
-	 * 发送Https请求，获取SNH48 Group全体成员列表。
+	 * 发送Https请求，获取SNH48 Group全体成员列表。（V1版接口）
 	 * 
 	 * @return 全体成员列表的json字符串
 	 * @throws IOException
@@ -43,7 +43,39 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 	 */
 	public static String httpsAllMember() throws KeyManagementException, NoSuchAlgorithmException, IOException {
 		Https https = new Https();
-		String result = https.setDataType(HttpMethod.GET.name()).setUrl(HttpsURL.ALL_MEMBER_LIST).send();
+		String result = https.setDataType(HttpMethod.GET.name()).setUrl(HttpsURL.ALL_MEMBER_LIST_V1).send();
+		return result;
+	}
+	
+	/**
+	 * 发送Https请求，获取SNH48 Group全体成员列表。（V2版接口）
+	 * <p>
+	 * 	该版本添加了可分别团体查询的参数 gid。全体 gid=00，SNH48 gid=10， BEJ48 gid=11，GNZ48 gid=12...
+	 * </p>
+	 * 
+	 * @param gid 团体ID，建议参数00
+	 * @return 成员列表字符串
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 */
+	public static String httpsAllMemberV2(String gid) throws KeyManagementException, NoSuchAlgorithmException, IOException {
+		Https https = new Https();
+		/* 请求头 */
+		Map<String, String> requestPropertys = new HashMap<String, String>();
+		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.CHROME_VALUE);
+		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.CHROME_USER_AGENT);
+		/* 请求参数 */
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("gid", gid);
+//		params.put("callback", "get_members_success");
+//		params.put("_", String.valueOf(System.currentTimeMillis()));
+		/* 发送请求 */
+		String result = https.setDataType(HttpMethod.GET.name())
+											.setRequestProperty(requestPropertys)
+											.setParams(params)
+											.setUrl(HttpsURL.ALL_MEMBER_LIST_V2)
+											.send();
 		return result;
 	}
 

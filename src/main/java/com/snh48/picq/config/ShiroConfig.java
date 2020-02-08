@@ -165,6 +165,7 @@ public class ShiroConfig {
 		 */
 		filterChainDefinitionMap.put("/resource-management/member-table", "anon");// 成员列表跳转url
 		filterChainDefinitionMap.put("/member/refresh", "perms[member:refresh]");// 同步到最新的成员房间信息接口
+		filterChainDefinitionMap.put("/member/add", "perms[member:add]");// 新增成员信息接口
 		filterChainDefinitionMap.put("/member/update/room-monitor", "perms[member:update]");// 修改成员房间监控状态接口
 		filterChainDefinitionMap.put("/room-monitor/add", "perms[room-monitor:add]");// 新增成员房间监控配置接口
 		filterChainDefinitionMap.put("/room-monitor/update/keyword", "perms[room-monitor:update]");// 修改成员房间监控配置接口

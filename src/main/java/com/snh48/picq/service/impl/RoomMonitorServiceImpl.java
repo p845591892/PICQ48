@@ -1,6 +1,7 @@
 package com.snh48.picq.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,6 +70,15 @@ public class RoomMonitorServiceImpl implements RoomMonitorService {
 		} else {// 缓存中不存在，获取新的
 			return setCache(roomId);
 		}
+	}
+
+	@Override
+	public RoomMonitor getById(Long roomMonitorId) {
+		Optional<RoomMonitor> optional = roomMonitorRepository.findById(roomMonitorId);
+		if (optional.isPresent()) {
+			return optional.get();
+		}
+		return null;
 	}
 
 }

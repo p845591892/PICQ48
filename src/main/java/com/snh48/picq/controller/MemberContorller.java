@@ -1,17 +1,22 @@
 package com.snh48.picq.controller;
 
+import java.util.Optional;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.snh48.picq.annotation.Log;
 import com.snh48.picq.annotation.OperationType;
+import com.snh48.picq.entity.snh48.Member;
+import com.snh48.picq.https.Pocket48Tool;
 import com.snh48.picq.repository.snh48.MemberRepository;
 import com.snh48.picq.vo.ResultVO;
 
@@ -62,6 +67,34 @@ public class MemberContorller {
 		result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
 		result.setCause("该接口维护中");
 		return result;
+	}
+
+	/**
+	 * 新增成员信息
+	 * 
+	 * @param id 成员ID
+	 */
+	@Log(desc = "新增成员信息", type = OperationType.ADD)
+	@PutMapping("/add")
+	public ResultVO addMember(Long id) {
+		Member member = Pocket48Tool.getMember(id);
+
+		if (member == null) {
+			return new ResultVO(HttpsURLConnection.HTTP_NOT_FOUND, "获取的成员信息为空。");
+		}
+
+		if (member.getRoomMonitor() == null) {// 房间状态不为404
+			Optional<Member> optional = memberRepository.findById(id);
+			if (optional.isPresent()) {
+				member.setRoomMonitor(optional.get().getRoomMonitor());
+			} else {
+				member.setRoomMonitor(2);// 默认未开启同步
+			}
+		}
+
+		memberRepository.save(member);
+
+		return new ResultVO(HttpsURLConnection.HTTP_OK, "success");
 	}
 
 }

@@ -43,4 +43,11 @@ public interface RoomMonitorService {
 	 */
 	List<RoomMonitorVO> getCache(Long roomId);
 
+	/**
+	 * 获取房间监控配置
+	 * @param roomMonitorId 监控配置ID
+	 * @return
+	 */
+	RoomMonitor getById(Long roomMonitorId);
+
 }

@@ -21,15 +21,25 @@ public class MyMediaType extends MediaType {
 	public static final String SAFARI_VALUE = "application/json, text/plain, */*";
 
 	/**
+	 * ACCEPT的chrome浏览器值
+	 */
+	public static final String CHROME_VALUE = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
+	
+	/**
 	 * USER_AGENT的safari浏览器值
 	 */
 	public static final String SAFARI_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Safari/605.1.15";
 
 	/**
+	 * USER_AGENT的chrome浏览器值
+	 */
+	public static final String CHROME_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36";
+
+	/**
 	 * 
 	 */
 	public static final String X_REQUESTED_WITH = "XMLHttpRequest";
-
+	
 	public MyMediaType(String type, String subtype) {
 		super(type, subtype);
 	}

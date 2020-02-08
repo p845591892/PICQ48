@@ -32,7 +32,7 @@ import lombok.extern.log4j.Log4j2;
 public class Pocket48Tool extends JsonPICQ48 {
 
 	/**
-	 * 获取SNH48 Group成员的数据集合。通过Https的方式发送请求，获得json结果，解析后生成{@link Member}的集合。
+	 * 获取SNH48 Group成员的数据集合。通过Https的方式发送请求，获得json结果，解析后生成{@link Member}的集合。（V1版接口）
 	 * 
 	 * @return {@link Member}集合
 	 */
@@ -53,7 +53,42 @@ public class Pocket48Tool extends JsonPICQ48 {
 			}
 			return memberList;
 		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
-			log.error("获取List<Member>异常：{}", e.getMessage());
+			log.error("getMemberList() 获取List<Member>异常：{}", e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 获取SNH48 Group成员的数据集合。通过Https的方式发送请求，获得json结果，解析后生成{@link Member}的集合。（V2版接口）
+	 * <p>
+	 * 该版本添加了可分别团体查询的参数 gid。全体 gid=00，SNH48 gid=10， BEJ48 gid=11，GNZ48 gid=12...
+	 * </p>
+	 * 
+	 * @param gid 团体ID，建议参数00
+	 * @return {@link Member}集合
+	 */
+	public static List<Member> getMemberListV2(String gid) {
+		try {
+			JSONObject obj = jsonAllMemberV2(gid);
+			List<Member> memberList = new ArrayList<Member>();
+			JSONArray array = obj.getJSONArray("rows");
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject indexObj = array.getJSONObject(i);
+				long memberId = indexObj.getLong("pocket_id");
+				Member member = null;
+				if (memberId == 0) {
+					System.out.println(indexObj.toString());
+				} else {
+					member = getMember(memberId);
+					memberList.add(member);
+					Thread.sleep(1000);
+				}
+			}
+			return memberList;
+		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException
+				| InterruptedException e) {
+			log.error("getMemberListV2() 获取List<Member>异常：{}", e.getMessage());
 			e.printStackTrace();
 		}
 		return null;
@@ -94,12 +129,12 @@ public class Pocket48Tool extends JsonPICQ48 {
 			// 遍历消息json数组
 			JSONArray messageArray = messageObj.getJSONObject("content").getJSONArray("message");
 			List<RoomMessage> messageList = new ArrayList<RoomMessage>();
-			
+
 			int messageArraySize = messageArray.length();
 			if (messageArraySize < 1) {
 				throw new NullPointerException("获取到的口袋房间消息列表为空");
 			}
-			
+
 			for (int i = 0; i < messageArraySize; i++) {
 				JSONObject indexObj = messageArray.getJSONObject(i);
 				RoomMessage roomMessage = new RoomMessage();
@@ -205,7 +240,7 @@ public class Pocket48Tool extends JsonPICQ48 {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public <T> List<T> get(Class<T> clazz) {
 		// TODO Auto-generated method stub
