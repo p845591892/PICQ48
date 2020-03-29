@@ -1,10 +1,17 @@
 server:
   port: 8080
+#  ssl:
+#    enabled: true
+#    key-store: server.keystore
+#    key-alias: tomcat
+#    key-store-password: 123456
+#    key-store-type: JKS
+    
 spring:
   application:
     name: PICQ48
   #启动配置：开发环境dev、测试环境test、灰度环境pre、生产环境pro
-  profiles.active: dev
+  profiles.active: pro
   thymeleaf:
     enabled: true
     prefix: classpath:/templates/
@@ -46,10 +53,10 @@ mybatis:
   executor-type: simple
   configuration:
     map-underscore-to-camel-case: true
-    default-fetch-size: 100
+#    default-fetch-size: 100
     default-statement-timeout: 30
     #sql日志
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
     
 #分页插件
 pagehelper:

@@ -44,7 +44,6 @@ public class FindMemberCommand implements EverywhereCommand {
 		// 设置查询参数
 		String arg = args.get(0);
 		MemberVO vo = new MemberVO();
-
 		if (StringUtil.isChinese(arg)) {
 			vo.setName(arg);
 		} else if (StringUtil.isEnglish(arg)) {
@@ -56,28 +55,19 @@ public class FindMemberCommand implements EverywhereCommand {
 		// 查询
 		Page<Member> memberPage = resourceManagementService.getMembers(1, 20, vo);
 		if (memberPage.isEmpty()) {
-			return "未查找到成员！";
+			return "未查找到相关成员。";
 		}
-
-		List<Member> memberList = memberPage.toList();
-
-		if (memberList.size() >= 5) {
-			event.respond("查找到相关至少 " + memberList.size() + " 位成员！");
-
-			List<Member> responListP = new ArrayList<Member>();// 精
-			for (int i = 0; i < memberList.size(); i++) {
-				Member member = memberList.get(i);
-				if (member.getName().equals(arg) || member.getAbbr().equals(arg)) {
-					responListP.add(member);
-				}
-			}
-
-			respond(event, responListP);
+		List<Member> members = memberPage.getContent();
+		int size = members.size();
+		if (size > 5) {
+			event.respond("查找到至少5位相关成员。");
+			List<Member> responMembers = new ArrayList<Member>();// 精
+			members.stream().filter((p) -> p.getName().equals(arg) || p.getAbbr().equals(arg))
+					.forEach((p) -> responMembers.add(p));
+			respond(event, responMembers);
 
 		} else {
-			event.respond("查找到相关 " + memberList.size() + " 位成员：");
-
-			respond(event, memberList);
+			respond(event, members);
 		}
 
 		return null;
@@ -90,16 +80,17 @@ public class FindMemberCommand implements EverywhereCommand {
 	 * @param list  成员列表
 	 */
 	private void respond(EventMessage event, List<Member> list) {
-		if (list.size() < 1) {
-			event.respond("由于相关成员过多，提高参数精确度。");
+		int size = list.size();
+		if (size == 0) {
+			event.respond("由于相关成员过多，请提高参数精确度。");
 			return;
+		} else {
+			event.respond("最接近的成员有" + size + "位：");
 		}
-		
-		event.respond("其中最接近的是：");
-		for (int i = 0; i < list.size(); i++) {
-			String message = KuqManage.memberMessageBuilder(list.get(i));
+		list.forEach((p) -> {
+			String message = KuqManage.memberMessageBuilder(p);
 			event.respond(message, false);
-		}
+		});
 	}
 
 }

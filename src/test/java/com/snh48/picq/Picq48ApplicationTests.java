@@ -4,12 +4,14 @@
 //import java.security.KeyManagementException;
 //import java.security.NoSuchAlgorithmException;
 //import java.text.ParseException;
+//import java.util.ArrayList;
 //import java.util.List;
 //
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.configurationprocessor.json.JSONException;
 //import org.springframework.boot.test.context.SpringBootTest;
+//import org.springframework.data.domain.Page;
 //
 //import com.snh48.picq.entity.snh48.Member;
 //import com.snh48.picq.entity.snh48.PocketUser;
@@ -21,7 +23,10 @@
 //import com.snh48.picq.repository.snh48.PocketUserRepository;
 //import com.snh48.picq.repository.snh48.RoomMessageAllRepository;
 //import com.snh48.picq.repository.snh48.RoomMessageRepository;
+//import com.snh48.picq.service.ResourceManagementService;
 //import com.snh48.picq.utils.DateUtil;
+//import com.snh48.picq.utils.StringUtil;
+//import com.snh48.picq.vo.MemberVO;
 //
 //@SpringBootTest
 //class Picq48ApplicationTests {
@@ -182,5 +187,28 @@
 //			e.printStackTrace();
 //		}
 //	}
-//	
+//
+//	@Autowired
+//	private ResourceManagementService resourceManagementService;
+//
+//	@Test
+//	void lambdaTest() {
+//		String arg = "zy";
+//		MemberVO vo = new MemberVO();
+//		vo.setAbbr(arg);
+//		// 查询
+//		Page<Member> memberPage = resourceManagementService.getMembers(1, 20, vo);
+//		List<Member> responListP = new ArrayList<Member>();// 精
+//		memberPage.stream().filter((p) -> p.getName().equals(arg) || p.getAbbr().equals(arg))
+//				.forEach((p) -> responListP.add(p));
+//		responListP.forEach((p) -> System.out.println(p.toString()));
+//	}
+//
+//	/**
+//	 * coolq findm指令
+//	 */
+//	@Test
+//	void findm() {
+//	}
+//
 //}

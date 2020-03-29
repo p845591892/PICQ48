@@ -87,7 +87,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/aspectj/aspectjweaver/1.9.4/aspectjweaver-1.9.4.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/mysql/mysql-connector-java/8.0.18/mysql-connector-java-8.0.18.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/projectlombok/lombok/1.18.10/lombok-1.18.10.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/github/hydevelop/PicqBotX/4.12.0.1015.PRE/PicqBotX-4.12.0.1015.PRE.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/github/hydevelop/PicqBotX/4.12.0.1019.PRE/PicqBotX-4.12.0.1019.PRE.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/cn/hutool/hutool-all/5.1.0/hutool-all-5.1.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/github/hydevelop/HyLogger/4.0.254/HyLogger-4.0.254.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/github/HyDevelop/HyCommonUtils/1.4.0.207/HyCommonUtils-1.4.0.207.jar" enabled="true" runInBatchMode="false"/>

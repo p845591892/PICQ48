@@ -464,11 +464,19 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append(bodysObject.getString("url"));
 
 		} else if (messageType.equals("PASSWORD_REDPACKAGE")) {// 口令红包
-			msgContent.append("口令红包：");
+			msgContent.append("[口令红包]<br>");
 			msgContent.append(extInfoObject.getString("redPackageTitle"));
 			msgContent.append("<img>");
 			msgContent.append(getSourceUrl(extInfoObject.getString("redPackageCover")));
 
+		} else if (messageType.equals("SHARE_POSTS") || messageType.equals("SHARE_WEB")) {// POSTS/WEB分享
+			msgContent.append("[网页分享]<br>");
+			msgContent.append(extInfoObject.getString("shareDesc"));
+			msgContent.append("<br>");
+			msgContent.append(extInfoObject.getString("jumpPath"));
+			msgContent.append("<img>");
+			msgContent.append(extInfoObject.getString("sharePic"));
+			
 		} else {
 			msgContent.append("type error.");
 			log.info("本条消息为未知的新类型: {}", messageType);
@@ -563,6 +571,10 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		} else if (messageType.equals("SPECICAL_REDPACKAGE")) {// 新春红包
 			msgContent.append(extInfoObject.getString("redPackageTitle"));
 
+		} else if (messageType.equals("SHARE_POSTS") || messageType.equals("SHARE_WEB")) {// POSTS/WEB分享
+			msgContent.append(extInfoObject.getString("shareDesc"));
+			msgContent.append(extInfoObject.getString("jumpPath"));
+			
 		} else {
 			msgContent.append("Unknown message type.");
 			log.info("本条消息为未知的新类型: {}", messageType);

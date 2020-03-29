@@ -3,19 +3,19 @@
 //import java.io.IOException;
 //import java.security.KeyManagementException;
 //import java.security.NoSuchAlgorithmException;
+//import java.util.Arrays;
 //import java.util.HashMap;
+//import java.util.List;
 //import java.util.Map;
+//import java.util.function.Consumer;
+//import java.util.function.Function;
+//import java.util.function.Predicate;
+//import java.util.function.Supplier;
 //
 //import org.junit.jupiter.api.Test;
-//import org.springframework.beans.BeanUtils;
-//import org.springframework.boot.configurationprocessor.json.JSONArray;
-//import org.springframework.boot.configurationprocessor.json.JSONException;
-//import org.springframework.boot.configurationprocessor.json.JSONObject;
 //import org.springframework.http.HttpMethod;
 //
-//import com.snh48.picq.entity.snh48.Member;
 //import com.snh48.picq.https.HttpsURL;
-//import com.snh48.picq.https.JsonProcess;
 //import com.snh48.picq.https.MyHttpHeaders;
 //import com.snh48.picq.https.MyMediaType;
 //import com.snh48.picq.utils.Https;
@@ -23,28 +23,63 @@
 //public class Picq48Tests {
 //
 //	@Test
-//	public void test1() {
-//		Member m1 = new Member();
-//		m1.setAbbr("111");
-//		m1.setAvatar("222");
-//		m1.setBirthday("333");
+//	public void lambdaTest() {
+//		// 消费型接口 有参数，无返回
+//		changeStr("hello", (str) -> System.out.println(str));
 //
-//		Member m2 = new Member();
-//		m2.setBirthplace("444");
-//		m2.setBloodType("555");
-//		m2.setConstellation("666");
+//		// 供给型接口 无参数，有返回
+//		String value = getValue(() -> "hello");
+//		System.out.println(value);
 //
-//		System.out.println("m1:");
-//		System.out.println(m1.toString());
-//		System.out.println("m2:");
-//		System.out.println(m2.toString());
+//		// 函数式接口 有参数，有返回
+//		Long result1 = changeNum(100L, (x) -> x + 200L);
+//		System.out.println(result1);
 //
-//		BeanUtils.copyProperties(m1, m2);
+//		// 断言型接口 有参数，返回boolean
+//		boolean result2 = changeBoolean("hello", (str) -> str.length() > 5);
+//		System.out.println(result2);
+//	}
 //
-//		System.out.println("m1:");
-//		System.out.println(m1.toString());
-//		System.out.println("m2:");
-//		System.out.println(m2.toString());
+//	/**
+//	 * Consumer<T> 消费型接口
+//	 * 
+//	 * @param str
+//	 * @param con
+//	 */
+//	public void changeStr(String str, Consumer<String> con) {
+//		con.accept(str);
+//	}
+//
+//	/**
+//	 * Supplier<T> 供给型接口
+//	 * 
+//	 * @param sup
+//	 * @return
+//	 */
+//	public String getValue(Supplier<String> sup) {
+//		return sup.get();
+//	}
+//
+//	/**
+//	 * Function<T,R> 函数式接口
+//	 * 
+//	 * @param num
+//	 * @param fun
+//	 * @return
+//	 */
+//	public Long changeNum(Long num, Function<Long, Long> fun) {
+//		return fun.apply(num);
+//	}
+//
+//	/**
+//	 * Predicate<T> 断言型接口
+//	 * 
+//	 * @param str
+//	 * @param pre
+//	 * @return
+//	 */
+//	public boolean changeBoolean(String str, Predicate<String> pre) {
+//		return pre.test(str);
 //	}
 //
 //	/**
@@ -64,7 +99,7 @@
 //		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPHONE);
 //		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
 //		/* 请求参数 */
-//		String payloadJson = "{\"mobile\":\"\",\"pwd\":\"\"}";
+//		String payloadJson = "{\"mobile\":\"15676101104\",\"pwd\":\"2d3m9rQmxsz34VYV\"}";
 //		/* 发送请求 */
 //		String loginJson = https.setUrl(HttpsURL.TOKEN).setDataType(HttpMethod.POST.name()).setPayloadJson(payloadJson)
 //				.setRequestProperty(requestPropertys).send();
@@ -136,43 +171,28 @@
 //		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.CHROME_USER_AGENT);
 //		/* 请求参数 */
 //		Map<String, String> params = new HashMap<String, String>();
-//		params.put("gid","00");
+//		params.put("gid", "00");
 ////		params.put("callback", "get_members_success");
 ////		params.put("_", String.valueOf(System.currentTimeMillis()));
 //		/* 发送请求 */
 //		try {
-//			String result = https.setDataType(HttpMethod.GET.name())
-//				.setRequestProperty(requestPropertys)
-//				.setParams(params)
-//				.setUrl(HttpsURL.ALL_MEMBER_LIST_V2)
-//				.send();
+//			String result = https.setDataType(HttpMethod.GET.name()).setRequestProperty(requestPropertys)
+//					.setParams(params).setUrl(HttpsURL.ALL_MEMBER_LIST_V2).send();
 //			System.out.println(result);
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}
 //	}
-//	
+//
 //	@Test
 //	public void test() {
-//		String str =  "";
-//		String startStr = "get_members_success(";
-//		String endStr = ");";
-//		if (str.startsWith(startStr) && str.endsWith(endStr)) {
-//			System.out.println(true);
-//			str = str.substring(startStr.length());// 去头
-//			str = str.substring(0, str.length() - endStr.length());// 去尾
-//			System.out.println(str);
-//		}
-//		try {
-//			JSONObject obj = JsonProcess.getJSONObjectByString(str);
-//			JSONArray array = obj.getJSONArray("rows");
-//			for (int i = 0; i < array.length(); i++) {
-//				JSONObject indexObj = array.getJSONObject(i);
-//				System.out.println(indexObj.toString());
-//			}
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
+//		// 并行流 多个线程执行
+//		List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+//		numbers.parallelStream().forEach(System.out::println);
+//
+//		//
+//		System.out.println("=========================");
+//		numbers.stream().sequential().forEach(System.out::println);
 //	}
 //
 ////	@Test
