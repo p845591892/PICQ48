@@ -396,13 +396,13 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 	 */
 	private static String getMsgContent(JSONObject indexObj) throws JSONException {
 		StringBuffer msgContent = new StringBuffer();
-		JSONObject extInfoObject = new JSONObject(indexObj.getString("extInfo"));// 消息内容的主体对象
-		String messageType = extInfoObject.getString("messageType");// 消息类型
+		JSONObject extInfoObject = new JSONObject(indexObj.getString("extInfo")); // 消息内容的主体对象
+		String messageType = extInfoObject.getString("messageType"); // 消息类型
 
-		if (messageType.equals("TEXT")) {// 普通文本类型
+		if (messageType.equals("TEXT")) { // 普通文本类型
 			msgContent.append(indexObj.getString("bodys"));
 
-		} else if (messageType.equals("REPLY")) {// 回复类型
+		} else if (messageType.equals("REPLY")) { // 回复类型
 			msgContent.append("[回复]<br>");
 			msgContent.append(indexObj.getString("bodys"));
 			msgContent.append("<br>_____________________________<br>");
@@ -410,12 +410,12 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append(" : ");
 			msgContent.append(extInfoObject.getString("replyText"));
 
-		} else if (messageType.equals("IMAGE")) {// 图片类型
+		} else if (messageType.equals("IMAGE") || messageType.equals("gif")) { // 图片类型/动态图片
 			msgContent.append("<img>");
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append(bodysObject.getString("url"));
 
-		} else if (messageType.equals("LIVEPUSH")) {// 生放送类型
+		} else if (messageType.equals("LIVEPUSH")) { // 生放送类型
 			msgContent.append("[生放送]<br>");
 			msgContent.append(extInfoObject.getString("liveTitle"));
 			msgContent.append("<br>");
@@ -424,12 +424,12 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append("<img>");
 			msgContent.append(getSourceUrl(extInfoObject.getString("liveCover")));
 
-		} else if (messageType.equals("FLIPCARD")) {// 翻牌类型
+		} else if (messageType.equals("FLIPCARD")) { // 翻牌类型
 			JSONObject contentObject = null;
 			String questionId = extInfoObject.getString("questionId");
 			String answerId = extInfoObject.getString("answerId");
 			try {
-				contentObject = jsonFlipcardContent(questionId, answerId);// 获取翻牌详情，目的是拿到这个翻牌是谁发的
+				contentObject = jsonFlipcardContent(questionId, answerId); // 获取翻牌详情，目的是拿到这个翻牌是谁发的
 			} catch (KeyManagementException | NoSuchAlgorithmException | IOException e) {
 				log.error("获取翻牌消息异常questionId={}, answerId={} : {}", questionId, answerId, e.getMessage());
 			}
@@ -443,33 +443,33 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append(" : ");
 			msgContent.append(extInfoObject.getString("question"));
 
-		} else if (messageType.equals("EXPRESS")) {// 特殊表情类型
+		} else if (messageType.equals("EXPRESS")) { // 特殊表情类型
 			msgContent.append("发送了一个特殊表情[");
 			msgContent.append(extInfoObject.getString("emotionName"));
 			msgContent.append("]，请到口袋48App查看。");
 
-		} else if (messageType.equals("VIDEO")) {// 视频类型
+		} else if (messageType.equals("VIDEO")) { // 视频类型
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append("[视频]<br>点击➡️");
 			msgContent.append(bodysObject.getString("url"));
 
-		} else if (messageType.equals("VOTE")) {// 投票类型
+		} else if (messageType.equals("VOTE")) { // 投票类型
 			msgContent.append("[投票]<br>");
 			msgContent.append(extInfoObject.getString("text"));
 			msgContent.append("<br>详情请到口袋48App查看。");
 
-		} else if (messageType.equals("AUDIO")) {// 语音类型
+		} else if (messageType.equals("AUDIO")) { // 语音类型
 			msgContent.append("<audio>️");
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append(bodysObject.getString("url"));
 
-		} else if (messageType.equals("PASSWORD_REDPACKAGE")) {// 口令红包
+		} else if (messageType.equals("PASSWORD_REDPACKAGE")) { // 口令红包
 			msgContent.append("[口令红包]<br>");
 			msgContent.append(extInfoObject.getString("redPackageTitle"));
 			msgContent.append("<img>");
 			msgContent.append(getSourceUrl(extInfoObject.getString("redPackageCover")));
 
-		} else if (messageType.equals("SHARE_POSTS") || messageType.equals("SHARE_WEB")) {// POSTS/WEB分享
+		} else if (messageType.equals("SHARE_POSTS") || messageType.equals("SHARE_WEB")) { // POSTS/WEB分享
 			msgContent.append("[网页分享]<br>");
 			msgContent.append(extInfoObject.getString("shareDesc"));
 			msgContent.append("<br>");
@@ -540,7 +540,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		} else if (messageType.equals("REPLY")) {// 回复类型
 			msgContent.append(indexObj.getString("bodys"));
 
-		} else if (messageType.equals("IMAGE")) {// 图片类型
+		} else if (messageType.equals("IMAGE")|| messageType.equals("gif")) {// 图片类型/动态图片
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append(bodysObject.getString("url"));
 

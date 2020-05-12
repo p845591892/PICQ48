@@ -38,6 +38,7 @@
 //		// 断言型接口 有参数，返回boolean
 //		boolean result2 = changeBoolean("hello", (str) -> str.length() > 5);
 //		System.out.println(result2);
+//		
 //	}
 //
 //	/**
@@ -193,6 +194,11 @@
 //		//
 //		System.out.println("=========================");
 //		numbers.stream().sequential().forEach(System.out::println);
+//	}
+//	
+//	@Test
+//	public void taobaHttpsTest() {
+//		
 //	}
 //
 ////	@Test

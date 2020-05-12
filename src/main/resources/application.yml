@@ -11,7 +11,7 @@ spring:
   application:
     name: PICQ48
   #启动配置：开发环境dev、测试环境test、灰度环境pre、生产环境pro
-  profiles.active: pro
+  profiles.active: dev
   thymeleaf:
     enabled: true
     prefix: classpath:/templates/
