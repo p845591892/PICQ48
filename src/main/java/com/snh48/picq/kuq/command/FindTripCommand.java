@@ -17,6 +17,7 @@ import com.snh48.picq.utils.DateUtil;
 import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.EverywhereCommand;
 import cc.moecraft.icq.event.events.message.EventMessage;
+import cc.moecraft.icq.sender.message.MessageBuilder;
 import cc.moecraft.icq.user.User;
 
 /**
@@ -26,7 +27,7 @@ import cc.moecraft.icq.user.User;
  *
  */
 @Component
-public class FindTripCommand implements EverywhereCommand {
+public class FindTripCommand extends AbstractCommand implements EverywhereCommand {
 
 	@Autowired
 	private TripRepository tripRepository;
@@ -38,48 +39,83 @@ public class FindTripCommand implements EverywhereCommand {
 
 	@Override
 	public String run(EventMessage event, User sender, String command, ArrayList<String> args) {
-		List<Trip> tripList = null;
+		List<Trip> tripList = new ArrayList<>();
 		Date showTime = DateUtil.getMidnight();
 		String locationKeywordRegex = "北京|上海|广州";
-		String typeRegex = "公演|冷餐";
+		String typeRegex = "公演|冷餐|生日";
 
 		if (args == null || args.size() == 0) {
-			tripList = tripRepository.findByTypeAndShowTimeAfterOrderByShowTimeAsc(1, showTime);
+			tripList.addAll(tripRepository.findByShowTimeAfterOrderByShowTimeAsc(showTime));
 
 		} else if (args.size() == 1) {
 			String arg = args.get(0);
-
 			if (Pattern.matches(locationKeywordRegex, arg)) {
-				tripList = tripRepository.findByTypeAndLocationKeywordAndShowTimeAfterOrderByShowTimeAsc(1, arg,
-						showTime);
+				tripList.addAll(tripRepository.findByTypeAndLocationKeywordAndShowTimeAfterOrderByShowTimeAsc(1, arg,
+						showTime));
 
 			} else if (Pattern.matches(typeRegex, arg)) {
-				int type = "公演".equals(arg) ? 1 : 3;
-				tripList = tripRepository.findByTypeAndShowTimeAfterOrderByShowTimeAsc(type, showTime);
+				int type;
+				switch (arg) {
+				case "公演":
+					type = 1;
+					break;
+				case "冷餐":
+					type = 3;
+					break;
+				case "生日":
+					type = 0;
+					break;
+				default:
+					type = -1;
+					break;
+				}
+				tripList.addAll(tripRepository.findByTypeAndShowTimeAfterOrderByShowTimeAsc(type, showTime));
+
+			} else {
+				return "参数错误！\n" + Common.COMMAND_CAPTION_FIND_TRIP;
+			}
+
+		} else if (args.size() == 2) {
+			String type = args.get(0);
+			String locationKeyword = args.get(1);
+			if (Pattern.matches(typeRegex, type) && Pattern.matches(locationKeywordRegex, locationKeyword)) {
+				tripList.addAll(tripRepository.findByTypeAndLocationKeywordAndShowTimeAfterOrderByShowTimeAsc(
+						Integer.parseInt(type), locationKeyword, showTime));
+
+			} else {
+				return "参数错误！\n" + Common.COMMAND_CAPTION_FIND_TRIP;
 			}
 
 		} else {
-			return "参数错误！";
-		}
-
-		if (tripList == null || tripList.size() < 1) {
-			return "未查询到行程！";
+			return "参数错误！\n" + Common.COMMAND_CAPTION_FIND_TRIP;
 		}
 
 		respond(event, tripList);
-
 		return null;
 	}
 
-	/**
-	 * 回复成员资料
-	 * 
-	 * @param event 活动对象
-	 * @param list  行程列表
-	 */
-	private void respond(EventMessage event, List<Trip> list) {
-		String message = KuqManage.tripMessageBuilder(list);
-		event.respond(message);
+	@Override
+	protected <T> void respond(EventMessage event, List<T> list) {
+		int size = list.size();
+		if (size < 1) {
+			event.respond("未查询到行程！");
+		}
+
+		MessageBuilder mb = new MessageBuilder();
+		for (int i = 0; i < size; i++) {
+			Trip trip = (Trip) list.get(i);
+			mb.add(KuqManage.tripMessageBuilder(trip));
+
+			if (i < size - 1) {
+				mb.newLine().add("_____________________________").newLine();
+			}
+		}
+		respond(event, mb);
+	}
+
+	@Override
+	protected <T> void respond(EventMessage event, T t) {
+		event.respond(t.toString());
 	}
 
 }

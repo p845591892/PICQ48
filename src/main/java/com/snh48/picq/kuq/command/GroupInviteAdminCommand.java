@@ -1,6 +1,7 @@
 package com.snh48.picq.kuq.command;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,17 +13,18 @@ import com.snh48.picq.utils.SpringUtil;
 
 import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.PrivateCommand;
+import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.event.events.message.EventPrivateMessage;
 import cc.moecraft.icq.user.User;
 
 /**
- * 处理好友请求指令
+ * 处理Q群邀请请求指令
  * 
  * @author shiro
  *
  */
 @Component
-public class GroupInviteAdminCommand implements PrivateCommand {
+public class GroupInviteAdminCommand extends AbstractCommand implements PrivateCommand {
 
 	@Autowired
 	private KuqProperties properties;
@@ -39,7 +41,7 @@ public class GroupInviteAdminCommand implements PrivateCommand {
 		}
 
 		if (args == null || args.size() < 2) {
-			return "参数错误！\n" + Common.COMMAND_REPLAY_HELP;
+			return "参数错误！\n" + Common.COMMAND_CAPTION_GROUP_INVITE;
 		}
 
 		String flag = args.get(0);
@@ -51,7 +53,7 @@ public class GroupInviteAdminCommand implements PrivateCommand {
 		} else if ("no".equals(approveTemp) || "n".equals(approveTemp)) {
 			approve = false;
 		} else {
-			return "参数错误！";
+			return "参数错误！\n" + Common.COMMAND_CAPTION_GROUP_INVITE;
 		}
 
 		event.getHttpApi().setGroupAndRequest(flag, "invite", approve, "");
@@ -60,6 +62,16 @@ public class GroupInviteAdminCommand implements PrivateCommand {
 		SpringUtil.getBean(QQCommunityService.class).syncQQCommunity();
 
 		return "操作成功，已同步QQ列表。";
+	}
+
+	@Override
+	protected <T> void respond(EventMessage event, List<T> list) {
+
+	}
+
+	@Override
+	protected <T> void respond(EventMessage event, T t) {
+
 	}
 
 }

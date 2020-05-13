@@ -1,6 +1,7 @@
 package com.snh48.picq.kuq.command;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,7 @@ import cc.moecraft.icq.user.User;
  *
  */
 @Component
-public class VersionCommand implements EverywhereCommand {
+public class VersionCommand extends AbstractCommand implements EverywhereCommand {
 
 	@Override
 	public CommandProperties properties() {
@@ -37,11 +38,11 @@ public class VersionCommand implements EverywhereCommand {
 		// 消息构造器
 		MessageBuilder mb = new MessageBuilder();
 		// Line 1
-		mb.add("最后更新时间：2019-12-29").newLine();
+		mb.add("最后更新时间：2020-05-13").newLine();
 		// Line 2
 		mb.newLine().add("系统版本信息：");
 		// Line 3
-		mb.newLine().add("【PQIC48版本】  1.3.3");
+		mb.newLine().add("【PQIC48版本】  1.4.0");
 		// Line 4
 		mb.newLine().add("【PicqBotX版本】  4.12.0.1015.PRE").newLine();
 		// Line 5
@@ -51,6 +52,16 @@ public class VersionCommand implements EverywhereCommand {
 		// Line 7
 		mb.newLine().add("【版本】  " + ver.getPluginVersion());
 		return mb.toString();
+	}
+
+	@Override
+	protected <T> void respond(EventMessage event, List<T> list) {
+
+	}
+
+	@Override
+	protected <T> void respond(EventMessage event, T t) {
+
 	}
 
 }

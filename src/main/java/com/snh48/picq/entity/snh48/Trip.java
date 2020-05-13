@@ -36,6 +36,9 @@ public class Trip implements Serializable {
 	
 	/**
 	 * 行程类型
+	 * <PRE>
+	 * 0：生日，1：公演，3:冷餐
+	 * </PRE>
 	 */
 	@Column(name = "TYPE")
 	private Integer type;

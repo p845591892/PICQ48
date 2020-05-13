@@ -38,4 +38,12 @@ public interface TripRepository extends JpaRepository<Trip, Long>, JpaSpecificat
 	List<Trip> findByTypeAndLocationKeywordAndShowTimeAfterOrderByShowTimeAsc(int type, String locationKeyword,
 			Date showTime);
 
+	/**
+	 * 按演出时间升序查询行程列表。
+	 * 
+	 * @param showTime 最早演出时间
+	 * @return 行程List集合
+	 */
+	List<Trip> findByShowTimeAfterOrderByShowTimeAsc(Date showTime);
+
 }

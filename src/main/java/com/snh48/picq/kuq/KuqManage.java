@@ -1,7 +1,6 @@
 package com.snh48.picq.kuq;
 
 import java.io.File;
-import java.util.List;
 
 import com.snh48.picq.config.KuqProperties;
 import com.snh48.picq.core.QQType;
@@ -178,31 +177,22 @@ public class KuqManage {
 	 * @param list 行程列表
 	 * @return 转化后的字符串
 	 */
-	public static String tripMessageBuilder(List<Trip> list) {
+	public static String tripMessageBuilder(Trip trip) {
 		MessageBuilder mb = new MessageBuilder();
-		int size = list.size();
-		for (int i = 0; i < size; i++) {
-			Trip trip = list.get(i);
-			int type = trip.getType();
+		int type = trip.getType();
 
-			if (type == 1) {// 公演
-				mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd HH:mm")).add(" " + trip.getSubTitle());
-				mb.newLine();
-				mb.add(trip.getContent());
-			} else if (type == 3) {// 冷餐
-				mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd HH:mm")).add(" " + trip.getTitle());
-				mb.newLine();
-				mb.add(trip.getContent());
-			} else if (type == 0) {
-				mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd")).add(" " + trip.getTitle());
-				mb.newLine();
-				mb.add(trip.getSubTitle());
-			}
-
-			if (i < (size - 1)) {
-				mb.newLine().add("_____________________________").newLine();
-			}
-
+		if (type == 1) {// 公演
+			mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd HH:mm")).add(" " + trip.getSubTitle());
+			mb.newLine();
+			mb.add(trip.getContent());
+		} else if (type == 3) {// 冷餐
+			mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd HH:mm")).add(" " + trip.getTitle());
+			mb.newLine();
+			mb.add(trip.getContent());
+		} else if (type == 0) {// 生日
+			mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd")).add(" " + trip.getTitle());
+			mb.newLine();
+			mb.add(trip.getSubTitle());
 		}
 		return mb.toString();
 	}

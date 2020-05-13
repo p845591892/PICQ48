@@ -26,7 +26,7 @@ import cc.moecraft.icq.user.User;
  *
  */
 @Component
-public class FindMemberCommand implements EverywhereCommand {
+public class FindMemberCommand extends AbstractCommand implements EverywhereCommand {
 
 	@Autowired
 	private ResourceManagementService resourceManagementService;
@@ -39,7 +39,7 @@ public class FindMemberCommand implements EverywhereCommand {
 	@Override
 	public String run(EventMessage event, User sender, String command, ArrayList<String> args) {
 		if (args == null || args.size() == 0) {
-			return "缺少参数！" + Common.COMMAND_REPLAY_HELP;
+			return "缺少参数！\n" + Common.COMMAND_CAPTION_FIND_MEMBER;
 		}
 		// 设置查询参数
 		String arg = args.get(0);
@@ -49,7 +49,7 @@ public class FindMemberCommand implements EverywhereCommand {
 		} else if (StringUtil.isEnglish(arg)) {
 			vo.setAbbr(arg);
 		} else {
-			return "参数错误！";
+			return "参数错误！\n" + Common.COMMAND_CAPTION_FIND_MEMBER;
 		}
 
 		// 查询
@@ -73,13 +73,8 @@ public class FindMemberCommand implements EverywhereCommand {
 		return null;
 	}
 
-	/**
-	 * 回复成员资料
-	 * 
-	 * @param event 活动对象
-	 * @param list  成员列表
-	 */
-	private void respond(EventMessage event, List<Member> list) {
+	@Override
+	protected <T> void respond(EventMessage event, List<T> list) {
 		int size = list.size();
 		if (size == 0) {
 			event.respond("由于相关成员过多，请提高参数精确度。");
@@ -88,9 +83,15 @@ public class FindMemberCommand implements EverywhereCommand {
 			event.respond("最接近的成员有" + size + "位：");
 		}
 		list.forEach((p) -> {
-			String message = KuqManage.memberMessageBuilder(p);
-			event.respond(message, false);
+			respond(event, p);
 		});
+
+	}
+
+	@Override
+	protected <T> void respond(EventMessage event, T t) {
+		String message = KuqManage.memberMessageBuilder((Member) t);
+		event.respond(message, false);
 	}
 
 }

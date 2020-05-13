@@ -1,6 +1,7 @@
 package com.snh48.picq.kuq.command;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import com.snh48.picq.core.Common;
 import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.GroupCommand;
 import cc.moecraft.icq.event.events.message.EventGroupMessage;
+import cc.moecraft.icq.event.events.message.EventMessage;
 import cc.moecraft.icq.user.Group;
 import cc.moecraft.icq.user.GroupUser;
 
@@ -19,7 +21,7 @@ import cc.moecraft.icq.user.GroupUser;
  *
  */
 @Component
-public class SetRoomMonitorGroupCommand implements GroupCommand {
+public class SetRoomMonitorGroupCommand extends AbstractCommand implements GroupCommand {
 
 	@Override
 	public CommandProperties properties() {
@@ -31,6 +33,16 @@ public class SetRoomMonitorGroupCommand implements GroupCommand {
 			ArrayList<String> args) {
 
 		return "抱歉，该功能还在开发当中。";
+	}
+
+	@Override
+	protected <T> void respond(EventMessage event, List<T> list) {
+
+	}
+
+	@Override
+	protected <T> void respond(EventMessage event, T t) {
+
 	}
 
 }

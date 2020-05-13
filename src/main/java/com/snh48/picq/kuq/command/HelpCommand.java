@@ -1,6 +1,7 @@
 package com.snh48.picq.kuq.command;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ import cc.moecraft.icq.user.User;
  *
  */
 @Component
-public class HelpCommand implements EverywhereCommand {
+public class HelpCommand extends AbstractCommand implements EverywhereCommand {
 
 	@Override
 	public CommandProperties properties() {
@@ -53,6 +54,16 @@ public class HelpCommand implements EverywhereCommand {
 		// Line 11
 		mb.newLine().add(Common.COMMAND_CAPTION_FIND_TRIP);
 		return mb.toString();
+	}
+
+	@Override
+	protected <T> void respond(EventMessage event, List<T> list) {
+
+	}
+
+	@Override
+	protected <T> void respond(EventMessage event, T t) {
+
 	}
 
 }
