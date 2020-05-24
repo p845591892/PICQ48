@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.snh48.picq.core.Common;
+import com.snh48.picq.core.Common.Command;
+import com.snh48.picq.core.Common.CommandAlias;
 
 import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.GroupCommand;
@@ -25,7 +26,7 @@ public class SetRoomMonitorGroupCommand extends AbstractCommand implements Group
 
 	@Override
 	public CommandProperties properties() {
-		return new CommandProperties(Common.COMMAND_NAME_SET_ROOM_MONITOR, Common.COMMAND_ALIAS_SET_ROOM_MONITOR);
+		return new CommandProperties(Command.SET_ROOM_MONITOR, CommandAlias.SET_ROOM_MONITOR);
 	}
 
 	@Override

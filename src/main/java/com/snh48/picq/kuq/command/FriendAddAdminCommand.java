@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.snh48.picq.config.KuqProperties;
-import com.snh48.picq.core.Common;
+import com.snh48.picq.core.Common.Command;
+import com.snh48.picq.core.Common.CommandAlias;
+import com.snh48.picq.core.Common.CommandCaption;
 import com.snh48.picq.service.QQCommunityService;
 import com.snh48.picq.utils.SpringUtil;
 
@@ -31,7 +33,7 @@ public class FriendAddAdminCommand extends AbstractCommand implements PrivateCom
 
 	@Override
 	public CommandProperties properties() {
-		return new CommandProperties(Common.COMMAND_NAME_FRIEND_ADD, Common.COMMAND_ALIAS_FRIEND_ADD);
+		return new CommandProperties(Command.FRIEND_ADD, CommandAlias.FRIEND_ADD);
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class FriendAddAdminCommand extends AbstractCommand implements PrivateCom
 		}
 
 		if (args == null || args.size() < 2) {
-			return "参数错误！\n" + Common.COMMAND_CAPTION_FRIEND_ADD;
+			return "参数错误！\n" + CommandCaption.FRIEND_ADD;
 		}
 
 		String flag = args.get(0);
@@ -53,7 +55,7 @@ public class FriendAddAdminCommand extends AbstractCommand implements PrivateCom
 		} else if ("no".equals(approveTemp) || "n".equals(approveTemp)) {
 			approve = false;
 		} else {
-			return "参数错误\n" + Common.COMMAND_CAPTION_FRIEND_ADD;
+			return "参数错误\n" + CommandCaption.FRIEND_ADD;
 		}
 
 		event.getHttpApi().setFriendAndRequest(flag, approve);

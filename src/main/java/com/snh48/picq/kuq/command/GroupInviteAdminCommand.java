@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.snh48.picq.config.KuqProperties;
-import com.snh48.picq.core.Common;
+import com.snh48.picq.core.Common.Command;
+import com.snh48.picq.core.Common.CommandAlias;
+import com.snh48.picq.core.Common.CommandCaption;
 import com.snh48.picq.service.QQCommunityService;
 import com.snh48.picq.utils.SpringUtil;
 
@@ -31,7 +33,7 @@ public class GroupInviteAdminCommand extends AbstractCommand implements PrivateC
 
 	@Override
 	public CommandProperties properties() {
-		return new CommandProperties(Common.COMMAND_NAME_GROUP_INVITE, Common.COMMAND_ALIAS_GROUP_INVITE);
+		return new CommandProperties(Command.GROUP_INVITE, CommandAlias.GROUP_INVITE);
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class GroupInviteAdminCommand extends AbstractCommand implements PrivateC
 		}
 
 		if (args == null || args.size() < 2) {
-			return "参数错误！\n" + Common.COMMAND_CAPTION_GROUP_INVITE;
+			return "参数错误！\n" + CommandCaption.GROUP_INVITE;
 		}
 
 		String flag = args.get(0);
@@ -53,7 +55,7 @@ public class GroupInviteAdminCommand extends AbstractCommand implements PrivateC
 		} else if ("no".equals(approveTemp) || "n".equals(approveTemp)) {
 			approve = false;
 		} else {
-			return "参数错误！\n" + Common.COMMAND_CAPTION_GROUP_INVITE;
+			return "参数错误！\n" + CommandCaption.GROUP_INVITE;
 		}
 
 		event.getHttpApi().setGroupAndRequest(flag, "invite", approve, "");

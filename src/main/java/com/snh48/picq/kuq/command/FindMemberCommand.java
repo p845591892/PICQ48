@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import com.snh48.picq.core.Common;
+import com.snh48.picq.core.Common.Command;
+import com.snh48.picq.core.Common.CommandAlias;
+import com.snh48.picq.core.Common.CommandCaption;
 import com.snh48.picq.entity.snh48.Member;
 import com.snh48.picq.kuq.KuqManage;
 import com.snh48.picq.service.ResourceManagementService;
@@ -33,13 +35,13 @@ public class FindMemberCommand extends AbstractCommand implements EverywhereComm
 
 	@Override
 	public CommandProperties properties() {
-		return new CommandProperties(Common.COMMAND_NAME_FIND_MEMBER, Common.COMMAND_ALIAS_FIND_MEMBER);
+		return new CommandProperties(Command.FIND_MEMBER, CommandAlias.FIND_MEMBER);
 	}
 
 	@Override
 	public String run(EventMessage event, User sender, String command, ArrayList<String> args) {
 		if (args == null || args.size() == 0) {
-			return "缺少参数！\n" + Common.COMMAND_CAPTION_FIND_MEMBER;
+			return "缺少参数！\n" + CommandCaption.FIND_MEMBER;
 		}
 		// 设置查询参数
 		String arg = args.get(0);
@@ -49,7 +51,7 @@ public class FindMemberCommand extends AbstractCommand implements EverywhereComm
 		} else if (StringUtil.isEnglish(arg)) {
 			vo.setAbbr(arg);
 		} else {
-			return "参数错误！\n" + Common.COMMAND_CAPTION_FIND_MEMBER;
+			return "参数错误！\n" + CommandCaption.FIND_MEMBER;
 		}
 
 		// 查询

@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.snh48.picq.core.Common;
+import com.snh48.picq.core.Common.Command;
+import com.snh48.picq.core.Common.CommandAlias;
+import com.snh48.picq.core.Common.CommandCaption;
 
 import cc.moecraft.icq.command.CommandProperties;
 import cc.moecraft.icq.command.interfaces.EverywhereCommand;
@@ -24,7 +26,7 @@ public class HelpCommand extends AbstractCommand implements EverywhereCommand {
 
 	@Override
 	public CommandProperties properties() {
-		return new CommandProperties(Common.COMMAND_NAME_HELP, Common.COMMAND_ALIAS_HELP);
+		return new CommandProperties(Command.HELP, CommandAlias.HELP);
 	}
 
 	@Override
@@ -38,21 +40,21 @@ public class HelpCommand extends AbstractCommand implements EverywhereCommand {
 		// Line 3
 		mb.newLine().add("指令列表：").newLine();
 		// Line 4
-		mb.newLine().add(Common.COMMAND_CAPTION).newLine();
+		mb.newLine().add(CommandCaption.HEAD).newLine();
 		// Line 5
-		mb.newLine().add(Common.COMMAND_CAPTION_HELP).newLine();
+		mb.newLine().add(CommandCaption.HELP).newLine();
 		// Line 6
-		mb.newLine().add(Common.COMMAND_CAPTION_VERSION).newLine();
+		mb.newLine().add(CommandCaption.VERSION).newLine();
 		// Line 7
-		mb.newLine().add(Common.COMMAND_CAPTION_SET_ROOM_MONITOR).newLine();
+		mb.newLine().add(CommandCaption.SET_ROOM_MONITOR).newLine();
 		// Line 8
-		mb.newLine().add(Common.COMMAND_CAPTION_FIND_MEMBER).newLine();
+		mb.newLine().add(CommandCaption.FIND_MEMBER).newLine();
 		// Line 9
-		mb.newLine().add(Common.COMMAND_CAPTION_FRIEND_ADD).newLine();
+		mb.newLine().add(CommandCaption.FRIEND_ADD).newLine();
 		// Line 10
-		mb.newLine().add(Common.COMMAND_CAPTION_GROUP_INVITE).newLine();
+		mb.newLine().add(CommandCaption.GROUP_INVITE).newLine();
 		// Line 11
-		mb.newLine().add(Common.COMMAND_CAPTION_FIND_TRIP);
+		mb.newLine().add(CommandCaption.FIND_TRIP);
 		return mb.toString();
 	}
 

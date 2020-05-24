@@ -1,5 +1,7 @@
 package com.snh48.picq.service;
 
+import java.util.List;
+
 import com.snh48.picq.entity.snh48.Member;
 
 /**
@@ -17,5 +19,13 @@ public interface MemberService {
 	 * @return {@link Member}
 	 */
 	Member getCacheByRoomId(Long roomId);
+
+	/**
+	 * 获取成员列表
+	 * 
+	 * @param monitorType 监控状态
+	 * @return {@link List<Member>}
+	 */
+	List<Member> getMemberList(int monitorType);
 
 }

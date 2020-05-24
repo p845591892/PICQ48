@@ -13,6 +13,7 @@
 //import java.util.function.Supplier;
 //
 //import org.junit.jupiter.api.Test;
+//import org.springframework.boot.configurationprocessor.json.JSONException;
 //import org.springframework.http.HttpMethod;
 //
 //import com.snh48.picq.https.HttpsURL;
@@ -38,7 +39,7 @@
 //		// 断言型接口 有参数，返回boolean
 //		boolean result2 = changeBoolean("hello", (str) -> str.length() > 5);
 //		System.out.println(result2);
-//		
+//
 //	}
 //
 //	/**
@@ -107,7 +108,7 @@
 //		System.out.println(loginJson);
 //	}
 //
-//	private String token = "OTN7Hto/EX7i3FZIynB4yfQ2jN+4S8FsB03BQX9B0g1F2O4tlNv9CP1oQbHqUK+1ZuDAkFmZTgYA8znPgGnZz3Sru84SBiLjiQNEWLqmWlAjDfFrYEYscvaYbZm0tjVx";
+//	private String token = "Q+9kkDTe/t1FFehkG88HoIhiQdtpE1sK6DTbEIpasUNF2O4tlNv9CP1oQbHqUK+1ZuDAkFmZTgYA8znPgGnZz1QitnRcz2f4ROjZ5Tt65UBYD01d5NhIWhvOTG4QmN3j";
 //
 //	/**
 //	 * 获取用户信息
@@ -135,13 +136,37 @@
 //	}
 //
 //	/**
+//	 * 获取口袋房间资料
+//	 */
+//	@Test
+//	public void getMemberRoom() throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+//		long sourceId = 867892;
+//		int type = 0;
+//		Https https = new Https();
+//		/* 请求头 */
+//		Map<String, String> requestPropertys = new HashMap<String, String>();
+//		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
+//		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
+//		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPHONE);
+//		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
+//		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, token);
+//		/* 请求参数 */
+//		String payloadJson = "{\"sourceId\":\"" + String.valueOf(sourceId) + "\",\"type\":\"" + String.valueOf(type)
+//				+ "\"}";
+//		/* 发送请求 */
+//		String roomJson = https.setUrl(HttpsURL.MEMBER_ROOM).setDataType(HttpMethod.POST.name())
+//				.setRequestProperty(requestPropertys).setPayloadJson(payloadJson).send();
+//		System.out.println(roomJson);
+//	}
+//
+//	/**
 //	 * 获取口袋房间消息
 //	 */
 //	@Test
 //	public void getRoomMessage() {
-//		String memberId = "19";
-//		long roomId = 67333101;
-//		long nextTime = 1579930408196l;
+//		String memberId = "679462";
+//		long roomId = 67303319;
+//		long nextTime = 0;
 //
 //		Https https = new Https();
 //		/* 请求头 */
@@ -151,7 +176,7 @@
 //		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPHONE);
 //		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, token);
 //		/* 请求参数 */
-//		String payloadJson = "{\"ownerId\":\"" + memberId + "\",\"needTop1Msg\":\"false\",\"nextTime\":\""
+//		String payloadJson = "{\"ownerId\":\"" + memberId + "\",\"needTop1Msg\":\"true\",\"nextTime\":\""
 //				+ String.valueOf(nextTime) + "\",\"roomId\":\"" + roomId + "\"}";
 //		/* 发送请求 */
 //		try {
@@ -164,7 +189,7 @@
 //	}
 //
 //	@Test
-//	public void https() {
+//	public void getMemberList() {
 //		Https https = new Https();
 //		/* 请求头 */
 //		Map<String, String> requestPropertys = new HashMap<String, String>();
@@ -195,10 +220,10 @@
 //		System.out.println("=========================");
 //		numbers.stream().sequential().forEach(System.out::println);
 //	}
-//	
+//
 //	@Test
 //	public void taobaHttpsTest() {
-//		
+//
 //	}
 //
 ////	@Test

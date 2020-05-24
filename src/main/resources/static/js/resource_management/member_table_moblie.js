@@ -66,7 +66,9 @@ $(document).ready(function() {
 			visible : false
 		}, {
 			field : "roomName",
-			title : "口袋房间名字"
+			title : "口袋房间名字",
+			formatter : roomNameHtml,
+			events : roomNameEvent
 		}, {
 			field : "topic",
 			title : "话题"
@@ -210,7 +212,15 @@ var monitorConfigHtml = function(value, row, index) {
 	var id = row.id;
 	var roomMonitor = row.roomMonitor;
 	if (roomMonitor == 1 || roomMonitor == 2) {
-		return "<button type=\"button\" class=\"btn btn-theme03 btn-sm btn-monitor-config\"><i class=\"fa fa-qq fa-lg\"></i> 配置</button>"
+		return "<button type=\"button\" class=\"btn btn-theme03 btn-sm btn-monitor-config\"><i class=\"fa fa-qq fa-lg\"></i> 配置</button>";
+	}
+}
+
+var roomNameHtml = function(value, row, index) {
+	var roomName = row.roomName;
+	var roomMonitor = row.roomMonitor;
+	if (roomMonitor == 1 || roomMonitor == 2) {
+		return "<a class=\"btn-room-show\" href=\"javascript:void(0);\"><ins>" + roomName + "</ins></a>";
 	}
 }
 
@@ -220,6 +230,16 @@ var monitorConfigHtml = function(value, row, index) {
 var roomMonitorEvent = {
 	"click .btn-room-monitor" : function(event, value, row, index) {
 		updateRoomMonitor(value, row, index);
+	}
+}
+
+/**
+ * 口袋房间名列活动
+ */
+var roomNameEvent = {
+	"click .btn-room-show" : function(event, value, row, index) {
+		var id = row.id
+		showRoomJson(id);
 	}
 }
 
@@ -355,7 +375,6 @@ function showAddMonitor(btn, roomId) {
 					"shadeClose" : false,
 					"btn" : [ "保存", "取消" ],
 					"yes" : function(index) {
-						console.log(index)
 						openLoad();
 						var keyword = $("textarea[name = 'keyword']").val();
 						var communityId = $("select[name = 'communityId']").val();
@@ -390,6 +409,35 @@ function showAddMonitor(btn, roomId) {
 			layerMsg(500, "请求失败");
 		}
 	});
+}
+
+function showRoomJson(id) {
+	$.ajax({
+		url : "/resource/meber/room/json/" + id,
+		type : "get",
+		success : function(data) {
+			if (data.status == 200) {
+				var json = formatJson(data.data);
+				var pageii = layer.open({
+					type : 1,
+					content : json,
+					anim : 'up',
+					style : 'position:fixed; left:0; top:0; width:100%; height:100%; border: none; -webkit-animation-duration: .5s; animation-duration: .5s;',
+					btn : [ "关闭" ]
+				});
+			} else {
+				layerMsg(data.status, data.cause);
+			}
+		},
+		error : function(data) {
+			closeLoad();
+			layerMsg(500, "请求失败");
+		}
+	});
+}
+
+function jsonHtml() {
+
 }
 
 /**
@@ -582,3 +630,29 @@ function addVideoShow() {
 		}
 	});
 }
+
+var formatJson = function(json) {
+	var outStr = '', // 转换后的json字符串
+	padIdx = 0, // 换行后是否增减PADDING的标识
+	space = '    '; // 4个空格符
+	if (typeof json !== 'string') {
+		json = JSON.stringify(json);
+	}
+	json = json.replace(/([\{\}\[\]])/g, '\r\n$1\r\n').replace(/(\,)/g, '$1\r\n').replace(/(\r\n\r\n)/g, '\r\n');
+	(json.split('\r\n')).forEach(function(node, index) {
+		var indent = 0, padding = '';
+		if (node.match(/[\{\[]/)) {
+			indent = 1;
+		} else if (node.match(/[\}\]]/)) {
+			padIdx = padIdx !== 0 ? --padIdx : padIdx;
+		} else {
+			indent = 0;
+		}
+		for (var i = 0; i < padIdx; i++) {
+			padding += space;
+		}
+		outStr += padding + node + '\r\n';
+		padIdx += indent;
+	});
+	return outStr;
+};

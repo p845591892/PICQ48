@@ -117,7 +117,7 @@
 //	public void syncRoomMessageAllByYear() throws ParseException, InterruptedException {
 //
 //		long overTime = DateUtil.getDateFormat("2019-01-0100:00:00").getTime();
-//		long nextTime = DateUtil.getDateFormat("2020-01-0100:00:00").getTime();
+//		long nextTime = DateUtil.getDateFormat("2020-05-1900:11:09").getTime();
 ////		long nextTime = DateUtil.getDateFormat("2019-07-3100:27:28").getTime();
 //		/* 杨媛媛 */
 ////		long roomId = 67342057;
@@ -133,6 +133,8 @@
 ////		long roomId = 67370540l;
 //		/* 郭爽 */
 //		long roomId = 67275562l;
+//		/* 李慧 */
+////		long roomId = 67207862l;
 //
 //		do {
 //			// 每次循环暂停8秒

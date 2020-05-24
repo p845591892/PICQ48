@@ -3,12 +3,14 @@ package com.snh48.picq.controller;
 import javax.net.ssl.HttpsURLConnection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.snh48.picq.https.JsonPICQ48;
 import com.snh48.picq.repository.QQCommunityRepository;
 import com.snh48.picq.repository.QuartzConfigRepository;
 import com.snh48.picq.repository.modian.MoDianPoolProjectRepository;
@@ -21,6 +23,8 @@ import com.snh48.picq.vo.MemberVO;
 import com.snh48.picq.vo.ResultVO;
 import com.snh48.picq.vo.RoomMessageVO;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * @ClassName: ResourceManagementApi
  * @Description: 资源的数据接口
@@ -29,6 +33,7 @@ import com.snh48.picq.vo.RoomMessageVO;
  * @author JuFF_白羽
  * @date 2018年7月19日 下午2:28:56
  */
+@Log4j2
 @RestController
 @RequestMapping("/resource")
 public class ResourceContorller {
@@ -105,6 +110,28 @@ public class ResourceContorller {
 		result.setStatus(HttpsURLConnection.HTTP_OK);
 		result.setCause("success");
 		result.setData(resourceManagementService.getRoomMonitorTableHtml(roomId));
+		return result;
+	}
+
+	/**
+	 * @Description: 获取房间的json数据
+	 * @author JuFF_白羽
+	 */
+	@GetMapping("/meber/room/json/{memberId}")
+	public ResultVO getRoomJson(@PathVariable Long memberId) {
+		JSONObject json;
+		ResultVO result = new ResultVO();
+		try {
+			json = JsonPICQ48.jsonMemberRoom(memberId, 0);
+			result.setStatus(HttpsURLConnection.HTTP_OK);
+			result.setCause("success");
+			result.setData(json.toString());
+		} catch (Exception e) {
+			result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
+			result.setCause("获取房间的json数据发生错误。");
+			log.error("获取房间的json数据发生错误，参数：[memberId={}]，异常：{}", memberId, e.getMessage());
+			e.printStackTrace();
+		}
 		return result;
 	}
 

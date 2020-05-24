@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.snh48</groupId>
 	<artifactId>PICQ48</artifactId>
-	<version>1.4.0</version>
+	<version>1.4.1</version>
 	<name>PICQ48</name>
 	<description>基于zztyyh，使用酷Q作为发送消息的工具，重新构建的应援会机器人项目</description>
 

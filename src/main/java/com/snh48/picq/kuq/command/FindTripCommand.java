@@ -8,7 +8,9 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.snh48.picq.core.Common;
+import com.snh48.picq.core.Common.Command;
+import com.snh48.picq.core.Common.CommandAlias;
+import com.snh48.picq.core.Common.CommandCaption;
 import com.snh48.picq.entity.snh48.Trip;
 import com.snh48.picq.kuq.KuqManage;
 import com.snh48.picq.repository.snh48.TripRepository;
@@ -34,7 +36,7 @@ public class FindTripCommand extends AbstractCommand implements EverywhereComman
 
 	@Override
 	public CommandProperties properties() {
-		return new CommandProperties(Common.COMMAND_NAME_FIND_TRIP, Common.COMMAND_ALIAS_FIND_TRIP);
+		return new CommandProperties(Command.FIND_TRIP, CommandAlias.FIND_TRIP);
 	}
 
 	@Override
@@ -72,7 +74,7 @@ public class FindTripCommand extends AbstractCommand implements EverywhereComman
 				tripList.addAll(tripRepository.findByTypeAndShowTimeAfterOrderByShowTimeAsc(type, showTime));
 
 			} else {
-				return "参数错误！\n" + Common.COMMAND_CAPTION_FIND_TRIP;
+				return "参数错误！\n" + CommandCaption.FIND_TRIP;
 			}
 
 		} else if (args.size() == 2) {
@@ -83,11 +85,11 @@ public class FindTripCommand extends AbstractCommand implements EverywhereComman
 						Integer.parseInt(type), locationKeyword, showTime));
 
 			} else {
-				return "参数错误！\n" + Common.COMMAND_CAPTION_FIND_TRIP;
+				return "参数错误！\n" + CommandCaption.FIND_TRIP;
 			}
 
 		} else {
-			return "参数错误！\n" + Common.COMMAND_CAPTION_FIND_TRIP;
+			return "参数错误！\n" + CommandCaption.FIND_TRIP;
 		}
 
 		respond(event, tripList);

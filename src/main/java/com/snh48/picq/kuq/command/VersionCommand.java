@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.snh48.picq.core.Common;
+import com.snh48.picq.core.Common.Command;
+import com.snh48.picq.core.Common.CommandAlias;
 import com.snh48.picq.utils.SpringUtil;
 
 import cc.moecraft.icq.PicqBotX;
@@ -28,7 +29,7 @@ public class VersionCommand extends AbstractCommand implements EverywhereCommand
 
 	@Override
 	public CommandProperties properties() {
-		return new CommandProperties(Common.COMMAND_NAME_VERSION, Common.COMMAND_ALIAS_VERSION);
+		return new CommandProperties(Command.VERSION, CommandAlias.VERSION);
 	}
 
 	@Override

@@ -163,10 +163,6 @@ public class Pocket48Tool extends JsonPICQ48 {
 	 * @param needTop1Msg 是否需要最新一条数据。
 	 * @param roomId      口袋房间ID。
 	 * @return {@link RoomMessageAll}集合。
-	 * @throws KeyManagementException
-	 * @throws NoSuchAlgorithmException
-	 * @throws IOException
-	 * @throws JSONException
 	 */
 	public static List<RoomMessageAll> getRoomMessageAllList(long nextTime, boolean needTop1Msg, long roomId) {
 		try {

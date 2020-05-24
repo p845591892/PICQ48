@@ -12,6 +12,7 @@ import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 
+import com.snh48.picq.core.Common.MsgType;
 import com.snh48.picq.entity.snh48.Member;
 import com.snh48.picq.entity.snh48.PocketUser;
 import com.snh48.picq.entity.snh48.RoomMessage;
@@ -399,10 +400,10 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		JSONObject extInfoObject = new JSONObject(indexObj.getString("extInfo")); // 消息内容的主体对象
 		String messageType = extInfoObject.getString("messageType"); // 消息类型
 
-		if (messageType.equals("TEXT")) { // 普通文本类型
+		if (messageType.equals(MsgType.TEXT)) { // 普通文本类型
 			msgContent.append(indexObj.getString("bodys"));
 
-		} else if (messageType.equals("REPLY")) { // 回复类型
+		} else if (messageType.equals(MsgType.REPLY)) { // 回复类型
 			msgContent.append("[回复]<br>");
 			msgContent.append(indexObj.getString("bodys"));
 			msgContent.append("<br>_____________________________<br>");
@@ -410,12 +411,12 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append(" : ");
 			msgContent.append(extInfoObject.getString("replyText"));
 
-		} else if (messageType.equals("IMAGE") || messageType.equals("gif")) { // 图片类型/动态图片
+		} else if (messageType.equals(MsgType.IMAGE) || messageType.equals(MsgType.GIF)) { // 图片类型/动态图片
 			msgContent.append("<img>");
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append(bodysObject.getString("url"));
 
-		} else if (messageType.equals("LIVEPUSH")) { // 生放送类型
+		} else if (messageType.equals(MsgType.LIVEPUSH)) { // 生放送类型
 			msgContent.append("[生放送]<br>");
 			msgContent.append(extInfoObject.getString("liveTitle"));
 			msgContent.append("<br>");
@@ -424,7 +425,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append("<img>");
 			msgContent.append(getSourceUrl(extInfoObject.getString("liveCover")));
 
-		} else if (messageType.equals("FLIPCARD")) { // 翻牌类型
+		} else if (messageType.equals(MsgType.FLIPCARD)) { // 翻牌类型
 			JSONObject contentObject = null;
 			String questionId = extInfoObject.getString("questionId");
 			String answerId = extInfoObject.getString("answerId");
@@ -443,33 +444,33 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append(" : ");
 			msgContent.append(extInfoObject.getString("question"));
 
-		} else if (messageType.equals("EXPRESS")) { // 特殊表情类型
+		} else if (messageType.equals(MsgType.EXPRESS)) { // 特殊表情类型
 			msgContent.append("发送了一个特殊表情[");
 			msgContent.append(extInfoObject.getString("emotionName"));
 			msgContent.append("]，请到口袋48App查看。");
 
-		} else if (messageType.equals("VIDEO")) { // 视频类型
+		} else if (messageType.equals(MsgType.VIDEO)) { // 视频类型
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append("[视频]<br>点击➡️");
 			msgContent.append(bodysObject.getString("url"));
 
-		} else if (messageType.equals("VOTE")) { // 投票类型
+		} else if (messageType.equals(MsgType.VOTE)) { // 投票类型
 			msgContent.append("[投票]<br>");
 			msgContent.append(extInfoObject.getString("text"));
 			msgContent.append("<br>详情请到口袋48App查看。");
 
-		} else if (messageType.equals("AUDIO")) { // 语音类型
+		} else if (messageType.equals(MsgType.AUDIO)) { // 语音类型
 			msgContent.append("<audio>️");
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append(bodysObject.getString("url"));
 
-		} else if (messageType.equals("PASSWORD_REDPACKAGE")) { // 口令红包
+		} else if (messageType.equals(MsgType.PASSWORD_REDPACKAGE)) { // 口令红包
 			msgContent.append("[口令红包]<br>");
 			msgContent.append(extInfoObject.getString("redPackageTitle"));
 			msgContent.append("<img>");
 			msgContent.append(getSourceUrl(extInfoObject.getString("redPackageCover")));
 
-		} else if (messageType.equals("SHARE_POSTS") || messageType.equals("SHARE_WEB")) { // POSTS/WEB分享
+		} else if (messageType.equals(MsgType.SHARE_POSTS) || messageType.equals(MsgType.SHARE_WEB)) { // POSTS/WEB分享
 			msgContent.append("[网页分享]<br>");
 			msgContent.append(extInfoObject.getString("shareDesc"));
 			msgContent.append("<br>");
@@ -506,11 +507,11 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		roomMessageAll.setMessageTime(DateUtil.getDateFormat(indexObj.getLong("msgTime")));// 发送时间
 		roomMessageAll.setMessageContent(getMessageContent(indexObj));// 消息内容
 
-		if (messageType.equals("REPLY")) {// 回复
+		if (messageType.equals(MsgType.REPLY)) {// 回复
 			roomMessageAll.setReplyMessageId(extInfoObj.getString("replyMessageId"));// 回复的消息ID
 			roomMessageAll.setReplyName(extInfoObj.getString("replyName"));// 被回复人昵称
 
-		} else if (messageType.equals("FLIPCARD")) {// 翻牌
+		} else if (messageType.equals(MsgType.FLIPCARD)) {// 翻牌
 			String questionId = extInfoObj.getString("questionId");
 			String answerId = extInfoObj.getString("answerId");
 			try {
@@ -534,44 +535,44 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		JSONObject extInfoObject = new JSONObject(indexObj.getString("extInfo"));// 消息内容的主体对象
 		String messageType = extInfoObject.getString("messageType");// 消息类型
 
-		if (messageType.equals("TEXT")) {// 普通文本类型
+		if (messageType.equals(MsgType.TEXT)) {// 普通文本类型
 			msgContent.append(indexObj.getString("bodys"));
 
-		} else if (messageType.equals("REPLY")) {// 回复类型
+		} else if (messageType.equals(MsgType.REPLY)) {// 回复类型
 			msgContent.append(indexObj.getString("bodys"));
 
-		} else if (messageType.equals("IMAGE")|| messageType.equals("gif")) {// 图片类型/动态图片
+		} else if (messageType.equals(MsgType.IMAGE)|| messageType.equals(MsgType.GIF)) {// 图片类型/动态图片
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append(bodysObject.getString("url"));
 
-		} else if (messageType.equals("LIVEPUSH")) {// 生放送类型
+		} else if (messageType.equals(MsgType.LIVEPUSH)) {// 生放送类型
 			msgContent.append(HttpsURL.LIVE);
 			msgContent.append(extInfoObject.getString("liveId"));
 
-		} else if (messageType.equals("FLIPCARD")) {// 翻牌类型
+		} else if (messageType.equals(MsgType.FLIPCARD)) {// 翻牌类型
 			msgContent.append(extInfoObject.getString("answer"));
 
-		} else if (messageType.equals("EXPRESS")) {// 特殊表情类型
+		} else if (messageType.equals(MsgType.EXPRESS)) {// 特殊表情类型
 			msgContent.append(extInfoObject.getString("emotionName"));
 
-		} else if (messageType.equals("VIDEO")) {// 视频类型
+		} else if (messageType.equals(MsgType.VIDEO)) {// 视频类型
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append(bodysObject.getString("url"));
 
-		} else if (messageType.equals("VOTE")) {// 投票类型
+		} else if (messageType.equals(MsgType.VOTE)) {// 投票类型
 			msgContent.append(extInfoObject.getString("text"));
 
-		} else if (messageType.equals("AUDIO")) {// 语音类型
+		} else if (messageType.equals(MsgType.AUDIO)) {// 语音类型
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append(bodysObject.getString("url"));
 
-		} else if (messageType.equals("PRESENT_TEXT")) {// 礼物类型
+		} else if (messageType.equals(MsgType.PRESENT_TEXT)) {// 礼物类型
 			msgContent.append(extInfoObject.getJSONObject("giftInfo").getString("giftName"));
 
-		} else if (messageType.equals("SPECICAL_REDPACKAGE")) {// 新春红包
+		} else if (messageType.equals(MsgType.SPECICAL_REDPACKAGE)) {// 新春红包
 			msgContent.append(extInfoObject.getString("redPackageTitle"));
 
-		} else if (messageType.equals("SHARE_POSTS") || messageType.equals("SHARE_WEB")) {// POSTS/WEB分享
+		} else if (messageType.equals(MsgType.SHARE_POSTS) || messageType.equals(MsgType.SHARE_WEB)) {// POSTS/WEB分享
 			msgContent.append(extInfoObject.getString("shareDesc"));
 			msgContent.append(extInfoObject.getString("jumpPath"));
 			
