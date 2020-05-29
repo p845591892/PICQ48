@@ -11,11 +11,13 @@
 //import java.util.function.Function;
 //import java.util.function.Predicate;
 //import java.util.function.Supplier;
+//import java.util.regex.Pattern;
 //
 //import org.junit.jupiter.api.Test;
 //import org.springframework.boot.configurationprocessor.json.JSONException;
 //import org.springframework.http.HttpMethod;
 //
+//import com.snh48.picq.https.HttpsPICQ48;
 //import com.snh48.picq.https.HttpsURL;
 //import com.snh48.picq.https.MyHttpHeaders;
 //import com.snh48.picq.https.MyMediaType;
@@ -223,7 +225,31 @@
 //
 //	@Test
 //	public void taobaHttpsTest() {
+//		String locationKeywordRegex = "北京|上海|广州";
+//		String typeRegex = "公演|冷餐|生日";
+//		String[] arg1 = { "广州", "上海", "北京" };
+//		String[] arg2 = { "公演", "冷餐", "生日" };
 //
+//		for (String arg : arg1) {
+//			System.out.println(arg);
+//			System.out.println(Pattern.matches(locationKeywordRegex, arg));
+//			System.out.println(Pattern.matches(typeRegex, arg));
+//		}
+//
+//		for (String arg : arg2) {
+//			System.out.println(arg);
+//			System.out.println(Pattern.matches(locationKeywordRegex, arg));
+//			System.out.println(Pattern.matches(typeRegex, arg));
+//		}
+//	}
+//	
+//	@Test
+//	void getTrip() {
+//		try {
+//			System.out.println(HttpsPICQ48.httpsTrip(0, 0, false));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 //	}
 //
 ////	@Test

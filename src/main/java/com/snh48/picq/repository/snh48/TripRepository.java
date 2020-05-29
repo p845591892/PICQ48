@@ -19,7 +19,7 @@ import com.snh48.picq.entity.snh48.Trip;
 public interface TripRepository extends JpaRepository<Trip, Long>, JpaSpecificationExecutor<Trip> {
 
 	/**
-	 * 按演出时间升序查询行程列表。
+	 * 升序查询行程列表。
 	 * 
 	 * @param type     行程类型
 	 * @param showTime 最早演出时间
@@ -28,7 +28,7 @@ public interface TripRepository extends JpaRepository<Trip, Long>, JpaSpecificat
 	List<Trip> findByTypeAndShowTimeAfterOrderByShowTimeAsc(int type, Date showTime);
 
 	/**
-	 * 按演出时间升序查询行程列表。
+	 * 升序查询行程列表。
 	 * 
 	 * @param type            行程类型
 	 * @param locationKeyword 地址关键字
@@ -39,11 +39,53 @@ public interface TripRepository extends JpaRepository<Trip, Long>, JpaSpecificat
 			Date showTime);
 
 	/**
-	 * 按演出时间升序查询行程列表。
+	 * 升序查询行程列表。
 	 * 
 	 * @param showTime 最早演出时间
 	 * @return 行程List集合
 	 */
 	List<Trip> findByShowTimeAfterOrderByShowTimeAsc(Date showTime);
+
+	/**
+	 * 升序查询行程列表。
+	 * 
+	 * @param beginTime 区间开始时间
+	 * @param endTime   区间结束时间
+	 * @return 行程List集合
+	 */
+	List<Trip> findByShowTimeAfterAndShowTimeBeforeOrderByShowTimeAsc(Date beginTime, Date endTime);
+
+	/**
+	 * 升序查询行程列表。
+	 * 
+	 * @param locationKeyword 地址关键字
+	 * @param beginTime       区间开始时间
+	 * @param endTime         区间结束时间
+	 * @return 行程List集合
+	 */
+	List<Trip> findByLocationKeywordAndShowTimeAfterAndShowTimeBeforeOrderByShowTimeAsc(String locationKeyword,
+			Date beginTime, Date endTime);
+
+	/**
+	 * 升序查询行程列表。
+	 * 
+	 * @param type      行程类型
+	 * @param beginTime 区间开始时间
+	 * @param endTime   区间结束时间
+	 * @return 行程List集合
+	 */
+	List<Trip> findByTypeAndShowTimeAfterAndShowTimeBeforeOrderByShowTimeAsc(int type, Date beginTime, Date endTime);
+
+	/**
+	 * 升序查询行程列表。
+	 * 
+	 * @param type            行程类型
+	 * @param locationKeyword 地址关键字
+	 * @param beginTime       区间开始时间
+	 * @param endTime         区间结束时间
+	 * @return 行程List集合
+	 */
+	List<Trip> findByTypeAndLocationKeywordAndShowTimeAfterAndShowTimeBeforeOrderByShowTimeAsc(int type,
+			String locationKeyword, Date beginTime, Date endTime);
 
 }

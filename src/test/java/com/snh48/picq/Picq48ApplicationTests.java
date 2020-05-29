@@ -206,11 +206,4 @@
 //		responListP.forEach((p) -> System.out.println(p.toString()));
 //	}
 //
-//	/**
-//	 * coolq findm指令
-//	 */
-//	@Test
-//	void findm() {
-//	}
-//
 //}

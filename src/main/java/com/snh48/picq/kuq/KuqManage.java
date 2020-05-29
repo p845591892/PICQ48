@@ -1,6 +1,7 @@
 package com.snh48.picq.kuq;
 
 import java.io.File;
+import java.util.Date;
 
 import com.snh48.picq.config.KuqProperties;
 import com.snh48.picq.core.QQType;
@@ -178,22 +179,22 @@ public class KuqManage {
 	 * @return 转化后的字符串
 	 */
 	public static String tripMessageBuilder(Trip trip) {
+		Date showTime = trip.getShowTime();
+		String title = trip.getTitle();
+		String subTitle = trip.getSubTitle();
+		
 		MessageBuilder mb = new MessageBuilder();
-		int type = trip.getType();
-
-		if (type == 1) {// 公演
-			mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd HH:mm")).add(" " + trip.getSubTitle());
-			mb.newLine();
-			mb.add(trip.getContent());
-		} else if (type == 3) {// 冷餐
-			mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd HH:mm")).add(" " + trip.getTitle());
-			mb.newLine();
-			mb.add(trip.getContent());
-		} else if (type == 0) {// 生日
-			mb.add(DateUtil.getDate(trip.getShowTime(), "yyyy-MM-dd")).add(" " + trip.getTitle());
-			mb.newLine();
+		mb.add(DateUtil.getDate(showTime, "yyyy-MM-dd HH:mm"));
+		mb.add(" " + trip.getTitle());
+		mb.newLine();
+		if (!title.equals(subTitle)) {
 			mb.add(trip.getSubTitle());
+			mb.newLine();
 		}
+		mb.add(trip.getJoinMemberName());
+		mb.newLine();
+		mb.add(trip.getContent());
+		
 		return mb.toString();
 	}
 

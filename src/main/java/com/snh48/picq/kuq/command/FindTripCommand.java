@@ -42,47 +42,35 @@ public class FindTripCommand extends AbstractCommand implements EverywhereComman
 	@Override
 	public String run(EventMessage event, User sender, String command, ArrayList<String> args) {
 		List<Trip> tripList = new ArrayList<>();
-		Date showTime = DateUtil.getMidnight();
+		Date beginTime = DateUtil.getMidnight();
+		Date endTime = DateUtil.getNearMidnight(DateUtil.countDayToDate(7));
 		String locationKeywordRegex = "北京|上海|广州";
-		String typeRegex = "公演|冷餐|生日";
+		String typeRegex = "公演|冷餐|生日|节目";
 
 		if (args == null || args.size() == 0) {
-			tripList.addAll(tripRepository.findByShowTimeAfterOrderByShowTimeAsc(showTime));
+			tripList.addAll(tripRepository.findByShowTimeAfterAndShowTimeBeforeOrderByShowTimeAsc(beginTime, endTime));
 
 		} else if (args.size() == 1) {
 			String arg = args.get(0);
 			if (Pattern.matches(locationKeywordRegex, arg)) {
-				tripList.addAll(tripRepository.findByTypeAndLocationKeywordAndShowTimeAfterOrderByShowTimeAsc(1, arg,
-						showTime));
+				tripList.addAll(tripRepository.findByLocationKeywordAndShowTimeAfterAndShowTimeBeforeOrderByShowTimeAsc(
+						arg, beginTime, endTime));
 
 			} else if (Pattern.matches(typeRegex, arg)) {
-				int type;
-				switch (arg) {
-				case "公演":
-					type = 1;
-					break;
-				case "冷餐":
-					type = 3;
-					break;
-				case "生日":
-					type = 0;
-					break;
-				default:
-					type = -1;
-					break;
-				}
-				tripList.addAll(tripRepository.findByTypeAndShowTimeAfterOrderByShowTimeAsc(type, showTime));
+				tripList.addAll(tripRepository.findByTypeAndShowTimeAfterAndShowTimeBeforeOrderByShowTimeAsc(
+						getType(arg), beginTime, endTime));
 
 			} else {
 				return "参数错误！\n" + CommandCaption.FIND_TRIP;
 			}
 
 		} else if (args.size() == 2) {
-			String type = args.get(0);
-			String locationKeyword = args.get(1);
+			String locationKeyword = args.get(0);
+			String type = args.get(1);
 			if (Pattern.matches(typeRegex, type) && Pattern.matches(locationKeywordRegex, locationKeyword)) {
-				tripList.addAll(tripRepository.findByTypeAndLocationKeywordAndShowTimeAfterOrderByShowTimeAsc(
-						Integer.parseInt(type), locationKeyword, showTime));
+				tripList.addAll(
+						tripRepository.findByTypeAndLocationKeywordAndShowTimeAfterAndShowTimeBeforeOrderByShowTimeAsc(
+								getType(type), locationKeyword, beginTime, endTime));
 
 			} else {
 				return "参数错误！\n" + CommandCaption.FIND_TRIP;
@@ -118,6 +106,28 @@ public class FindTripCommand extends AbstractCommand implements EverywhereComman
 	@Override
 	protected <T> void respond(EventMessage event, T t) {
 		event.respond(t.toString());
+	}
+
+	private int getType(String arg) {
+		int type = 1;
+		switch (arg) {
+		case "公演":
+			type = 1;
+			break;
+		case "冷餐":
+			type = 3;
+			break;
+		case "生日":
+			type = 0;
+			break;
+		case "节目":
+			type = 5;
+			break;
+		default:
+			type = -1;
+			break;
+		}
+		return type;
 	}
 
 }
