@@ -3,7 +3,6 @@ package com.snh48.picq.https;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,9 +37,9 @@ public class Pocket48Tool extends JsonPICQ48 {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Member> getMemberList() {
+		List<Member> memberList = new ArrayList<Member>();
 		try {
 			JSONObject allMemberObj = jsonAllMember();
-			List<Member> memberList = new ArrayList<Member>();
 			/* 遍历全体成员列表 */
 			Iterator<String> iterator = allMemberObj.keys();
 			while (iterator.hasNext()) {
@@ -49,12 +48,14 @@ public class Pocket48Tool extends JsonPICQ48 {
 				JSONObject memberObject = allMemberObj.getJSONObject(key);
 				long memberId = memberObject.getLong("memberId");
 				Member member = getMember(memberId);
-				memberList.add(member);
+				
+				if (null != member) {
+					memberList.add(member);
+				}
 			}
 			return memberList;
-		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
+		} catch (Exception e) {
 			log.error("getMemberList() 获取List<Member>异常：{}", e.getMessage());
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -86,10 +87,8 @@ public class Pocket48Tool extends JsonPICQ48 {
 				}
 			}
 			return memberList;
-		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException
-				| InterruptedException e) {
+		} catch (Exception e) {
 			log.error("getMemberListV2() 获取List<Member>异常：{}", e.getMessage());
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -102,18 +101,21 @@ public class Pocket48Tool extends JsonPICQ48 {
 	 */
 	public static Member getMember(long memberId) {
 		try {
-			JSONObject memberObj = jsonMember(memberId);
 			Member member = new Member();
+			JSONObject memberObj = jsonMember(memberId);
 			member.setId(memberId);// 设置成员ID
 			setMember(member, memberObj);
-			JSONObject memberRoomObj = jsonMemberRoom(memberId, 0);
-			setMemberRoom(member, memberRoomObj);
 			return member;
-		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException | ParseException e) {
-			log.error("获取Member异常：{}", e.getMessage());
+		} catch (Exception e) {
+			log.error("getMember(long memberId)异常：{}", e.getMessage());
 		}
 		return null;
 	}
+	
+//	public static Member getMemberRoom(Member member) {
+//		jsonMemberRoom()
+//		return member;
+//	}
 
 	/**
 	 * 获取SNH48成员的口袋48房间消息。通过Https的方式发送请求，获得json结果，解析后生成{@link RoomMessage}的集合。
@@ -143,7 +145,8 @@ public class Pocket48Tool extends JsonPICQ48 {
 			}
 			return messageList;
 		} catch (Exception e) {
-			log.error("获取List<RoomMessage>发生异常：{}", e.getMessage());
+			log.error("获取口袋房间消息失败。memberId={}, roomId={}, nextTime={}, 异常：{}", 
+					memberId, roomId, nextTime, e.getMessage());
 		}
 		return null;
 	}

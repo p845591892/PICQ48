@@ -70,14 +70,14 @@ public class KuqManage {
 			try {
 				icqHttpApi.sendGroupMsg(qq, message, autoEscape);
 			} catch (Exception e) {
-				log.info("发送同步消息到Q群发生异常：{}", e.getMessage());
+				log.error("发送同步消息到Q群发生异常：{}", e.getMessage());
 			}
 			break;
 		case FRIEND:// 发送到QQ好友
 			try {
 				icqHttpApi.sendPrivateMsg(qq, message, autoEscape);
 			} catch (Exception e) {
-				log.info("发送同步消息到好友发生异常：{}", e.getMessage());
+				log.error("发送同步消息到好友发生异常：{}", e.getMessage());
 			}
 			break;
 		default:

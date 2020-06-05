@@ -89,7 +89,7 @@ public class WebContorller {
 	@Log(desc = "登录", type = OperationType.LOGIN)
 	@PostMapping("/doLogin")
 	public ModelAndView doLogin(HttpServletRequest request, ModelAndView mav) {
-		log.info(IpUtil.getIpAddr(request));
+		log.info("IP={}", IpUtil.getIpAddr(request));
 
 		Subject subject = SecurityUtils.getSubject();
 		String username = request.getParameter("username");
@@ -102,42 +102,42 @@ public class WebContorller {
 		try {
 			subject.login(token);
 		} catch (UnknownAccountException unknownAccountException) {
-			log.info("用户名错误：{}", username);
+			log.error("用户名错误：{}", username);
 			mav.addObject("msg", "无效用户名");
 			mav.setViewName("login");
 			return mav;
 		} catch (IncorrectCredentialsException incorrectCredentialsException) {
-			log.info("密码错误：{}", username);
+			log.error("密码错误：{}", username);
 			mav.addObject("msg", "密码错误");
 			mav.setViewName("login");
 			return mav;
 		} catch (LockedAccountException e) {
-			log.info("用户被锁定：{}", username);
+			log.error("用户被锁定：{}", username);
 			mav.addObject("msg", "用户被锁定");
 			mav.setViewName("login");
 			return mav;
 		} catch (ActivationAccountException e) {
-			log.info("用户未激活：{}", username);
+			log.error("用户未激活：{}", username);
 			mav.addObject("msg", "用户未激活");
 			mav.setViewName("login");
 			return mav;
 		} catch (ExpiredCredentialsException e) {
-			log.info("密码过期：{}", username);
+			log.error("密码过期：{}", username);
 			mav.addObject("msg", "凭证过期");
 			mav.setViewName("login");
 			return mav;
 		} catch (ExcessiveAttemptsException e) {
-			log.info("登录错误次数过多：{}", username);
+			log.error("登录错误次数过多：{}", username);
 			mav.addObject("msg", "登录错误次数过多");
 			mav.setViewName("login");
 			return mav;
 		} catch (DisabledAccountException e) {
-			log.info("账号被禁用：{}", username);
+			log.error("账号被禁用：{}", username);
 			mav.addObject("msg", "账号被禁用");
 			mav.setViewName("login");
 			return mav;
 		} catch (Exception e) {
-			log.info("其他错误");
+			log.error("其他错误");
 			e.printStackTrace();
 			mav.addObject("msg", e.getClass().getName());
 			return mav;
@@ -162,7 +162,7 @@ public class WebContorller {
 		try {
 			subject.logout();
 		} catch (Exception e) {
-			log.info("其他错误:{}", e.toString());
+			log.error("其他错误:{}", e.toString());
 		}
 		mav.setViewName("login");
 		return mav;

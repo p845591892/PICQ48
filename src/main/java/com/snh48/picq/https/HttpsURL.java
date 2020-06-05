@@ -39,7 +39,7 @@ public class HttpsURL {
 	public static final String TOKEN = POCKET_API + "/user/api/v1/login/app/mobile";
 
 	/** SNH48成员的口袋48房间信息接口。请求方式为POST。 */
-	public static final String MEMBER_ROOM = POCKET_API + "/im/api/v1/im/room/info/type/source";
+	public static final String MEMBER_ROOM = POCKET_API + "/im/api/v1/im/room/info";
 
 	/** SNH48成员的口袋房间消息接口。请求方式为POST。 */
 	public static final String ROOM_MESSAGE = POCKET_API + "/im/api/v1/chatroom/msg/list/homeowner";
@@ -53,6 +53,9 @@ public class HttpsURL {
 
 	/** SNH48 Group行程接口。请求方式为POST。 */
 	public static final String TRIP = POCKET_API + "/trip/api/trip/v1/list";
+
+	/** 口袋48聚聚列表（关注的成员房间list）。请求方式为POST。 */
+	public static final String CONVERSATION = POCKET_API + "/im/api/v1/conversation/page";
 
 	/** 微博数据接口。请求方式为GET。 */
 	public static final String WEIBO = "https://m.weibo.cn/api/container/getIndex";

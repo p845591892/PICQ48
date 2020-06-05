@@ -15,7 +15,8 @@ public class MyHttpHeaders extends HttpHeaders {
 	 */
 	public static final String POCKET_TOKEN = "token";
 	
-	
 	public static final String REQUESTED_WITH = "X-Requested-With";
+
+	public static final String PA = "pa";
 
 }

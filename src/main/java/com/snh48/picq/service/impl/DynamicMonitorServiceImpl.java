@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.snh48.picq.core.Common;
+import com.snh48.picq.core.Common.ExpireTime;
+import com.snh48.picq.core.Common.RedisKey;
 import com.snh48.picq.entity.weibo.DynamicMonitor;
 import com.snh48.picq.entity.weibo.WeiboUser;
 import com.snh48.picq.https.WeiboTool;
@@ -51,12 +52,12 @@ public class DynamicMonitorServiceImpl implements DynamicMonitorService {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<DynamicMonitorVO> getCache(long userId) {
-		String keyStr = Common.DYNAMIC_MONITOR + String.valueOf(userId);
+		String keyStr = RedisKey.DYNAMIC_MONITOR + String.valueOf(userId);
 		if (RedisUtil.exists(keyStr)) {
 			return (List<DynamicMonitorVO>) RedisUtil.get(keyStr);
 		}
 		List<DynamicMonitorVO> voList = dynamicMonitorRepository.findDynamicMonitorAndQQCommunityByUserId(userId);
-		RedisUtil.setex(keyStr, voList, Common.EXPIRE_TIME_SECOND_MONITOR);
+		RedisUtil.setex(keyStr, voList, ExpireTime.TEN_MINUTE);
 		return voList;
 	}
 

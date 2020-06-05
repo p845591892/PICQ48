@@ -59,36 +59,41 @@ public class SyncRoomMessageJob extends QuartzJobBean {
 
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-		log.info("--------------开始：SyncRoomMessageJob");
+		log.info("--------------[开始] 同步口袋48房间消息任务。");
+		
 		// 获取开启了监控的成员，逐一发送请求获取其口袋房间消息
 		List<Member> members = memberRepository.findByRoomMonitor(1);
 		for (Member member : members) {
 
-			log.info("同步口袋房间消息==>>{}", member.getName());
+//			log.info("同步口袋房间消息==>>{}", member.getName());
 
 			RoomMessage sourceRoomMessage = roomMessageRepository
 					.findFirstByRoomIdOrderByMsgTimeDesc(member.getRoomId());
 
-			long sourceMsgTime = 0;// 原消息时间
-			int flag = 1;// while循环的flag
-			long nextTime = 0;// https请求参数
-			List<RoomMessage> sendRoomMessageList = new ArrayList<RoomMessage>();// 待发送的房间消息集合
+			long sourceMsgTime = 0; // 原消息时间
+			int flag = 1; // while循环的flag
+			long nextTime = 0; // https请求参数
+			List<RoomMessage> sendRoomMessageList = new ArrayList<RoomMessage>(); // 待发送的房间消息集合
 
 			while (flag == 1) {
-				if (sourceRoomMessage == null) {// 原消息不存在，即，当第一次同步时，只进行本次while循环。
-					log.info("【{}】口袋房间消息为第一次同步。", member.getName());
-					flag = 0;// 设置flag=0，就不会进行下次while循环了。
+				if (sourceRoomMessage == null) { // 原消息不存在，即，当第一次同步时，只进行本次while循环。
+					flag = 0; // 设置flag=0，就不会进行下次while循环了。
 
-				} else {// 原消息存在
+//					log.info("【{}】口袋房间消息为第一次同步。", member.getName());
+
+				} else { // 原消息存在
 					sourceMsgTime = sourceRoomMessage.getMsgTime().getTime();// 赋值原消息时间
 					long lineTime = DateUtil.countDayToDate(-1).getTime();
 
 //					log.info("历史消息时间为 {} , 1日时间线的时间为 {}", DateUtil.getDate(sourceRoomMessage.getMsgTime()),
 //							DateUtil.getDate(DateUtil.countDayToDate(-1)));
-
-					if (lineTime > sourceMsgTime) {// 如果间隔时间大于1天线，当作第一次同步，只进行本次while循环。
+					
+					// 如果间隔时间大于1天线，当作第一次同步，只进行本次while循环。
+					if (lineTime > sourceMsgTime) {
 						flag = 0;// 设置flag=0，就不会进行下次while循环了。
-						log.info("【{}】口袋房间消息为间隔超过1天再次同步。", member.getName());
+						
+//						log.info("【{}】口袋房间消息为间隔超过1天再次同步。", member.getName());
+						
 					}
 				}
 
@@ -108,17 +113,20 @@ public class SyncRoomMessageJob extends QuartzJobBean {
 				// 遍历保存
 				for (RoomMessage message : messageList) {
 					long newMsgTime = message.getMsgTime().getTime();
-
-					if (newMsgTime <= sourceMsgTime) {// 当本次获取的消息时间小于等于旧的消息时间时，不进行下次while循环，并结束本遍历保存。
-						flag = 0;// 设置flag=0，就不会进行下次while循环了。
-						log.info("【{}】已匹配到上次最后一条数据。", member.getName());
+					// 当本次获取的消息时间小于等于旧的消息时间时，不进行下次while循环，并结束本遍历保存。
+					if (newMsgTime <= sourceMsgTime) { 
+						flag = 0; // 设置flag=0，就不会进行下次while循环了。
+						
+//						log.info("【{}】已匹配到上次最后一条数据。", member.getName());
+						
 						break;
-					} else {// 否则需要继续进行while循环。
+					} else { // 否则需要继续进行while循环。
+						nextTime = message.getMsgTime().getTime();// 设置下一循环的参数
+						
 //						log.info("【{}】未匹配到上次最后一条数据，需要继续执行while循环，nextTime={}", member.getName(),
 //								DateUtil.getDate(message.getMsgTime()));
-						nextTime = message.getMsgTime().getTime();// 设置下一循环的参数
 					}
-					sendRoomMessageList.add(message);// 保存到待发送集合
+					sendRoomMessageList.add(message); // 保存到待发送集合
 				}
 			}
 
@@ -134,7 +142,7 @@ public class SyncRoomMessageJob extends QuartzJobBean {
 					try {
 						sendRoomMessage(sendRoomMessage);
 					} catch (InterruptedException e) {
-						log.info("发送【{}】的口袋消息到消息队列中发生错误。{}", member.getName(), e.getMessage());
+						log.error("发送【{}】的口袋消息到消息队列中发生错误。{}", member.getName(), e.getMessage());
 					}
 
 					// 写入数据库
@@ -153,7 +161,7 @@ public class SyncRoomMessageJob extends QuartzJobBean {
 			}
 		}
 
-		log.info("--------------结束：SyncRoomMessageJob");
+		log.info("--------------[结束] 同步口袋48房间消息任务。");
 
 	}
 

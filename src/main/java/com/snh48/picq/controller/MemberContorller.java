@@ -6,6 +6,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,10 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.snh48.picq.annotation.Log;
 import com.snh48.picq.annotation.OperationType;
+import com.snh48.picq.core.Common.MonitorType;
 import com.snh48.picq.entity.snh48.Member;
+import com.snh48.picq.https.JsonPICQ48;
 import com.snh48.picq.https.Pocket48Tool;
 import com.snh48.picq.repository.snh48.MemberRepository;
+import com.snh48.picq.service.HttpsService;
 import com.snh48.picq.vo.ResultVO;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @ClassName: MemberApi
@@ -28,12 +34,16 @@ import com.snh48.picq.vo.ResultVO;
  * @author JuFF_白羽
  * @date 2018年7月24日 下午4:46:04
  */
+@Log4j2
 @RestController
 @RequestMapping("/member")
 public class MemberContorller {
 
 	@Autowired
 	private MemberRepository memberRepository;
+	
+	@Autowired
+	private HttpsService httpsService;
 
 	/**
 	 * @Description: 修改房间监控状态
@@ -78,9 +88,20 @@ public class MemberContorller {
 	@PutMapping("/add")
 	public ResultVO addMember(Long id) {
 		Member member = Pocket48Tool.getMember(id);
-
+		
 		if (member == null) {
 			return new ResultVO(HttpsURLConnection.HTTP_NOT_FOUND, "获取的成员信息为空。");
+		}
+		
+		long roomId = httpsService.getRoomId(member.getId());
+		
+		try {
+			if (roomId >= 1) {
+				JSONObject roomObj = JsonPICQ48.jsonMemberRoom(roomId, 0);
+				member.buildRoom(roomObj);
+			}
+		} catch (Exception e) {
+			log.error("获取成员房间信息失败，roomId={}, 异常：{}", roomId, e.getMessage());
 		}
 
 		if (member.getRoomMonitor() == null) {// 房间状态不为404
@@ -88,7 +109,7 @@ public class MemberContorller {
 			if (optional.isPresent()) {
 				member.setRoomMonitor(optional.get().getRoomMonitor());
 			} else {
-				member.setRoomMonitor(2);// 默认未开启同步
+				member.setRoomMonitor(MonitorType.CLOS);// 默认未开启同步
 			}
 		}
 

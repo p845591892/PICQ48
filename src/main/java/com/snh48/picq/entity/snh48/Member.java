@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -167,5 +169,17 @@ public class Member implements Serializable {
 	 */
 	@Column(name = "NICKNAME", length = 50)
 	private String nickname;
+
+	public void buildRoom(JSONObject roomObj) throws JSONException {
+		if (roomObj.getBoolean("success")) {// 房间存在
+			JSONObject roomInfo = roomObj.getJSONObject("content").getJSONObject("roomInfo");
+			setRoomId(roomInfo.getLong("roomId"));// 房间ID
+			setRoomName(roomInfo.getString("roomName"));// 房间名
+			setTopic(roomInfo.getString("roomTopic"));// 房间话题
+		} else {
+			setRoomMonitor(roomObj.getInt("status"));
+		}
+		
+	}
 
 }

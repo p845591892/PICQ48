@@ -11,36 +11,41 @@ public class Common {
 	/*
 	 * 失效时间
 	 */
-	public static final int EXPIRE_TIME_SECOND = 1;
-	public static final int EXPIRE_TIME_SECOND_MINUTE = EXPIRE_TIME_SECOND * 60;
-	public static final int EXPIRE_TIME_SECOND_HOUR = EXPIRE_TIME_SECOND_MINUTE * 60;
-	public static final int EXPIRE_TIME_SECOND_DAY = EXPIRE_TIME_SECOND_HOUR * 24;
-	public static final int EXPIRE_TIME_SECOND_WEEK = EXPIRE_TIME_SECOND_DAY * 7;
-	public static final int EXPIRE_TIME_SECOND_MONTH = EXPIRE_TIME_SECOND_DAY * 30;
+	public static class ExpireTime {
+		public static final int SECOND = 1;
+		public static final int MINUTE = SECOND * 60;
+		public static final int HOUR = MINUTE * 60;
+		public static final int DAY = HOUR * 24;
+		public static final int WEEK = DAY * 7;
+		public static final int MONTH = DAY * 30;
+		public static final int TEN_MINUTE = MINUTE * 10;
+	}
+	
 	public static final long EXPIRE_TIME_MILLISECOND_SECOND = 1000;
 	public static final long EXPIRE_TIME_MILLISECOND_MINUTE = EXPIRE_TIME_MILLISECOND_SECOND * 60;
 
-	/**
-	 * 口袋48房间监控信息缓存的key（在后拼接roomId）
-	 */
-	public static final String ROOM_MONITOR = "room_monitor_";
-	/**
-	 * 监控QQ列表缓存的生存时间（10分钟）
-	 */
-	public static final int EXPIRE_TIME_SECOND_MONITOR = EXPIRE_TIME_SECOND_MINUTE * 10;
-	/**
-	 * 口袋48房间成员信息缓存的key（在后拼接roomId）
-	 */
-	public static final String ROOM_MEMBER = "room_member_";
-	/**
-	 * 成员信息缓存的生存时间（1小时）
-	 */
-	public static final int EXPIRE_TIME_SECOND_MEMBER = EXPIRE_TIME_SECOND_HOUR;
-	/**
-	 * 微博动态监控信息缓存的key（在后拼接userId）
-	 */
-	public static final String DYNAMIC_MONITOR = "dynamic_monitor_";
+	public static class RedisKey {
+		/**
+		 * 口袋48房间监控信息缓存的key（在后拼接roomId）
+		 */
+		public static final String ROOM_MONITOR = "room_monitor_";
+		
+		/**
+		 * 口袋48房间成员信息缓存的key（在后拼接roomId）
+		 */
+		public static final String ROOM_MEMBER = "room_member_";
+		
+		/**
+		 * 微博动态监控信息缓存的key（在后拼接userId）
+		 */
+		public static final String DYNAMIC_MONITOR = "dynamic_monitor_";
 
+		/**
+		 * 更新成员信息用关注的成员口袋房间ID缓存（在后拼接memberId）
+		 */
+		public static final String CONVERSATION_ = "conversation_";
+	}
+	
 	/*
 	 * 酷Q
 	 */

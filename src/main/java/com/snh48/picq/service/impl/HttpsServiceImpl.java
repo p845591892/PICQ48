@@ -6,15 +6,23 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.snh48.picq.core.Common.ExpireTime;
+import com.snh48.picq.core.Common.RedisKey;
 import com.snh48.picq.entity.weibo.WeiboUser;
+import com.snh48.picq.https.JsonPICQ48;
 import com.snh48.picq.service.HttpsService;
 import com.snh48.picq.utils.Https;
+import com.snh48.picq.utils.RedisUtil;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 @Transactional
 public class HttpsServiceImpl implements HttpsService {
@@ -53,6 +61,38 @@ public class HttpsServiceImpl implements HttpsService {
 			
 		}
 		return null;
+	}
+
+	@Override
+	public long getRoomId(Long memberId) {
+		Long roomId = (Long) RedisUtil.get(RedisKey.CONVERSATION_ + memberId);
+		if (null != roomId) {
+			return roomId;
+		}
+		
+		try {
+			JSONObject json = JsonPICQ48.jsonConversation(0);
+			JSONArray array = json.getJSONArray("conversations");
+			
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject conversation = array.getJSONObject(i);
+				long ownerId = conversation.getLong("ownerId");
+				long targetId = conversation.getLong("targetId");
+				if (ownerId == memberId) {
+					roomId = targetId;
+				}
+				
+				RedisUtil.setex(RedisKey.CONVERSATION_ + ownerId, targetId, ExpireTime.MONTH);
+			}
+			
+			if (null == roomId) {
+				roomId = 0l;
+			}
+		} catch (Exception e) {
+			log.error("获取关注成员口袋房间ID错误，异常：{}", e.getMessage());
+			roomId = -1l;
+		}
+		return roomId;
 	}
 
 }

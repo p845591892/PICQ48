@@ -32,7 +32,7 @@ public class SyncWeiboUserJob extends QuartzJobBean {
 
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-		log.info("--------------开始：SyncWeiboUserJob");
+		log.info("--------------[开始] 同步微博用户信息任务。");
 		List<WeiboUser> sourceUserList = weiboUserRepository.findAll();
 		for (WeiboUser sourceUser : sourceUserList) {
 			try {
@@ -45,7 +45,7 @@ public class SyncWeiboUserJob extends QuartzJobBean {
 				weiboUserRepository.save(weiboUser);
 			}
 		}
-		log.info("--------------结束：SyncWeiboUserJob");
+		log.info("--------------[结束] 同步微博用户信息任务。");
 	}
 
 }

@@ -26,7 +26,14 @@ public interface HttpsService {
 	 * @throws KeyManagementException
 	 * @throws JSONException
 	 */
-	public WeiboUser getWeiboUser(Long containerUserId)
+	WeiboUser getWeiboUser(Long containerUserId)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException;
+	
+	/**
+	 * 获取成员口袋房间ID
+	 * @param memberId 成员ID
+	 * @return 口袋房间ID
+	 */
+	long getRoomId(Long memberId);
 
 }

@@ -56,7 +56,7 @@ public class SystemManageServiceImpl implements SystemManageService {
 		try {
 			return systemManageDao.updateUserById(param);
 		} catch (Exception e) {
-			log.info(e.toString());
+			log.error(e.getMessage());
 			return 0;
 		}
 	}
@@ -74,7 +74,7 @@ public class SystemManageServiceImpl implements SystemManageService {
 			roleRepository.save(param);
 			return 1;
 		} catch (Exception e) {
-			log.info(e.toString());
+			log.error(e.getMessage());
 			return 0;
 		}
 	}
@@ -118,7 +118,7 @@ public class SystemManageServiceImpl implements SystemManageService {
 			roleRepository.deleteById(id);
 			return 1;
 		} catch (Exception e) {
-			log.info(e.toString());
+			log.error(e.getMessage());
 			return 0;
 		}
 	}
@@ -138,7 +138,7 @@ public class SystemManageServiceImpl implements SystemManageService {
 		try {
 			return systemManageDao.insertRolePermission(param);
 		} catch (Exception e) {
-			log.info(e.toString());
+			log.error(e.getMessage());
 			return 0;
 		}
 	}
@@ -150,7 +150,7 @@ public class SystemManageServiceImpl implements SystemManageService {
 		try {
 			return systemManageDao.deleteRolePermission(param);
 		} catch (Exception e) {
-			log.info(e.toString());
+			log.error(e.getMessage());
 			return 0;
 		}
 	}
@@ -173,7 +173,7 @@ public class SystemManageServiceImpl implements SystemManageService {
 			permissionRepository.save(permission);
 			return 1;
 		} catch (Exception e) {
-			log.info(e.toString());
+			log.error(e.getMessage());
 			return 0;
 		}
 	}
@@ -197,7 +197,7 @@ public class SystemManageServiceImpl implements SystemManageService {
 			permissionRepository.deleteById(id);
 			return 1;
 		} catch (Exception e) {
-			log.info(e.toString());
+			log.error(e.getMessage());
 			return 0;
 		}
 	}

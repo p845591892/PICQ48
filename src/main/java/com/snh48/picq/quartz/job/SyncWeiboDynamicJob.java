@@ -53,12 +53,12 @@ public class SyncWeiboDynamicJob extends QuartzJobBean {
 
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-		log.info("--------------开始：SyncWeiboDynamicJob");
+		log.info("--------------[开始] 同步微博动态任务。");
 		// 获库中保存的取所有的微博用户
 		List<WeiboUser> userList = weiboUserRepository.findAll();
 		for (WeiboUser weiboUser : userList) {
 
-			log.info("同步微博用户动态==>>{}", weiboUser.getUserName());
+//			log.info("同步微博用户动态==>>{}", weiboUser.getUserName());
 
 			try {
 				Thread.sleep(HttpsURL.REQUEST_INTERVAL_TIME);
@@ -71,18 +71,17 @@ public class SyncWeiboDynamicJob extends QuartzJobBean {
 
 			for (Dynamic dynamic : dynamiList) {
 				Optional<Dynamic> od = dynamicRepository.findById(dynamic.getId());
-				if (od.isPresent()) {// 当该条动态存在数据库中时,判断是否置顶
-					if (dynamic.getIsTop()) {// 若为置顶博，则结束本次循环
+				if (od.isPresent()) { // 当该条动态存在数据库中时,判断是否置顶
+					if (dynamic.getIsTop()) { // 若为置顶博，则结束本次循环
 //						log.info("数据库已存在置顶博。[{}]", dynamic.getId());
 						continue;
-					} else {// 否则结束循环
+					} else { // 否则结束循环
 //						log.info("数据库已存在非置顶博。[{}]", dynamic.getId());
 						break;
 					}
 				}
 
 				// 发送消息
-				log.info("发送微博动态 [{}]", dynamic.getId());
 				try {
 					sendWeiboDynamic(dynamic);
 				} catch (InterruptedException e) {
@@ -102,7 +101,7 @@ public class SyncWeiboDynamicJob extends QuartzJobBean {
 			}
 		}
 
-		log.info("--------------结束：SyncWeiboDynamicJob");
+		log.info("--------------[结束] 同步微博动态任务。");
 	}
 
 	/**

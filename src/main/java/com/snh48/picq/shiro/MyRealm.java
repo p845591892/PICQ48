@@ -58,6 +58,7 @@ public class MyRealm extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		log.info("----->> shiro-获取身份证明");
+		
 		// 获取用户的输入的账号.
 		String username = (String) token.getPrincipal();
 		// 通过username从数据库中查找 User对象，如果找到，没找到.
@@ -66,9 +67,11 @@ public class MyRealm extends AuthorizingRealm {
 		try {
 			user = userRepository.findByUsername(username);
 		} catch (Exception e) {
-			log.info("查询用户异常：{}", e.getMessage());
+			log.error("查询用户异常：{}", e.getMessage());
 		}
+		
 		log.info("认证用户：{}", username);
+		
 		if (user == null) {
 			// 用户不存在
 			throw new UnknownAccountException();

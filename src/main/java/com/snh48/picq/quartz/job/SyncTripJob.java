@@ -34,7 +34,7 @@ public class SyncTripJob extends QuartzJobBean {
 
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-		log.info("--------------开始：SyncTripJob");
+		log.info("--------------[开始] 同步SNH48 Grop行程任务。");
 		
 		long sourceTimestamp = 0;
 		boolean isMore = false;
@@ -61,7 +61,7 @@ public class SyncTripJob extends QuartzJobBean {
 			tripRepository.save(trip);
 		}
 
-		log.info("--------------结束：SyncTripJob");
+		log.info("--------------[结束] 同步SNH48 Grop行程任务。");
 	}
 
 }

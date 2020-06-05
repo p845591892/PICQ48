@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.snh48.picq.core.Common;
+import com.snh48.picq.core.Common.ExpireTime;
+import com.snh48.picq.core.Common.RedisKey;
 import com.snh48.picq.entity.snh48.RoomMonitor;
 import com.snh48.picq.repository.snh48.RoomMonitorRepository;
 import com.snh48.picq.service.RoomMonitorService;
@@ -36,8 +37,8 @@ public class RoomMonitorServiceImpl implements RoomMonitorService {
 	 */
 	private List<RoomMonitorVO> setCache(long roomId) {
 		List<RoomMonitorVO> roomMonitorList = roomMonitorRepository.findRoomMonitorAndQQCommunityByRoomId(roomId);
-		String keyStr = Common.ROOM_MONITOR + String.valueOf(roomId);
-		RedisUtil.setex(keyStr, roomMonitorList, Common.EXPIRE_TIME_SECOND_MONITOR);
+		String keyStr = RedisKey.ROOM_MONITOR + String.valueOf(roomId);
+		RedisUtil.setex(keyStr, roomMonitorList, ExpireTime.TEN_MINUTE);
 		return roomMonitorList;
 	}
 
@@ -64,7 +65,7 @@ public class RoomMonitorServiceImpl implements RoomMonitorService {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<RoomMonitorVO> getCache(Long roomId) {
-		String keyStr = Common.ROOM_MONITOR + String.valueOf(roomId);
+		String keyStr = RedisKey.ROOM_MONITOR + String.valueOf(roomId);
 		if (RedisUtil.exists(keyStr)) {// 如果缓存中存在，直接返回
 			return (List<RoomMonitorVO>) RedisUtil.get(keyStr);
 		} else {// 缓存中不存在，获取新的

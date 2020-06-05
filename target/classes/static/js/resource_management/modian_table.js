@@ -3,7 +3,7 @@ $(document).ready(function () {
     /* 友情提示 */
     var unique_id = $.gritter.add({
         title: '友情提示',
-        text: '本页面进行的配置前，需要先添加机器人QQ好友或拉入Q群中。',
+        text: '本页面进行的配置前，需要先添加机器人QQ好友或拉入Q群中。个人使用免费，咨询或开通权限联系QQ847109667，微博@JuFF_白羽。',
         image: '../assets/img/ui-sam.jpg',
         sticky: true,
         time: '',

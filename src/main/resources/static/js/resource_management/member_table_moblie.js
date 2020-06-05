@@ -1,23 +1,11 @@
 $(document).ready(function() {
 	/* 友情提示 */
 	var unique_id = $.gritter.add({
-		// (string | mandatory) the heading of the
-		// notification
 		title : '友情提示',
-		// (string | mandatory) the text inside the
-		// notification
-		text : '本页面进行的配置前，需要先添加机器人QQ好友或拉入Q群中。',
-		// (string | optional) the image to display on
-		// the left
+		text : '本页面进行的配置前，需要先添加机器人QQ好友或拉入Q群中。个人使用免费，咨询或开通权限联系QQ847109667，微博@JuFF_白羽。',
 		image : '../assets/img/ui-sam.jpg',
-		// (bool | optional) if you want it to fade out
-		// on its own or just sit there
 		sticky : true,
-		// (int | optional) the time you want it to be
-		// alive for before fading out
 		time : '',
-		// (string | optional) the class name you want
-		// to apply to that specific message
 		class_name : 'my-sticky-class'
 	});
 

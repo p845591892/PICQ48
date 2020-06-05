@@ -290,7 +290,7 @@ public class Https {
 		}
 
 		if (http > 0 || https > 0) {
-			log.info("URL头包含有BOM等其他字符。");
+			log.warn("URL头包含有BOM等其他字符。");
 			url = removeBom(url);
 		}
 
@@ -354,10 +354,8 @@ public class Https {
 				inputStream = connection.getInputStream();
 				return ImageIO.read(inputStream);
 			} else {
-				log.info("请求网络图片失败：{}", connection.getResponseCode());
+				log.error("请求网络图片失败：{}", connection.getResponseCode());
 			}
-		} catch (IOException e) {
-			log.info(e.getMessage());
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		} finally {

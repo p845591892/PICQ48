@@ -98,17 +98,17 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 	/**
 	 * 发送Https请求，获取SNH48成员的个人房间信息。
 	 * 
-	 * @param sourceId 成员ID，对应memberId
-	 * @param type     请求类型(默认填0，暂不推荐其他参数。)
+	 * @param roomId     房间ID
+	 * @param targetType 请求类型(默认填0，暂不推荐其他参数。)
 	 * @return 成员个人房间信息的json对象
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
 	 */
-	public static JSONObject jsonMemberRoom(long sourceId, int type)
+	public static JSONObject jsonMemberRoom(long roomId, int targetType)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
-		String jsonStr = httpsMemberRoom(sourceId, type);
+		String jsonStr = httpsMemberRoom(roomId, targetType);
 		JSONObject roomObj = JsonProcess.getJSONObjectByString(jsonStr);
 		if (roomObj.getBoolean("success") || roomObj.getString("message").equals("房间不存在")) {
 			return roomObj;
@@ -348,24 +348,6 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 	}
 
 	/**
-	 * 解析SNH48成员口袋48房间信息的json对象，将信息设置到{@link Member}中。
-	 * 
-	 * @param member        成员对象
-	 * @param memberRoomObj 口袋房间信息json对象
-	 * @throws JSONException
-	 */
-	protected static void setMemberRoom(Member member, JSONObject memberRoomObj) throws JSONException {
-		if (memberRoomObj.getBoolean("success")) {// 房间存在
-			JSONObject roomInfo = memberRoomObj.getJSONObject("content").getJSONObject("roomInfo");
-			member.setRoomId(roomInfo.getLong("roomId"));// 房间ID
-			member.setRoomName(roomInfo.getString("roomName"));// 房间名
-			member.setTopic(roomInfo.getString("roomTopic"));// 房间话题
-		} else {
-			member.setRoomMonitor(memberRoomObj.getInt("status"));
-		}
-	}
-
-	/**
 	 * 解析SNH48成员口袋48房间消息的json对象，将信息设置到{@link RoomMessage}中。
 	 * 
 	 * @param roomMessage 房间消息对象
@@ -480,8 +462,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			
 		} else {
 			msgContent.append("type error.");
-			log.info("本条消息为未知的新类型: {}", messageType);
-			log.info(indexObj.toString());
+			log.error("本条消息为未知的新类型。messageType={}, {}", messageType, indexObj.toString());
 		}
 
 		return msgContent.toString();
@@ -578,8 +559,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			
 		} else {
 			msgContent.append("Unknown message type.");
-			log.info("本条消息为未知的新类型: {}", messageType);
-			log.info(indexObj.toString());
+			log.error("本条消息为未知的新类型。messageType={}, {}", messageType, indexObj.toString());
 		}
 		return msgContent.toString();
 	}
@@ -744,6 +724,28 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			}
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * 发送Https请求，获取口袋48关注的成员房间列表。
+	 * 
+	 * @param targetType 请求类型(默认填0，暂不推荐其他参数。)
+	 * @return 关注的口袋房间列表json对象。
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyManagementException
+	 */
+	public static JSONObject jsonConversation(int targetType)
+			throws JSONException, KeyManagementException, NoSuchAlgorithmException, IOException {
+		String jsonStr = httpsConversation(targetType);
+		JSONObject conversationObj = JsonProcess.getJSONObjectByString(jsonStr);
+		if (conversationObj.getBoolean("success")) {
+			return conversationObj.getJSONObject("content");
+		}
+		throw new HttpsPocketAuthenticateException("HttpsURL.CONVERSATION：" + conversationObj.getString("message")
+				+ "。参数：{targetType = " + targetType + "}");
+		
 	}
 
 }
