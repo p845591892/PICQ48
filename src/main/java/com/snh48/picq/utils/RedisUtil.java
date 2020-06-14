@@ -13,10 +13,8 @@ import redis.clients.jedis.JedisPool;
 @Log4j2
 public class RedisUtil {
 
-	@SuppressWarnings("rawtypes")
-	private static RedisSerializer keySerializer = new StringSerializer();
-	@SuppressWarnings("rawtypes")
-	private static RedisSerializer valueSerializer = new ObjectSerializer();
+	private static RedisSerializer<String> keySerializer = new StringSerializer();
+	private static RedisSerializer<Object> valueSerializer = new ObjectSerializer();
 
 	private static JedisPool getJedisPool() {
 		RedisManager redisManager = SpringUtil.getBean(RedisManager.class);
@@ -39,16 +37,15 @@ public class RedisUtil {
 	 * @param valueObj 对象形式的值
 	 * @return 状态码
 	 */
-	@SuppressWarnings("unchecked")
 	public static String set(String keyStr, Object valueObj) {
 		byte[] key = null;
 		byte[] value = null;
 		try {
 			key = keySerializer.serialize(keyStr);
 			value = valueSerializer.serialize(valueObj);
-		} catch (SerializationException e) {
-			log.error("序列化 key={} 的键值对发生异常。", keyStr);
-			e.printStackTrace();
+		} catch (Exception e) {
+			log.error("序列化失败，key={}, value={}，异常：{}", keyStr, valueObj, e.toString());
+			return "error";
 		}
 		Jedis jedis = getJedisPool().getResource();
 		try {
@@ -66,16 +63,15 @@ public class RedisUtil {
 	 * @param seconds  key的生存时间（秒）
 	 * @return 状态码
 	 */
-	@SuppressWarnings("unchecked")
 	public static String setex(String keyStr, Object valueObj, int seconds) {
 		byte[] key = null;
 		byte[] value = null;
 		try {
 			key = keySerializer.serialize(keyStr);
 			value = valueSerializer.serialize(valueObj);
-		} catch (SerializationException e) {
-			log.error("序列化 key={} 的键值对发生异常。", keyStr);
-			e.printStackTrace();
+		} catch (Exception e) {
+			log.error("序列化失败，key={}, value={}, seconds={}，异常：{}", keyStr, valueObj, seconds, e.toString());
+			return "error";
 		}
 		Jedis jedis = getJedisPool().getResource();
 		try {
@@ -91,14 +87,12 @@ public class RedisUtil {
 	 * @param keyStr 字符串形式的key
 	 * @return 存在返回true，否则返回false
 	 */
-	@SuppressWarnings("unchecked")
 	public static boolean exists(String keyStr) {
 		byte[] key = null;
 		try {
 			key = keySerializer.serialize(keyStr);
-		} catch (SerializationException e) {
-			log.error("序列化 key={} 发生异常。", keyStr);
-			e.printStackTrace();
+		} catch (Exception e) {
+			log.error("序列化失败，key={}，异常：{}", keyStr, e.toString());
 		}
 		Jedis jedis = getJedisPool().getResource();
 		try {
@@ -114,28 +108,26 @@ public class RedisUtil {
 	 * @param keyStr 字符串形式的key
 	 * @return {@link Object}
 	 */
-	@SuppressWarnings("unchecked")
 	public static Object get(String keyStr) {
 		byte[] key = null;
 		byte[] value = null;
 		try {
 			key = keySerializer.serialize(keyStr);
-		} catch (SerializationException e) {
-			log.error("序列化 key={} 发生异常。{}", keyStr, e.getMessage());
+		} catch (Exception e) {
+			log.error("序列化失败，key={}，异常：{}", keyStr, e.toString());
 		}
 		Jedis jedis = getJedisPool().getResource();
 		try {
 			value = jedis.get(key);
 			return valueSerializer.deserialize(value);
-		} catch (SerializationException e) {
-			log.error("反序列化 value={} 的值发生异常。{}", keyStr, e.getMessage());
+		} catch (Exception e) {
+			log.error("反序列化失败，value={}，异常：{}", keyStr, e.toString());
 		} finally {
 			jedis.close();
 		}
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static byte[] serializeObj(Object obj) throws SerializationException {
 		return valueSerializer.serialize(obj);
 	}
@@ -144,7 +136,6 @@ public class RedisUtil {
 		return valueSerializer.deserialize(bytes);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static byte[] serializeStr(String str) throws SerializationException {
 		return keySerializer.serialize(str);
 	}

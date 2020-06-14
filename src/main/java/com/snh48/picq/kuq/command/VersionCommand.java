@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.snh48.picq.core.Common.Command;
 import com.snh48.picq.core.Common.CommandAlias;
+import com.snh48.picq.core.Common.PicqSystem;
 import com.snh48.picq.utils.SpringUtil;
 
 import cc.moecraft.icq.PicqBotX;
@@ -39,13 +40,13 @@ public class VersionCommand extends AbstractCommand implements EverywhereCommand
 		// 消息构造器
 		MessageBuilder mb = new MessageBuilder();
 		// Line 1
-		mb.add("更新时间：2020-06-05").newLine();
+		mb.add(PicqSystem.UPDATE_TIME).newLine();
 		// Line 2
 		mb.newLine().add("系统版本信息：");
 		// Line 3
-		mb.newLine().add("【PQIC48版本】  1.4.5");
+		mb.newLine().add(PicqSystem.PICQ48_VERSION);
 		// Line 4
-		mb.newLine().add("【PicqBotX版本】  4.12.0.1015.PRE").newLine();
+		mb.newLine().add(PicqSystem.PICQ_BOT_X_VERSION).newLine();
 		// Line 5
 		mb.newLine().add("酷Q版本信息：");
 		// Line 6

@@ -1,13 +1,9 @@
 package com.snh48.picq.https;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +28,8 @@ public class WeiboTool extends JsonPICQ48 {
 			weiboUser.setContainerUserId(containerUserId);
 			setWeiboUser(weiboUser, userObj);
 			return weiboUser;
-		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
-			log.error("获取WeiboUser发生异常：{}", e.getMessage());
+		} catch (Exception e) {
+			log.error("获取WeiboUser发生异常：{}", e.toString());
 		}
 		return null;
 	}
@@ -61,8 +57,8 @@ public class WeiboTool extends JsonPICQ48 {
 				}
 			}
 			return dynamicList;
-		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
-			log.error("获取List<Dynamic>发生异常：{}", e.getMessage());
+		} catch (Exception e) {
+			log.error("获取List<Dynamic>发生异常：{}", e.toString());
 		}
 		return null;
 	}

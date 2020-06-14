@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.snh48.picq.core.Common.MsgSend;
 import com.snh48.picq.entity.QQCommunity;
 import com.snh48.picq.entity.snh48.Member;
 import com.snh48.picq.entity.snh48.RoomMessage;
@@ -142,7 +143,7 @@ public class SyncRoomMessageJob extends QuartzJobBean {
 					try {
 						sendRoomMessage(sendRoomMessage);
 					} catch (InterruptedException e) {
-						log.error("发送【{}】的口袋消息到消息队列中发生错误。{}", member.getName(), e.getMessage());
+						log.error("发送{}的口袋消息到消息队列中发生错误, 异常：{}", member.getName(), e.toString());
 					}
 
 					// 写入数据库
@@ -201,7 +202,7 @@ public class SyncRoomMessageJob extends QuartzJobBean {
 		}
 
 		// 设置为已发送
-		roomMessage.setIsSend(2);
+		roomMessage.setIsSend(MsgSend.SENDED);
 	}
 
 	/**

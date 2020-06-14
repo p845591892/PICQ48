@@ -12,6 +12,7 @@ import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 
+import com.snh48.picq.core.Common.MsgSend;
 import com.snh48.picq.core.Common.MsgType;
 import com.snh48.picq.entity.snh48.Member;
 import com.snh48.picq.entity.snh48.PocketUser;
@@ -361,7 +362,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		JSONObject userObj = extInfoObj.getJSONObject("user");// 发送的用户对象
 
 		roomMessage.setId(indexObj.getString("msgidClient"));// 消息ID
-		roomMessage.setIsSend(1);// 是否发送，默认1(未发送)
+		roomMessage.setIsSend(MsgSend.NOT_SEND);// 是否发送，默认1(未发送)
 		roomMessage.setMessageObject(extInfoObj.getString("messageType"));// 消息类型
 		roomMessage.setMsgContent(getMsgContent(indexObj));// 消息内容
 		roomMessage.setRoomId(extInfoObj.getLong("roomId"));// 房间ID
@@ -414,7 +415,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			try {
 				contentObject = jsonFlipcardContent(questionId, answerId); // 获取翻牌详情，目的是拿到这个翻牌是谁发的
 			} catch (KeyManagementException | NoSuchAlgorithmException | IOException e) {
-				log.error("获取翻牌消息异常questionId={}, answerId={} : {}", questionId, answerId, e.getMessage());
+				log.error("获取翻牌消息异常questionId={}, answerId={} : {}", questionId, answerId, e.toString());
 			}
 			msgContent.append("[");
 			msgContent.append(indexObj.getString("bodys"));
@@ -499,7 +500,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 				JSONObject contentObject = jsonFlipcardContent(questionId, answerId);// 获取翻牌详情，目的是拿到这个翻牌是谁发的
 				roomMessageAll.setReplyName(contentObject.getString("userName"));// 被翻牌人昵称
 			} catch (KeyManagementException | NoSuchAlgorithmException | IOException e) {
-				log.error("获取翻牌消息异常questionId={}, answerId={} : {}", questionId, answerId, e.getMessage());
+				log.error("获取翻牌消息异常questionId={}, answerId={} : {}", questionId, answerId, e.toString());
 			}
 		}
 	}
@@ -679,7 +680,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		JSONObject userObject = mblog.getJSONObject("user");
 		dynamic.setSenderName(userObject.getString("screen_name"));// 发送者姓名
 		dynamic.setUserId(userObject.getLong("id"));// 发送者ID
-		dynamic.setIsSend(1);// 是否已执行发送任务，默认为1否
+		dynamic.setIsSend(MsgSend.NOT_SEND);// 是否已执行发送任务，默认为1否
 		dynamic.setSyncDate(new Date());// 同步时间
 	}
 

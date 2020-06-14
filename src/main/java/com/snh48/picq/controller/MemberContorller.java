@@ -101,7 +101,7 @@ public class MemberContorller {
 				member.buildRoom(roomObj);
 			}
 		} catch (Exception e) {
-			log.error("获取成员房间信息失败，roomId={}, 异常：{}", roomId, e.getMessage());
+			log.error("获取成员房间信息失败，roomId={}, 异常：{}", roomId, e.toString());
 		}
 
 		if (member.getRoomMonitor() == null) {// 房间状态不为404

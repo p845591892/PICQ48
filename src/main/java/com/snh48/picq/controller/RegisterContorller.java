@@ -55,7 +55,7 @@ public class RegisterContorller {
 	 * @Description: 注册账号
 	 * @author JuFF_白羽
 	 */
-	@Log(desc = "注册账号", type = OperationType.ADD)
+	@Log(desc = "注册账号", type = OperationType.REGISTER)
 	@PostMapping("/doRegister")
 	public ResultVO doRegister(UserVO user, HttpServletRequest request) {
 		ResultVO result = new ResultVO();

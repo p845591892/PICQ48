@@ -92,7 +92,8 @@ public class QuartzManage {
 				log.info("---任务[{}:{}]已经运行，请勿再次启动-------", job.getId(), job.getJobName());
 			}
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			log.error("启动定时任务失败，jobName={}，异常：{}", job.getJobName(), e.toString());
+			throw new RuntimeException("启动定时任务失败", e);
 		}
 		return false;
 	}
@@ -124,8 +125,8 @@ public class QuartzManage {
 			log.info("---任务[{}:{}]更新成功-------", job.getId(), job.getJobName());
 			return true;
 		} catch (SchedulerException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
+			log.error("更新任务失败，{}，异常：", job.toString(), e.toString());
+			throw new RuntimeException("更新任务失败", e);
 		}
 	}
 

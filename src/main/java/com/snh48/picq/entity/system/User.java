@@ -43,7 +43,7 @@ public class User implements Serializable {
 	private String salt;// 加密密码的盐
 
 	@Column(name = "STATE")
-	private byte state;// 用户状态,0:创建未认证（比如没有激活，没有输入验证码等等）--等待验证的用户 ,
+	private int state;// 用户状态,0:创建未认证（比如没有激活，没有输入验证码等等）--等待验证的用户 ,
 						// 1:正常状态,2：用户被锁定.
 
 	@Column(name = "EMAIL_CAPTCHA", length = 20)
@@ -97,11 +97,11 @@ public class User implements Serializable {
 		this.salt = salt;
 	}
 
-	public byte getState() {
+	public int getState() {
 		return state;
 	}
 
-	public void setState(byte state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 

@@ -89,7 +89,7 @@ public class HttpsServiceImpl implements HttpsService {
 				roomId = 0l;
 			}
 		} catch (Exception e) {
-			log.error("获取关注成员口袋房间ID错误，异常：{}", e.getMessage());
+			log.error("获取关注成员口袋房间ID错误，异常：{}", e.toString());
 			roomId = -1l;
 		}
 		return roomId;

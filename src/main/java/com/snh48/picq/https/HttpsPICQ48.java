@@ -11,6 +11,8 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpMethod;
 
 import com.snh48.picq.config.Pocket48Properties;
+import com.snh48.picq.core.Common.ExpireTime;
+import com.snh48.picq.core.Common.RedisKey;
 import com.snh48.picq.utils.Https;
 import com.snh48.picq.utils.RedisUtil;
 import com.snh48.picq.utils.SpringUtil;
@@ -25,16 +27,6 @@ import cn.hutool.crypto.digest.MD5;
  *
  */
 public abstract class HttpsPICQ48 implements PICQ48 {
-
-	/**
-	 * redis存储token的key。
-	 */
-	public static final String TOKEN_KEY = "pocket_token";
-
-	/**
-	 * redis存储token的过期时间。单位：秒。
-	 */
-	public static final int EXPIRE_TIME = 60 * 60 * 24 * 30;
 
 	/**
 	 * 发送Https请求，获取SNH48 Group全体成员列表。（V1版接口）
@@ -161,8 +153,8 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 	public static String getToken()
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
 		String token = "";
-		if (RedisUtil.exists(TOKEN_KEY)) {
-			token = (String) RedisUtil.get(TOKEN_KEY);
+		if (RedisUtil.exists(RedisKey.TOKEN_KEY)) {
+			token = (String) RedisUtil.get(RedisKey.TOKEN_KEY);
 		} else {
 			token = refreshToken();
 		}
@@ -184,7 +176,7 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		String jsonStr = httpsToken(properties.getUsername(), properties.getPassword());
 		JSONObject loginObj = JsonProcess.getJSONObjectByString(jsonStr);
 		String token = loginObj.getJSONObject("content").getJSONObject("userInfo").getString("token");
-		RedisUtil.setex(TOKEN_KEY, token, EXPIRE_TIME);
+		RedisUtil.setex(RedisKey.TOKEN_KEY, token, ExpireTime.WEEK);
 		return token;
 	}
 

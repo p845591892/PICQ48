@@ -26,6 +26,9 @@ public enum OperationType {
 
 	/** 登录 */
 	LOGIN,
+	
+	/** 注册 */
+	REGISTER,
 
 	/** 其他 */
 	OTHER;

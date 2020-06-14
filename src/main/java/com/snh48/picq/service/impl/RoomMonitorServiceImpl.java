@@ -38,7 +38,7 @@ public class RoomMonitorServiceImpl implements RoomMonitorService {
 	private List<RoomMonitorVO> setCache(long roomId) {
 		List<RoomMonitorVO> roomMonitorList = roomMonitorRepository.findRoomMonitorAndQQCommunityByRoomId(roomId);
 		String keyStr = RedisKey.ROOM_MONITOR + String.valueOf(roomId);
-		RedisUtil.setex(keyStr, roomMonitorList, ExpireTime.TEN_MINUTE);
+		RedisUtil.setex(keyStr, roomMonitorList, ExpireTime.MINUTE_10);
 		return roomMonitorList;
 	}
 

@@ -56,7 +56,11 @@ public class SystemManageServiceImpl implements SystemManageService {
 		try {
 			return systemManageDao.updateUserById(param);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("更新User失败，id={}, nickname={}, state={}，异常：{}", 
+					user.getId(), 
+					user.getNickname(), 
+					user.getState(),
+					e.toString());
 			return 0;
 		}
 	}
@@ -74,7 +78,9 @@ public class SystemManageServiceImpl implements SystemManageService {
 			roleRepository.save(param);
 			return 1;
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("新增Role失败，{}，异常：{}", 
+					role.toString(),
+					e.toString());
 			return 0;
 		}
 	}
@@ -118,7 +124,9 @@ public class SystemManageServiceImpl implements SystemManageService {
 			roleRepository.deleteById(id);
 			return 1;
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("删除Role失败，id={}，异常：{}", 
+					id,
+					e.toString());
 			return 0;
 		}
 	}
@@ -138,7 +146,10 @@ public class SystemManageServiceImpl implements SystemManageService {
 		try {
 			return systemManageDao.insertRolePermission(param);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("新增RolePermission失败，rid={}，pids={}，异常：{}", 
+					rid,
+					pids,
+					e.toString());
 			return 0;
 		}
 	}
@@ -150,7 +161,10 @@ public class SystemManageServiceImpl implements SystemManageService {
 		try {
 			return systemManageDao.deleteRolePermission(param);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("删除RolePermission失败，rid={}，pids={}，异常：{}", 
+					rid,
+					pids,
+					e.toString());
 			return 0;
 		}
 	}
@@ -173,7 +187,9 @@ public class SystemManageServiceImpl implements SystemManageService {
 			permissionRepository.save(permission);
 			return 1;
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("新增Permission失败，{}，异常：{}", 
+					vo.toString(),
+					e.toString());
 			return 0;
 		}
 	}
@@ -197,7 +213,9 @@ public class SystemManageServiceImpl implements SystemManageService {
 			permissionRepository.deleteById(id);
 			return 1;
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("删除Permission失败，id={}，异常：{}", 
+					id,
+					e.toString());
 			return 0;
 		}
 	}

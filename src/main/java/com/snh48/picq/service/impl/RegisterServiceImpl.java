@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.snh48.picq.core.Common.UserState;
 import com.snh48.picq.dao.SystemManageDao;
 import com.snh48.picq.entity.system.User;
 import com.snh48.picq.repository.system.UserRepository;
@@ -68,7 +69,7 @@ public class RegisterServiceImpl implements RegisterService {
 		user.setNickname(vo.getNickname());
 		user.setPassword(StringUtil.shiroMd5(vo.getUsername(), vo.getPassword()));
 		user.setUsername(vo.getUsername());
-		user.setState((byte) 1);
+		user.setState(UserState.NORMAL);
 		user.setEmail(vo.getEmail());
 		String emailCaptcha = MathUtil.random(6);
 		user.setEmailCaptcha(emailCaptcha);
@@ -87,7 +88,6 @@ public class RegisterServiceImpl implements RegisterService {
 	}
 
 	public int activation(String username, String emailCaptcha) {
-
 		if (username == null || emailCaptcha == null) {
 			return 2;
 		}
@@ -99,7 +99,7 @@ public class RegisterServiceImpl implements RegisterService {
 
 		if (user.getEmailCaptcha().equals(emailCaptcha)) {
 			user.setEmailCaptcha(MathUtil.random(6));
-			user.setState((byte) 1);
+			user.setState(UserState.NORMAL);
 			userRepository.save(user);
 			return 1;
 		} else {

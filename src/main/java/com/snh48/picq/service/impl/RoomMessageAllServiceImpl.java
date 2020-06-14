@@ -26,7 +26,7 @@ public class RoomMessageAllServiceImpl implements RoomMessageAllService {
 		try {
 			repository.save(roomMessageAll);
 		} catch (Exception e) {
-			log.error("保存口袋房间留言板消息失败。异常：{}", e.getMessage());
+			log.error("保存口袋房间留言板消息失败。异常：{}", e.toString());
 			throw e;
 		}
 	}
@@ -36,7 +36,7 @@ public class RoomMessageAllServiceImpl implements RoomMessageAllService {
 		try {
 			repository.saveAll(messages);
 		} catch (Exception e) {
-			log.error("保存口袋房间留言板消息集合失败。异常：{}", e.getMessage());
+			log.error("保存口袋房间留言板消息集合失败。异常：{}", e.toString());
 			throw e;
 		}
 
@@ -44,8 +44,12 @@ public class RoomMessageAllServiceImpl implements RoomMessageAllService {
 
 	@Override
 	public Date getLastMessageDate(Long roomId) {
-		// TODO Auto-generated method stub
-		return null;
+		Date date = null;
+		RoomMessageAll msg = repository.findFirstByRoomIdOrderByMessageTimeDesc(roomId);
+		if (null != msg) {
+			date = msg.getMessageTime();
+		}
+		return date;
 	}
 
 }

@@ -357,7 +357,7 @@ public class Https {
 				log.error("请求网络图片失败：{}", connection.getResponseCode());
 			}
 		} catch (Exception e) {
-			log.info(e.getMessage());
+			log.error("发送请求获取图片失败，异常：{}", e.toString());
 		} finally {
 			if (inputStream != null) {
 				inputStream.close();

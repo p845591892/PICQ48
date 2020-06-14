@@ -129,7 +129,7 @@ public class ResourceContorller {
 		} catch (Exception e) {
 			result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
 			result.setCause("获取房间的json数据发生错误。");
-			log.error("获取房间的json数据发生错误，参数：[memberId={}]，异常：{}", memberId, e.getMessage());
+			log.error("获取房间的json数据发生错误，参数：[memberId={}]，异常：{}", memberId, e.toString());
 			e.printStackTrace();
 		}
 		return result;

@@ -35,4 +35,11 @@ public interface RoomMessageAllRepository
 			+ "SELECT y.id FROM PocketUser y WHERE y.version=:version)")
 	List<Long> getSenderUserIdListByVersion(@Param(value = "version") long version);
 
+	/**
+	 * 获取指定口袋48房间的最新一条数据。
+	 * 
+	 * @return 消息实体对象
+	 */
+	RoomMessageAll findFirstByRoomIdOrderByMessageTimeDesc(Long roomId);
+
 }

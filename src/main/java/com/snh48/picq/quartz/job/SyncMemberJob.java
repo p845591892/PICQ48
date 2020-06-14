@@ -63,7 +63,7 @@ public class SyncMemberJob extends QuartzJobBean {
 				JSONObject roomObj = JsonPICQ48.jsonMemberRoom(roomId, 0);
 				member.buildRoom(roomObj);
 			} catch (Exception e) {
-				log.error("获取{}房间信息失败或者构建Member失败，异常：{}", member.getName(), e.getMessage());
+				log.error("获取{}房间信息失败或者构建Member失败，异常：{}", member.getName(), e.toString());
 				continue;
 			}
 			

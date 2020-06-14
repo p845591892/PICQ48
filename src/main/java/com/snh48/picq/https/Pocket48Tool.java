@@ -1,14 +1,10 @@
 package com.snh48.picq.https;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import com.snh48.picq.entity.snh48.Member;
@@ -55,7 +51,7 @@ public class Pocket48Tool extends JsonPICQ48 {
 			}
 			return memberList;
 		} catch (Exception e) {
-			log.error("getMemberList() 获取List<Member>异常：{}", e.getMessage());
+			log.error("getMemberList() 获取List<Member>异常：{}", e.toString());
 		}
 		return null;
 	}
@@ -88,7 +84,7 @@ public class Pocket48Tool extends JsonPICQ48 {
 			}
 			return memberList;
 		} catch (Exception e) {
-			log.error("getMemberListV2() 获取List<Member>异常：{}", e.getMessage());
+			log.error("getMemberListV2() 获取List<Member>异常：{}", e.toString());
 		}
 		return null;
 	}
@@ -107,7 +103,7 @@ public class Pocket48Tool extends JsonPICQ48 {
 			setMember(member, memberObj);
 			return member;
 		} catch (Exception e) {
-			log.error("getMember(long memberId)异常：{}", e.getMessage());
+			log.error("getMember(long memberId)异常：{}", e.toString());
 		}
 		return null;
 	}
@@ -146,7 +142,7 @@ public class Pocket48Tool extends JsonPICQ48 {
 			return messageList;
 		} catch (Exception e) {
 			log.error("获取口袋房间消息失败。memberId={}, roomId={}, nextTime={}, 异常：{}", 
-					memberId, roomId, nextTime, e.getMessage());
+					memberId, roomId, nextTime, e.toString());
 		}
 		return null;
 	}
@@ -180,8 +176,8 @@ public class Pocket48Tool extends JsonPICQ48 {
 				messageList.add(roomMessageAll);
 			}
 			return messageList;
-		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
-			log.error("获取List<RoomMessageAll>发生异常：{}", e.getMessage());
+		} catch (Exception e) {
+			log.error("获取List<RoomMessageAll>发生异常：{}", e.toString());
 		}
 		return null;
 	}
@@ -215,8 +211,8 @@ public class Pocket48Tool extends JsonPICQ48 {
 				tripList.add(trip);
 			}
 			return tripList;
-		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
-			log.error("获取List<Trip>发生异常：{}", e.getMessage());
+		} catch (Exception e) {
+			log.error("获取List<Trip>发生异常：{}", e.toString());
 		}
 		return null;
 	}
@@ -234,8 +230,8 @@ public class Pocket48Tool extends JsonPICQ48 {
 			PocketUser pocketUser = new PocketUser();
 			setPocketUser(pocketUser, userObj);
 			return pocketUser;
-		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | JSONException e) {
-			log.error("获取PocketUser发生异常：{}", e.getMessage());
+		} catch (Exception e) {
+			log.error("获取PocketUser发生异常：{}", e.toString());
 		}
 		return null;
 	}

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.snh48.picq.core.Common.Command;
 import com.snh48.picq.core.Common.CommandAlias;
 import com.snh48.picq.core.Common.CommandCaption;
+import com.snh48.picq.core.Common.TripType;
 import com.snh48.picq.entity.snh48.Trip;
 import com.snh48.picq.kuq.KuqManage;
 import com.snh48.picq.repository.snh48.TripRepository;
@@ -112,16 +113,16 @@ public class FindTripCommand extends AbstractCommand implements EverywhereComman
 		int type = 1;
 		switch (arg) {
 		case "公演":
-			type = 1;
+			type = TripType.LIVE;
 			break;
 		case "冷餐":
-			type = 3;
+			type = TripType.BIRTHDAY_DINE;
 			break;
 		case "生日":
-			type = 0;
+			type = TripType.BIRTHDAY;
 			break;
 		case "节目":
-			type = 5;
+			type = TripType.PROGRAM;
 			break;
 		default:
 			type = -1;

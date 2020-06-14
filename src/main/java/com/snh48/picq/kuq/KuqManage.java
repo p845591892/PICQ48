@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 
 import com.snh48.picq.config.KuqProperties;
+import com.snh48.picq.core.Common.MonitorType;
 import com.snh48.picq.core.QQType;
 import com.snh48.picq.entity.QQCommunity;
 import com.snh48.picq.entity.snh48.Member;
@@ -17,6 +18,7 @@ import cc.moecraft.icq.sender.IcqHttpApi;
 import cc.moecraft.icq.sender.message.MessageBuilder;
 import cc.moecraft.icq.sender.message.components.ComponentImage;
 import cc.moecraft.icq.sender.message.components.ComponentRecord;
+import cc.moecraft.icq.sender.message.components.ComponentShake;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -28,8 +30,32 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class KuqManage {
 
-	public static void sendMessage(long groupId, String message, boolean autoEscape, QQType qqType) {
+	/**
+	 * 发送告警消息给admin账号
+	 * 
+	 * @param bot     {@link PicqBotX}机器人实例
+	 * @param message 格式化后的消息
+	 */
+	public static void sendAlarmMessage(PicqBotX bot, String message) {
+		IcqHttpApi icqHttpApi = bot.getAccountManager().getNonAccountSpecifiedApi();
+		KuqProperties kuqProperties = SpringUtil.getBean(KuqProperties.class);
+		sendAlarmMessage(icqHttpApi, message, kuqProperties.getAdminId());
+	}
 
+	/**
+	 * 发送告警消息给指定账号
+	 * 
+	 * @param icqHttpApi icq接口
+	 * @param message    格式化后的消息
+	 * @param qq         QQ号
+	 */
+	public static void sendAlarmMessage(IcqHttpApi icqHttpApi, String message, long qq) {
+		try {
+			icqHttpApi.sendPrivateMsg(qq, new MessageBuilder().add(new ComponentShake()).toString(), false);
+			icqHttpApi.sendPrivateMsg(qq, message);
+		} catch (Exception e) {
+			log.error("发送告警消息失败");
+		}
 	}
 
 	/**
@@ -70,18 +96,20 @@ public class KuqManage {
 			try {
 				icqHttpApi.sendGroupMsg(qq, message, autoEscape);
 			} catch (Exception e) {
-				log.error("发送同步消息到Q群发生异常：{}", e.getMessage());
+				log.error("发送同步消息到Q群失败，message={}, qqCommunity={}, autoEscape={}，异常：{}", message, qqCommunity,
+						autoEscape, e.toString());
 			}
 			break;
 		case FRIEND:// 发送到QQ好友
 			try {
 				icqHttpApi.sendPrivateMsg(qq, message, autoEscape);
 			} catch (Exception e) {
-				log.error("发送同步消息到好友发生异常：{}", e.getMessage());
+				log.error("发送同步消息到好友失败，message={}, qqCommunity={}, autoEscape={}，异常：{}", message, qqCommunity,
+						autoEscape, e.toString());
 			}
 			break;
 		default:
-			log.error("QQ号[{}]的类型错误。", qqCommunity.getId());
+			log.error("QQ号{}的类型错误。", qqCommunity.getId());
 			break;
 		}
 
@@ -167,8 +195,8 @@ public class KuqManage {
 		mb.newLine().add("特长：").add(member.getSpecialty());
 		mb.newLine().add("口袋房间名：").add(member.getRoomName());
 		mb.newLine().add("口袋房间话题：").add(member.getTopic());
-		mb.newLine().add("监控状态：")
-				.add(member.getRoomMonitor() == 1 ? "监控中" : member.getRoomMonitor() == 2 ? "未监控" : "房间已关闭");
+		mb.newLine().add("监控状态：").add(member.getRoomMonitor() == MonitorType.OPEN ? "监控中"
+				: member.getRoomMonitor() == MonitorType.CLOS ? "未监控" : "房间已关闭");
 		return mb.toString();
 	}
 
@@ -182,7 +210,7 @@ public class KuqManage {
 		Date showTime = trip.getShowTime();
 		String title = trip.getTitle();
 		String subTitle = trip.getSubTitle();
-		
+
 		MessageBuilder mb = new MessageBuilder();
 		mb.add(DateUtil.getDate(showTime, "yyyy-MM-dd HH:mm"));
 		mb.add(" " + trip.getTitle());
@@ -194,7 +222,7 @@ public class KuqManage {
 		mb.add(trip.getJoinMemberName());
 		mb.newLine();
 		mb.add(trip.getContent());
-		
+
 		return mb.toString();
 	}
 

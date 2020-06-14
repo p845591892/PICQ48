@@ -8,33 +8,41 @@ package com.snh48.picq.core;
  */
 public class Common {
 
-	/*
-	 * 失效时间
-	 */
-	public static class ExpireTime {
+	public class PicqSystem {
+		public static final String UPDATE_TIME = "更新时间：2020-06-14";
+		public static final String PICQ48_VERSION = "【PQIC48版本】  1.4.5";
+		public static final String PICQ_BOT_X_VERSION = "【PicqBotX版本】  4.12.0.1015.PRE";
+	}
+
+	public class ExpireTime {
 		public static final int SECOND = 1;
 		public static final int MINUTE = SECOND * 60;
+		public static final int MINUTE_5 = MINUTE * 5;
+		public static final int MINUTE_10 = MINUTE * 10;
 		public static final int HOUR = MINUTE * 60;
 		public static final int DAY = HOUR * 24;
 		public static final int WEEK = DAY * 7;
 		public static final int MONTH = DAY * 30;
-		public static final int TEN_MINUTE = MINUTE * 10;
 	}
-	
-	public static final long EXPIRE_TIME_MILLISECOND_SECOND = 1000;
-	public static final long EXPIRE_TIME_MILLISECOND_MINUTE = EXPIRE_TIME_MILLISECOND_SECOND * 60;
 
-	public static class RedisKey {
+	public class SleepMillis {
+		public static final long SECOND = 1000;
+		public static final long SECOND_5 = SECOND * 5;
+		public static final long MINUTE = SECOND * 60;
+		public static final long POCKET_REQUEST = SECOND * 8;
+	}
+
+	public class RedisKey {
 		/**
 		 * 口袋48房间监控信息缓存的key（在后拼接roomId）
 		 */
 		public static final String ROOM_MONITOR = "room_monitor_";
-		
+
 		/**
 		 * 口袋48房间成员信息缓存的key（在后拼接roomId）
 		 */
 		public static final String ROOM_MEMBER = "room_member_";
-		
+
 		/**
 		 * 微博动态监控信息缓存的key（在后拼接userId）
 		 */
@@ -44,15 +52,38 @@ public class Common {
 		 * 更新成员信息用关注的成员口袋房间ID缓存（在后拼接memberId）
 		 */
 		public static final String CONVERSATION_ = "conversation_";
+
+		/**
+		 * 口袋48登录token
+		 */
+		public static final String TOKEN_KEY = "pocket_token";
+
+		/**
+		 * 主页横向监控数据
+		 */
+		public static final String HTML_INDEX_MTBOX = "html_index_mtbox";
+		public static final String HTML_INDEX_MTBOX_1 = HTML_INDEX_MTBOX + "_1";
+		public static final String HTML_INDEX_MTBOX_2 = HTML_INDEX_MTBOX + "_2";
+		public static final String HTML_INDEX_MTBOX_3 = HTML_INDEX_MTBOX + "_3";
+		public static final String HTML_INDEX_MTBOX_4 = HTML_INDEX_MTBOX + "_4";
+		public static final String HTML_INDEX_MTBOX_5 = HTML_INDEX_MTBOX + "_5";
+
+		/**
+		 * 主页纵向监控数据
+		 */
+		public static final String HTML_INDEX_DS = "html_index_ds";
+		public static final String HTML_INDEX_DS_ACTIVE_ROOMS = HTML_INDEX_DS + "_active_rooms";
+		public static final String HTML_INDEX_DS_ACTIVE_MEMBERS = HTML_INDEX_DS + "_active_members";
+
 	}
-	
+
 	/*
 	 * 酷Q
 	 */
 	public static final String COMMAND_REPLAY_HELP = "请使用 -help/-h/-帮助 指令来获取详细操作。";
 	public static final String[] ENABLE_COMMAND_MANAGER = new String[] { "!", "-" };
 
-	public static class Command {
+	public class Command {
 		public static final String HELP = "help";
 		public static final String VERSION = "version";
 		public static final String SET_ROOM_MONITOR = "setRoomMonitor";
@@ -159,16 +190,55 @@ public class Common {
 		 */
 		public static final String SPECICAL_REDPACKAGE = "SPECICAL_REDPACKAGE";
 	}
-	
-	/**
-	 * 监控状态
-	 * @author shiro
-	 *
-	 */
+
 	public class MonitorType {
-		public static final int  OPEN = 1;
+		/**
+		 * 已开启监控
+		 */
+		public static final int OPEN = 1;
+
+		/**
+		 * 未开启监控
+		 */
 		public static final int CLOS = 2;
+
+		/**
+		 * 口袋房间不存在
+		 */
 		public static final int NOTHING = 404;
 	}
 
+	public class MsgSend {
+		public static final int NOT_SEND = 1;
+		public static final int SENDED = 2;
+	}
+
+	public class TripType {
+		public static final int BIRTHDAY = 0;
+		public static final int LIVE = 1;
+		public static final int BIRTHDAY_DINE = 3;
+		public static final int PROGRAM = 5;
+	}
+
+	public class ResourceType {
+		public static final String MENU = "menu";
+		public static final String BUTTON = "button";
+	}
+	
+	public class RoleType {
+		public static final String SYSTEM_ADMIN = "systemadmin";
+		public static final String YYH_DELEGATE = "delegate";
+		public static final String GENERAL = "general";
+	}
+	
+	public class UserState {
+		public static final int NOT_ACTIVE = 0;
+		public static final int NORMAL = 1;
+		public static final int LOCKING = 2;
+	}
+
+	public class ModianStatus {
+		public static final String COLLECTING = "众筹中";
+		public static final String FINISHED = "已结束";
+	}
 }

@@ -148,7 +148,7 @@ public class DateUtil {
 		try {
 			date = sdf.parse(d);
 		} catch (ParseException e) {
-			log.error("将时间戳转换成Date发生异常：{}", e.getMessage());
+			log.error("将时间戳转换成Date失败，timestamp={}，异常：{}", timestamp, e.toString());
 		}
 		return date;
 	}

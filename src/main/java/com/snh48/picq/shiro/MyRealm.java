@@ -12,6 +12,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.snh48.picq.core.Common.UserState;
 import com.snh48.picq.entity.system.Permission;
 import com.snh48.picq.entity.system.Role;
 import com.snh48.picq.entity.system.User;
@@ -67,7 +68,7 @@ public class MyRealm extends AuthorizingRealm {
 		try {
 			user = userRepository.findByUsername(username);
 		} catch (Exception e) {
-			log.error("查询用户异常：{}", e.getMessage());
+			log.error("查询用户失败，username={}，异常：{}",username, e.toString());
 		}
 		
 		log.info("认证用户：{}", username);
@@ -75,10 +76,10 @@ public class MyRealm extends AuthorizingRealm {
 		if (user == null) {
 			// 用户不存在
 			throw new UnknownAccountException();
-		} else if (user.getState() == 2) {
+		} else if (user.getState() == UserState.LOCKING) {
 			// 用户被锁定
 			throw new LockedAccountException();
-		} else if (user.getState() == 0) {
+		} else if (user.getState() == UserState.NOT_ACTIVE) {
 			// 用户未激活
 			throw new ActivationAccountException();
 		} else {

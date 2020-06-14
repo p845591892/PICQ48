@@ -57,7 +57,7 @@ public class DynamicMonitorServiceImpl implements DynamicMonitorService {
 			return (List<DynamicMonitorVO>) RedisUtil.get(keyStr);
 		}
 		List<DynamicMonitorVO> voList = dynamicMonitorRepository.findDynamicMonitorAndQQCommunityByUserId(userId);
-		RedisUtil.setex(keyStr, voList, ExpireTime.TEN_MINUTE);
+		RedisUtil.setex(keyStr, voList, ExpireTime.MINUTE_10);
 		return voList;
 	}
 

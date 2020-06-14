@@ -66,9 +66,14 @@ public class WebContorller {
 	 * @throws ParseException
 	 */
 	@GetMapping("/index")
-	public ModelAndView toIndex(ModelAndView mav) throws ParseException {
-		mav.addObject("mtbox", webService.getMtboxData());// .mtbox中的数据
-		mav.addObject("ds", webService.getDsData());// .ds中的数据
+	public ModelAndView toIndex(ModelAndView mav) {
+		mav.addObject("mtbox", webService.getMtboxData()); // .mtbox中的数据
+		try {
+			mav.addObject("ds", webService.getDsData()); // .ds中的数据
+		} catch (ParseException e) {
+			log.error("跳转index页面异常：获取.ds中的数据失败，异常：{}", e.toString());
+			throw new RuntimeException("跳转index页面异常", e);
+		}
 		mav.setViewName("index");
 		return mav;
 	}

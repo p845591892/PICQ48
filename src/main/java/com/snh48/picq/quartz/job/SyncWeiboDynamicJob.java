@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.snh48.picq.core.Common.MsgSend;
 import com.snh48.picq.entity.QQCommunity;
 import com.snh48.picq.entity.weibo.Dynamic;
 import com.snh48.picq.entity.weibo.WeiboUser;
@@ -85,7 +86,7 @@ public class SyncWeiboDynamicJob extends QuartzJobBean {
 				try {
 					sendWeiboDynamic(dynamic);
 				} catch (InterruptedException e) {
-					log.error("发送微博动态 [{}] 到消息队列失败。{}", dynamic.getId(), e.getMessage());
+					log.error("发送微博动态 id={} 到消息队列失败，异常：{}", dynamic.getId(), e.toString());
 				}
 
 				// 写入数据库
@@ -127,7 +128,7 @@ public class SyncWeiboDynamicJob extends QuartzJobBean {
 		}
 
 		// 设置为已发送
-		dynamic.setIsSend(2);
+		dynamic.setIsSend(MsgSend.SENDED);
 	}
 
 	/**

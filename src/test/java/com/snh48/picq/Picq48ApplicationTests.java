@@ -137,7 +137,7 @@
 ////		long roomId = 67207862l;
 //
 //		do {
-//			// 每次循环暂停8秒
+//			// 每次循环暂停5秒
 //			Thread.sleep(5000);
 //			List<RoomMessageAll> list = list = Pocket48Tool.getRoomMessageAllList(nextTime, false, roomId);
 //			;
