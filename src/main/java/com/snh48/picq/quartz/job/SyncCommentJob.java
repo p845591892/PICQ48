@@ -42,7 +42,7 @@ public class SyncCommentJob extends QuartzJobBean {
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		log.info("--------------[开始] 同步SNH48 Group成员口袋房间留言板任务。");
 
-		List<Member> members = memberService.getMemberList(MonitorType.OPEN);
+		List<Member> members = memberService.getListByNotMonitorType(MonitorType.NOTHING);
 		
 		log.info("本轮待同步留言板的成员有{}位", members.size());
 		

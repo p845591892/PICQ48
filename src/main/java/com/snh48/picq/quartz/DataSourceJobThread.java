@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Configuration
-public class DataSourceJobThread extends Thread {
+public class DataSourceJobThread implements Runnable {
 
 	@Autowired
 	QuartzConfigRepository repository;

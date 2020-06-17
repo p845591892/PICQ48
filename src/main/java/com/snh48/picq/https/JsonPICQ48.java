@@ -323,7 +323,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 	 * @throws JSONException
 	 * @throws ParseException
 	 */
-	protected static void setMember(Member member, JSONObject memberObject) throws JSONException, ParseException {
+	public static void setMember(Member member, JSONObject memberObject) throws JSONException, ParseException {
 		JSONObject content = memberObject.getJSONObject("content");
 		JSONObject starInfo = content.getJSONObject("starInfo");
 		JSONArray history = content.getJSONArray("history");
@@ -744,6 +744,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		if (conversationObj.getBoolean("success")) {
 			return conversationObj.getJSONObject("content");
 		}
+		refreshToken();
 		throw new HttpsPocketAuthenticateException("HttpsURL.CONVERSATION：" + conversationObj.getString("message")
 				+ "。参数：{targetType = " + targetType + "}");
 		

@@ -62,9 +62,20 @@ public interface MemberRepository extends JpaRepository<Member, Long>, JpaSpecif
 
 	/**
 	 * 获取成员信息
+	 * 
 	 * @param roomId 口袋房间ID
 	 * @return {@link Menber}
 	 */
 	Member findByRoomId(Long roomId);
+
+	/**
+	 * @Description: 根据房间监控状态获取成员信息
+	 * @author JuFF_白羽
+	 * @param roomMonitor 排除的监控状态
+	 *                    <p>
+	 *                    参数：1开启，2关闭，404未开启
+	 * @return {@link List<Menber>}
+	 */
+	List<Member> findByRoomMonitorNot(int roomMonitor);
 
 }

@@ -38,13 +38,29 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<Member> getMemberList(int monitorType) {
+	public List<Member> getListByMonitorType(int monitorType) {
 		List<Member> members = null;
 		try {
 			members = memberRepository.findByRoomMonitor(monitorType);
 			if (null == members) {
 				members = new ArrayList<Member>();
 				log.error("method memberRepository.findByRoomMonitor(monitorType) result is null. monitorType={}",
+						monitorType);
+			}
+		} catch (Exception e) {
+			throw new RepositoryException("[Error] Get member list by roomMonitor exception:", e);
+		}
+		return members;
+	}
+
+	@Override
+	public List<Member> getListByNotMonitorType(int monitorType) {
+		List<Member> members = null;
+		try {
+			members = memberRepository.findByRoomMonitorNot(monitorType);
+			if (null == members) {
+				members = new ArrayList<Member>();
+				log.error("method memberRepository.findByNotRoomMonitor(monitorType) result is null. monitorType={}",
 						monitorType);
 			}
 		} catch (Exception e) {

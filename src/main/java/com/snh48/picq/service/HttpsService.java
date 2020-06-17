@@ -36,4 +36,9 @@ public interface HttpsService {
 	 */
 	long getRoomId(Long memberId);
 
+	/**
+	 * 同步已有成员的信息
+	 */
+	void syncMember();
+
 }

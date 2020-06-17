@@ -41,7 +41,7 @@ public class MemberContorller {
 
 	@Autowired
 	private MemberRepository memberRepository;
-	
+
 	@Autowired
 	private HttpsService httpsService;
 
@@ -72,10 +72,13 @@ public class MemberContorller {
 	@GetMapping("/refresh")
 	public ResultVO refreshMember(HttpServletRequest request) {
 		ResultVO result = new ResultVO();
-//		httpsService.syncMember();
-//		result.setStatus(HttpsURLConnection.HTTP_OK);
-		result.setStatus(HttpsURLConnection.HTTP_BAD_REQUEST);
-		result.setCause("该接口维护中");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				httpsService.syncMember();
+			}
+		}).start();
+		result.setStatus(HttpsURLConnection.HTTP_OK);
 		return result;
 	}
 
@@ -88,13 +91,13 @@ public class MemberContorller {
 	@PutMapping("/add")
 	public ResultVO addMember(Long id) {
 		Member member = Pocket48Tool.getMember(id);
-		
+
 		if (member == null) {
 			return new ResultVO(HttpsURLConnection.HTTP_NOT_FOUND, "获取的成员信息为空。");
 		}
-		
+
 		long roomId = httpsService.getRoomId(member.getId());
-		
+
 		try {
 			if (roomId >= 1) {
 				JSONObject roomObj = JsonPICQ48.jsonMemberRoom(roomId, 0);

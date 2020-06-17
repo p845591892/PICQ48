@@ -26,6 +26,14 @@ public interface MemberService {
 	 * @param monitorType 监控状态
 	 * @return {@link List<Member>}
 	 */
-	List<Member> getMemberList(int monitorType);
+	List<Member> getListByMonitorType(int monitorType);
+
+	/**
+	 * 获取成员列表
+	 * 
+	 * @param monitorType 监控状态
+	 * @return {@link List<Member>}
+	 */
+	List<Member> getListByNotMonitorType(int monitorType);
 
 }

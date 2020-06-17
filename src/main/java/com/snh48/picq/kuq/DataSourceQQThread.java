@@ -15,7 +15,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 @Configuration
-public class DataSourceQQThread extends Thread {
+public class DataSourceQQThread implements Runnable {
 
 	@Autowired
 	private QQCommunityService QQCommunityService;

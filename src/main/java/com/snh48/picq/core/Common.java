@@ -9,8 +9,8 @@ package com.snh48.picq.core;
 public class Common {
 
 	public class PicqSystem {
-		public static final String UPDATE_TIME = "更新时间：2020-06-14";
-		public static final String PICQ48_VERSION = "【PQIC48版本】  1.4.5";
+		public static final String UPDATE_TIME = "更新时间：2020-06-17";
+		public static final String PICQ48_VERSION = "【PQIC48版本】  1.4.8";
 		public static final String PICQ_BOT_X_VERSION = "【PicqBotX版本】  4.12.0.1015.PRE";
 	}
 

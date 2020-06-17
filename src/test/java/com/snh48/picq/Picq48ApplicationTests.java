@@ -13,6 +13,7 @@
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.data.domain.Page;
 //
+//import com.snh48.picq.core.Common.MonitorType;
 //import com.snh48.picq.entity.snh48.Member;
 //import com.snh48.picq.entity.snh48.PocketUser;
 //import com.snh48.picq.entity.snh48.RoomMessage;
@@ -38,12 +39,8 @@
 //
 //	@Test
 //	public void repositoryTest() {
-//		List<Member> memberList = memberRepository.findByRoomMonitor(1);
-//		for (Member member : memberList) {
-//			RoomMessage message = roomMessageRepository.findFirstByRoomIdOrderByMsgTimeDesc(member.getRoomId());
-//			System.out.println(message.toString());
-//			System.out.println(message.getId());
-//		}
+//		List<Member> memberList = memberRepository.findByRoomMonitorNot(MonitorType.NOTHING);
+//		System.out.println(memberList.size());
 //	}
 //
 //	/**
