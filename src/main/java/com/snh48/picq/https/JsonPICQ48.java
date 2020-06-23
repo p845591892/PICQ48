@@ -236,21 +236,23 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 	 * @param lastTime 时间戳
 	 * @param groupId  团体ID
 	 * @param isMore   是否更多
+	 * @param userId   当前登录的用户ID
 	 * @return 返回行程列表的JSON对象。
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
 	 * @throws JSONException
 	 */
-	public static JSONObject jsonTrip(long lastTime, int groupId, boolean isMore)
+	public static JSONObject jsonTrip(long lastTime, int groupId, boolean isMore, long userId)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
-		String jsonStr = httpsTrip(lastTime, groupId, isMore);
+		String jsonStr = httpsTrip(lastTime, groupId, isMore, userId);
 		JSONObject tripObj = JsonProcess.getJSONObjectByString(jsonStr);
 		if (tripObj.getBoolean("success")) {
 			return tripObj.getJSONObject("content");
 		}
-		throw new HttpsPocketAuthenticateException("HttpsURL.GROUP_TRIP：" + tripObj.getString("message")
-				+ "。参数：{lastTime = " + lastTime + ", groupId = " + groupId + ", isMore = " + isMore + "}");
+		throw new HttpsPocketAuthenticateException(
+				"HttpsURL.GROUP_TRIP：" + tripObj.getString("message") + "。参数：{lastTime = " + lastTime + ", groupId = "
+						+ groupId + ", isMore = " + isMore + ", userId = " + userId + "}");
 	}
 
 	/**

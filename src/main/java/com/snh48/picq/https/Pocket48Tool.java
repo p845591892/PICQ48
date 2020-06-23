@@ -196,11 +196,12 @@ public class Pocket48Tool extends JsonPICQ48 {
 	 * @param lastTime 时间戳
 	 * @param groupId  团体ID
 	 * @param isMore   是否更多
+	 * @param userId   当前登录的用户ID
 	 * @return {@link Trip}集合
 	 */
-	public static List<Trip> getTripList(long lastTime, int groupId, boolean isMore) {
+	public static List<Trip> getTripList(long lastTime, int groupId, boolean isMore, long userId) {
 		try {
-			JSONObject tripObj = jsonTrip(lastTime, groupId, isMore);
+			JSONObject tripObj = jsonTrip(lastTime, groupId, isMore, userId);
 			// 遍历数组
 			JSONArray tripArray = tripObj.getJSONArray("data");
 			List<Trip> tripList = new ArrayList<Trip>();

@@ -153,12 +153,23 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 	public static String getToken()
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
 		String token = "";
-		if (RedisUtil.exists(RedisKey.TOKEN_KEY)) {
-			token = (String) RedisUtil.get(RedisKey.TOKEN_KEY);
+		if (RedisUtil.exists(RedisKey.TOKEN)) {
+			token = (String) RedisUtil.get(RedisKey.TOKEN);
 		} else {
 			token = refreshToken();
 		}
 		return token;
+	}
+	
+	public static long getUserId() throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+		long userId = 0;
+		if (RedisUtil.exists(RedisKey.USER_ID)) {
+			userId = (long) RedisUtil.get(RedisKey.USER_ID);
+		} else {
+			refreshToken();
+			userId = (long) RedisUtil.get(RedisKey.USER_ID);
+		}
+		return userId;
 	}
 
 	/**
@@ -176,7 +187,9 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		String jsonStr = httpsToken(properties.getUsername(), properties.getPassword());
 		JSONObject loginObj = JsonProcess.getJSONObjectByString(jsonStr);
 		String token = loginObj.getJSONObject("content").getJSONObject("userInfo").getString("token");
-		RedisUtil.setex(RedisKey.TOKEN_KEY, token, ExpireTime.WEEK);
+		long userId = loginObj.getJSONObject("content").getJSONObject("userInfo").getLong("userId");
+		RedisUtil.setex(RedisKey.TOKEN, token, ExpireTime.WEEK);
+		RedisUtil.setex(RedisKey.USER_ID, userId, ExpireTime.WEEK);
 		return token;
 	}
 
@@ -233,6 +246,7 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
 		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPAD);
 		requestPropertys.put(MyHttpHeaders.PA, getPa());
+		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
 		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
 		/* 请求参数 */
 		String payloadJson = "{\"needTop1Msg\":false,\"roomId\":\"" + roomId + "\",\"ownerId\":\"" + memberId
@@ -313,6 +327,7 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
 		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPAD);
 		requestPropertys.put(MyHttpHeaders.PA, getPa());
+		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
 		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
 		/* 请求参数 */
 		String payloadJson = "{\"questionId\":\"" + questionId + "\",\"answerId\":\"" + answerId + "\"}";
@@ -339,14 +354,16 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 	 * @param lastTime 时间戳
 	 * @param groupId  团体ID
 	 * @param isMore   是否更多
+	 * @param userId   当前登录的用户ID
 	 * @return 返回行程列表的JSON字符串。
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
+	 * @throws JSONException 
 	 */
 	@SuppressWarnings("deprecation")
-	public static String httpsTrip(long lastTime, int groupId, boolean isMore)
-			throws KeyManagementException, NoSuchAlgorithmException, IOException {
+	public static String httpsTrip(long lastTime, int groupId, boolean isMore, long userId)
+			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
 		Https https = new Https();
 		/* 请求头 */
 		Map<String, String> requestPropertys = new HashMap<String, String>();
@@ -354,9 +371,11 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
 		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPAD);
 		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
+		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
+		requestPropertys.put(MyHttpHeaders.PA, getPa());
 		/* 请求参数 */
-		String payloadJson = "{\"lastTime\":\"" + lastTime + "\",\"groupId\":" + groupId + ",\"isMore\":" + isMore
-				+ "}";
+		String payloadJson = "{\"groupId\":" + groupId + ",\"lastTime\":\"" + lastTime + "\",\"isMore\":" + isMore
+				+ ",\"userId\":" + userId + "}";
 		/* 发送请求 */
 		String jsonStr = https.setDataType(HttpMethod.POST.name())
 											.setRequestProperty(requestPropertys)
@@ -509,5 +528,5 @@ public abstract class HttpsPICQ48 implements PICQ48 {
 		int num = (int) (Math.random() * (end - start + 1) + start);
 		return num;
 	}
-
+	
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.snh48.picq.core.Common.SleepMillis;
 import com.snh48.picq.entity.snh48.Trip;
 import com.snh48.picq.https.Pocket48Tool;
 import com.snh48.picq.repository.snh48.TripRepository;
@@ -41,7 +42,12 @@ public class SyncTripJob extends QuartzJobBean {
 		List<Trip> allList = new ArrayList<>();
 		
 		for (int i = 0; i < 3; i++) {
-			List<Trip> tripList = Pocket48Tool.getTripList(sourceTimestamp, 0, isMore);
+			List<Trip> tripList = null;
+			try {
+				tripList = Pocket48Tool.getTripList(sourceTimestamp, 0, isMore, Pocket48Tool.getUserId());
+			} catch (Exception e) {
+				log.error("获取行程List失败，异常：{}", e.toString());
+			}
 			if (tripList == null) {
 				return;
 			}
@@ -50,7 +56,7 @@ public class SyncTripJob extends QuartzJobBean {
 			sourceTimestamp = tripList.get(size - 1).getShowTime().getTime();
 			isMore = true;
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(SleepMillis.POCKET_REQUEST);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				return;

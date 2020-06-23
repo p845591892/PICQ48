@@ -9,9 +9,10 @@ package com.snh48.picq.core;
 public class Common {
 
 	public class PicqSystem {
-		public static final String UPDATE_TIME = "更新时间：2020-06-17";
-		public static final String PICQ48_VERSION = "【PQIC48版本】  1.4.8";
+		public static final String UPDATE_TIME = "更新时间：2020-06-23";
+		public static final String PICQ48_VERSION = "【PQIC48版本】  1.5.0";
 		public static final String PICQ_BOT_X_VERSION = "【PicqBotX版本】  4.12.0.1015.PRE";
+		public static final String UPDATE_MESSAGE = "本次更新：\n修复 获取不到口袋房间消息的问题。";
 	}
 
 	public class ExpireTime {
@@ -54,9 +55,10 @@ public class Common {
 		public static final String CONVERSATION_ = "conversation_";
 
 		/**
-		 * 口袋48登录token
+		 * 口袋48登录
 		 */
-		public static final String TOKEN_KEY = "pocket_token";
+		public static final String TOKEN = "pocket_token";
+		public static final String USER_ID = "pocket_user_id";
 
 		/**
 		 * 主页横向监控数据
@@ -106,8 +108,8 @@ public class Common {
 	public class CommandCaption {
 		public static final String HEAD = "指令名称(其他名称) | 参数 | 说明";
 		public static final String HELP = "help(h/帮助) | 无 | 获取帮助，如：-help。";
-		public static final String VERSION = "version(v/版本) | 无 | 获取版本。";
-		public static final String SET_ROOM_MONITOR = "setRoomMonitor(setrm/设置房间监控) | [成员名字] [关键字] | 设置口袋房间监控。在群聊使用该指令则消息发向群，在好友聊天使用该指令则消息发向好友。多个关键字使用英文逗号分割，无关键字则全量发送，否则只有包含关键字的消息才会发送。";
+		public static final String VERSION = "version(v/版本) | 无 | 获取版本。如：-v。";
+		public static final String SET_ROOM_MONITOR = "setRoomMonitor(setrm/设置房间监控) | [成员名字] [关键字] | 设置口袋房间监控。在群聊使用该指令则消息发向群，在好友聊天使用该指令则消息发向好友。多个关键字使用英文逗号分割，无关键字则全量发送，否则只有包含关键字的消息才会发送。如：-setrm 张语格。";
 		public static final String FIND_MEMBER = "findMember(findm/查找成员) | [名字]/[拼音缩写] | 根据名字或拼音缩写查找成员信息，如：-findm jjy";
 		public static final String FIND_TRIP = "findTrip(findt/查看行程) | [北京/上海/广州/冷餐/公演/生日/节目] [冷餐/公演/生日/节目] | 根据北上广/行程类型查看行程，无参数默认查看全团所有行程，如：-findt 广州 公演。";
 		public static final String FRIEND_ADD = "friendAdd(fadd/好友请求) | [flag码] [YES/NO] | 处理好友请求。flag码由上报好友请求时发送，同意填yes/y，不同意填no/n。（该功能仅限管理员）";

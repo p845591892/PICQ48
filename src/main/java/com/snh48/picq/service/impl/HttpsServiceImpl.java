@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.snh48.picq.core.Common.MonitorType;
 import com.snh48.picq.core.Common.RedisKey;
 import com.snh48.picq.core.Common.SleepMillis;
+import com.snh48.picq.dao.MemberDao;
 import com.snh48.picq.entity.snh48.Member;
 import com.snh48.picq.entity.weibo.WeiboUser;
 import com.snh48.picq.https.JsonPICQ48;
@@ -34,6 +35,9 @@ public class HttpsServiceImpl implements HttpsService {
 
 	@Autowired
 	private MemberRepository memberRepository;
+
+	@Autowired
+	private MemberDao memberDao;
 
 	@Override
 	public WeiboUser getWeiboUser(Long containerUserId)
@@ -110,7 +114,7 @@ public class HttpsServiceImpl implements HttpsService {
 		List<Member> members = memberRepository.findAll();
 		for (Member member : members) {
 			log.info("当前更新成员：{}", member.getName());
-			
+
 			try {
 				Thread.sleep(SleepMillis.POCKET_REQUEST);
 			} catch (InterruptedException e) {
@@ -126,14 +130,28 @@ public class HttpsServiceImpl implements HttpsService {
 				}
 			}
 
+			int hisRoomMonitor = member.getRoomMonitor();
 			try {
 				JSONObject roomObj = JsonPICQ48.jsonMemberRoom(roomId, 0);
-				buildRoom(roomObj, member);
+				member.buildRoom(roomObj);
 			} catch (Exception e) {
 				log.error("获取{}房间信息失败或者构建Member失败，异常：{}", member.getName(), e.toString());
 				continue;
 			}
-			
+
+			/* 1.判断房间是否被关闭 */
+			if (member.getRoomMonitor() != MonitorType.NOTHING) {
+
+				/* 2.房间是否关闭后开 */
+				if (hisRoomMonitor != MonitorType.OPEN && hisRoomMonitor != MonitorType.CLOS) {
+					member.setRoomMonitor(MonitorType.CLOS); // 强制为监控关闭
+
+					/* 3.房间一直开着 */
+				} else {
+					member.setRoomMonitor(hisRoomMonitor); // 保持使用旧状态
+				}
+			}
+
 			try {
 				JSONObject memberObj = JsonPICQ48.jsonMember(memberId);
 				JsonPICQ48.setMember(member, memberObj);
@@ -141,38 +159,13 @@ public class HttpsServiceImpl implements HttpsService {
 				log.error("获取{}成员信息失败或者构建Member失败，异常：{}", member.getName(), e.toString());
 			}
 
-			/* 修改成员资料 */
-			memberRepository.save(member);
+			/* 修改/新增成员资料 */
+			int row = memberDao.updateMemberById(member);
+			if (row == 0) {// 说明为新成员，需要再进行insert
+				memberRepository.save(member);
+			}
 		}
 		log.info("[结束] 更新成员列表");
-	}
-
-	private void buildRoom(JSONObject roomObj, Member member) throws Exception {
-		int sourceRoomMonitor = member.getRoomMonitor();
-		try {
-			/* 1.房间存在 */
-			if (roomObj.getBoolean("success")) {
-				JSONObject roomInfo = roomObj.getJSONObject("content").getJSONObject("roomInfo");
-				member.setRoomId(roomInfo.getLong("roomId"));// 房间ID
-				member.setRoomName(roomInfo.getString("roomName"));// 房间名
-				member.setTopic(roomInfo.getString("roomTopic"));// 房间话题
-
-				/* 2.房间关闭后再开 */
-				if (sourceRoomMonitor != MonitorType.OPEN && sourceRoomMonitor != MonitorType.CLOS) {
-					member.setRoomMonitor(MonitorType.CLOS); // 强制为监控关闭
-
-					/* 3.房间一直开着 */
-				} else if (sourceRoomMonitor == MonitorType.OPEN || sourceRoomMonitor == MonitorType.CLOS) {
-					member.setRoomMonitor(sourceRoomMonitor); // 强制使用旧状态
-				}
-			/* 4.房间不存在 */
-			} else {
-				member.setRoomMonitor(roomObj.getInt("status"));
-			}
-		} catch (Exception e) {
-			log.error("设置口袋房间参数失败，异常：{}", e.toString());
-			throw e;
-		}
 	}
 
 }

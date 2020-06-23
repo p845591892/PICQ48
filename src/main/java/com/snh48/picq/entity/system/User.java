@@ -30,7 +30,7 @@ public class User implements Serializable {
 	@Column(name = "ID")
 	private Long id;
 
-	@Column(name = "USERNAME", unique = true, length = 50)
+	@Column(name = "USERNAME", nullable = false, unique = true, length = 50)
 	private String username;// 帐号
 
 	@Column(name = "NICKNAME", length = 50)
