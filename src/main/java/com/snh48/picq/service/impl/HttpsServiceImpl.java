@@ -116,7 +116,7 @@ public class HttpsServiceImpl implements HttpsService {
 			log.info("当前更新成员：{}", member.getName());
 
 			try {
-				Thread.sleep(SleepMillis.POCKET_REQUEST);
+				Thread.sleep(SleepMillis.REQUEST);
 			} catch (InterruptedException e) {
 				log.error("syncMember休眠线程失败，异常：{}", e.toString());
 			}

@@ -237,10 +237,4 @@ public class Pocket48Tool extends JsonPICQ48 {
 		return null;
 	}
 
-	@Override
-	public <T> List<T> get(Class<T> clazz) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

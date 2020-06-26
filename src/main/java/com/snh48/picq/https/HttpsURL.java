@@ -59,5 +59,14 @@ public class HttpsURL {
 
 	/** 微博数据接口。请求方式为GET。 */
 	public static final String WEIBO = "https://m.weibo.cn/api/container/getIndex";
+	
+	/** 桃叭请求接口域名 */
+	public static final String TAOBA_API = "https://www.tao-ba.club";
+	
+	/** 桃叭集资项目信息接口。请求方式为POST。 */
+	public static final String TAOBA_DETAIL = TAOBA_API + "/idols/detail";
+
+	/** 桃叭集资购买列表接口。请求方式为POST。 */
+	public static final String TAOBA_JOIN = TAOBA_API + "/idols/join";
 
 }

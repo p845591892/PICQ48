@@ -56,7 +56,7 @@ public class SyncTripJob extends QuartzJobBean {
 			sourceTimestamp = tripList.get(size - 1).getShowTime().getTime();
 			isMore = true;
 			try {
-				Thread.sleep(SleepMillis.POCKET_REQUEST);
+				Thread.sleep(SleepMillis.REQUEST);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				return;

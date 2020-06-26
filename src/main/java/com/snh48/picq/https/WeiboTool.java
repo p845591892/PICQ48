@@ -12,6 +12,12 @@ import com.snh48.picq.entity.weibo.WeiboUser;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * 微博接口工具
+ * 
+ * @author shiro
+ *
+ */
 @Log4j2
 @Transactional
 public class WeiboTool extends JsonPICQ48 {
@@ -60,12 +66,6 @@ public class WeiboTool extends JsonPICQ48 {
 		} catch (Exception e) {
 			log.error("获取List<Dynamic>发生异常：{}", e.toString());
 		}
-		return null;
-	}
-
-	@Override
-	public <T> List<T> get(Class<T> clazz) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

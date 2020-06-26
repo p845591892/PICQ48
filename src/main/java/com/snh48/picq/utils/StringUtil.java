@@ -1,11 +1,22 @@
 package com.snh48.picq.utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.Deflater;
+import java.util.zip.InflaterOutputStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
+
+import com.snh48.picq.https.HttpsURL;
+
+import cn.hutool.core.codec.Base64Decoder;
+import cn.hutool.core.codec.Base64Encoder;
+import cn.hutool.crypto.digest.MD5;
 
 /**
  * @ClassName: StringUtil
@@ -16,6 +27,9 @@ import org.apache.shiro.util.ByteSource;
  * @date 2018年7月11日 下午9:08:31
  */
 public class StringUtil extends StringUtils {
+
+	private static final String POCKET_SALT = "K4bMWJawAtnyyTNOa70S";
+	private static final String TAOBA_SALT = "%#54$^%&SDF^A*52#@7";
 
 	/**
 	 * @Title: removeNonBmpUnicode
@@ -137,6 +151,160 @@ public class StringUtil extends StringUtils {
 			return true;
 		else
 			return false;
+	}
+
+	/**
+	 * zlib压缩
+	 * 
+	 * @param data 被压缩的数据
+	 * @return 压缩后的数据
+	 */
+	public static byte[] zlibCompress(String data) {
+		byte[] output = new byte[0];
+		try {
+			byte[] dataBytes = data.getBytes("utf-8");
+			output = zlibCompress(dataBytes);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return output;
+	}
+
+	/**
+	 * zlib压缩
+	 * 
+	 * @param data 被压缩的数据
+	 * @return 压缩后的数据
+	 */
+	public static byte[] zlibCompress(byte[] data) {
+		byte[] output = new byte[0];
+		Deflater compresser = new Deflater();
+		compresser.setInput(data);
+		compresser.finish();
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(data.length);
+		try {
+			byte[] buf = new byte[8192];
+			while (!compresser.finished()) {
+				int i = compresser.deflate(buf);
+				bos.write(buf, 0, i);
+			}
+			output = bos.toByteArray();
+		} catch (Exception e) {
+			output = data;
+			e.printStackTrace();
+		} finally {
+			try {
+				bos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		compresser.end();
+		return output;
+	}
+
+	/**
+	 * zlib解压
+	 * 
+	 * @param data 被解压的数据
+	 * @return 解压后的数据
+	 */
+	public static byte[] zlibDecompress(byte[] data) {
+		byte[] output = new byte[0];
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		InflaterOutputStream zos = new InflaterOutputStream(bos);
+		try {
+			zos.write(data);
+			output = bos.toByteArray();
+		} catch (Exception e) {
+			output = data;
+			e.printStackTrace();
+		} finally {
+			try {
+				zos.close();
+				bos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return output;
+	}
+
+	/**
+	 * 获取口袋48接口中PA请求头的值
+	 */
+	public static String getPa() {
+		String t = String.valueOf(System.currentTimeMillis() / 1000).concat("000");
+		String r = String.valueOf(getrandom(1000, 9999));
+		String tempM = t.concat(r).concat(POCKET_SALT);
+		String m = MD5.create().digestHex(tempM);
+		String tempPa = String.join(",", t, r, m);
+		String pa = Base64Encoder.encode(tempPa);
+		return pa;
+	}
+
+	private static int getrandom(int start, int end) {
+		int num = (int) (Math.random() * (end - start + 1) + start);
+		return num;
+	}
+
+	/**
+	 * 自动补全无http或https的48资源地址（SNH48专用）
+	 * 
+	 * @param sourceUrl 原获取到的url
+	 * @return 补全后的URL
+	 */
+	public static String getSourceUrl(String sourceUrl) {
+		if (!sourceUrl.startsWith("http://") && !sourceUrl.startsWith("https://")) {
+			sourceUrl = HttpsURL.SOURCE + sourceUrl;
+		}
+		return sourceUrl;
+	}
+
+	/**
+	 * 编码字符串（桃叭接口请）
+	 * 
+	 * @param data 被编码的字符串（求参数）
+	 * @return 编码后的字符串
+	 */
+	public static String encodePayloadJson(String data) {
+		int length = data.length();
+		byte[] compressed = zlibCompress(data);
+		byte[] salted = addSalt(compressed);
+		String result = Base64Encoder.encode(salted);
+		return String.valueOf(length).concat("$").concat(result);
+	}
+
+	/**
+	 * 解码字符串（桃叭接口）
+	 * 
+	 * @param requestResult 被解码的字符串（请求返回值）
+	 * @return 解码后的字符串
+	 */
+	public static String decodeRequestResult(String requestResult) {
+		String source = requestResult.split("\\$")[1];
+		byte[] decoded = Base64Decoder.decode(source);
+		byte[] salted = addSalt(decoded);
+		byte[] decompressed = zlibDecompress(salted);
+		String jsonStr = "";
+		try {
+			jsonStr = new String(decompressed, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return jsonStr;
+	}
+
+	private static byte[] addSalt(byte[] compressed) {
+		char[] salt = TAOBA_SALT.toCharArray();
+		for (int i = 0; i < compressed.length; i++) {
+			byte ch = compressed[i];
+			if (i % 2 == 0) {
+				ch = (byte) (ch ^ (byte) (salt[(i / 2) % salt.length]));
+			}
+			compressed[i] = ch;
+		}
+		return compressed;
 	}
 
 }

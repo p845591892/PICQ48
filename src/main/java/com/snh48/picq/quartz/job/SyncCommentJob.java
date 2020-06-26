@@ -69,7 +69,7 @@ public class SyncCommentJob extends QuartzJobBean {
 		do {
 			index += 1;
 			try {
-				Thread.sleep(SleepMillis.POCKET_REQUEST);
+				Thread.sleep(SleepMillis.REQUEST);
 			} catch (InterruptedException e) {
 				log.error("线程休眠错误，异常：{}", e.toString());
 			}

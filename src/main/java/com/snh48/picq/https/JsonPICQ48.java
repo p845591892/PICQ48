@@ -19,10 +19,13 @@ import com.snh48.picq.entity.snh48.PocketUser;
 import com.snh48.picq.entity.snh48.RoomMessage;
 import com.snh48.picq.entity.snh48.RoomMessageAll;
 import com.snh48.picq.entity.snh48.Trip;
+import com.snh48.picq.entity.taoba.TaobaDetail;
+import com.snh48.picq.entity.taoba.TaobaJoin;
 import com.snh48.picq.entity.weibo.Dynamic;
 import com.snh48.picq.entity.weibo.WeiboUser;
 import com.snh48.picq.exception.HttpsPocketAuthenticateException;
 import com.snh48.picq.utils.DateUtil;
+import com.snh48.picq.utils.StringUtil;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -330,7 +333,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		JSONObject starInfo = content.getJSONObject("starInfo");
 		JSONArray history = content.getJSONArray("history");
 
-		member.setAvatar(getSourceUrl(starInfo.getString("starAvatar")));// 成员头像地址
+		member.setAvatar(StringUtil.getSourceUrl(starInfo.getString("starAvatar")));// 成员头像地址
 		member.setName(starInfo.getString("starName"));// 名字
 		member.setPinyin(starInfo.getString("pinyin"));// 名字拼音
 		member.setAbbr(starInfo.getString("abbr"));// 名字缩写
@@ -408,7 +411,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append(HttpsURL.LIVE);
 			msgContent.append(extInfoObject.getString("liveId"));
 			msgContent.append("<img>");
-			msgContent.append(getSourceUrl(extInfoObject.getString("liveCover")));
+			msgContent.append(StringUtil.getSourceUrl(extInfoObject.getString("liveCover")));
 
 		} else if (messageType.equals(MsgType.FLIPCARD)) { // 翻牌类型
 			JSONObject contentObject = null;
@@ -453,7 +456,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append("[口令红包]<br>");
 			msgContent.append(extInfoObject.getString("redPackageTitle"));
 			msgContent.append("<img>");
-			msgContent.append(getSourceUrl(extInfoObject.getString("redPackageCover")));
+			msgContent.append(StringUtil.getSourceUrl(extInfoObject.getString("redPackageCover")));
 
 		} else if (messageType.equals(MsgType.SHARE_POSTS) || messageType.equals(MsgType.SHARE_WEB)) { // POSTS/WEB分享
 			msgContent.append("[网页分享]<br>");
@@ -462,7 +465,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 			msgContent.append(extInfoObject.getString("jumpPath"));
 			msgContent.append("<img>");
 			msgContent.append(extInfoObject.getString("sharePic"));
-			
+
 		} else {
 			msgContent.append("type error.");
 			log.error("本条消息为未知的新类型。messageType={}, {}", messageType, indexObj.toString());
@@ -525,7 +528,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		} else if (messageType.equals(MsgType.REPLY)) {// 回复类型
 			msgContent.append(indexObj.getString("bodys"));
 
-		} else if (messageType.equals(MsgType.IMAGE)|| messageType.equals(MsgType.GIF)) {// 图片类型/动态图片
+		} else if (messageType.equals(MsgType.IMAGE) || messageType.equals(MsgType.GIF)) {// 图片类型/动态图片
 			JSONObject bodysObject = new JSONObject(indexObj.getString("bodys"));
 			msgContent.append(bodysObject.getString("url"));
 
@@ -559,7 +562,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		} else if (messageType.equals(MsgType.SHARE_POSTS) || messageType.equals(MsgType.SHARE_WEB)) {// POSTS/WEB分享
 			msgContent.append(extInfoObject.getString("shareDesc"));
 			msgContent.append(extInfoObject.getString("jumpPath"));
-			
+
 		} else {
 			msgContent.append("Unknown message type.");
 			log.error("本条消息为未知的新类型。messageType={}, {}", messageType, indexObj.toString());
@@ -636,7 +639,7 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 
 		pocketUser.setId(id);// 用户ID
 		pocketUser.setNickname(nickname);// 昵称
-		pocketUser.setAvatar(getSourceUrl(avatar));// 头像地址
+		pocketUser.setAvatar(StringUtil.getSourceUrl(avatar));// 头像地址
 		pocketUser.setLevel(level);// 用户等级
 		pocketUser.setVip(vip);// 是否是vip用户
 		pocketUser.setRole(role);// 用户类型
@@ -749,7 +752,103 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 		refreshToken();
 		throw new HttpsPocketAuthenticateException("HttpsURL.CONVERSATION：" + conversationObj.getString("message")
 				+ "。参数：{targetType = " + targetType + "}");
-		
+	}
+
+	/**
+	 * 发送Https请求，获取桃叭项目信息。
+	 * 
+	 * @param id 桃叭项目ID
+	 * @return 桃叭项目信息的json对象
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 */
+	public static JSONObject jsonDetail(long id)
+			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+		String jsonStr = httpsDetail(id);
+		JSONObject detailObj = JsonProcess.getJSONObjectByString(jsonStr);
+		if (detailObj.getInt("code") == 0) {
+			return detailObj.getJSONObject("datas");
+		}
+		throw new HttpsPocketAuthenticateException(
+				"HttpsURL.TAOBA_DETAIL失败，id=" + id + "，result=" + jsonStr.toString());
+	}
+
+	/**
+	 * 发送Https请求，获取桃叭集资详细列表。
+	 * 
+	 * @param ismore 是否更多
+	 * @param limit  查询条数
+	 * @param id     项目ID
+	 * @param offset 已翻过条数
+	 * @return 桃叭项目详细列表的json数组对象
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public static JSONArray jsonJoin(boolean ismore, int limit, long id, int offset)
+			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+		String jsonStr = httpsJoin(ismore, limit, id, offset);
+		JSONObject detailObj = JsonProcess.getJSONObjectByString(jsonStr);
+		if (detailObj.getInt("code") == 0) {
+			return detailObj.getJSONArray("list");
+		}
+		throw new HttpsPocketAuthenticateException("HttpsURL.TAOBA_JOIN失败，ismore=" + ismore + ", limit=" + limit
+				+ ", id=" + id + ", offset=" + offset + "， result=" + detailObj.toString());
+	}
+
+	/**
+	 * 解析桃叭项目的json对象，将信息设置到{@link TaobaDetail}中。
+	 * 
+	 * @param detail 桃叭项目实例
+	 * @param obj    桃叭项目JSON对象
+	 * @throws JSONException
+	 */
+	protected static void setTaobaDetail(TaobaDetail detail, JSONObject obj) throws JSONException {
+		detail.setId(obj.getLong("id")); // 项目ID
+		detail.setPoster(obj.getString("ads")); // 项目封面
+		detail.setTitle(obj.getString("title")); // 项目标题
+		detail.setDescription(obj.getString("desc")); // 项目描述
+		detail.setStartTime(new Date(obj.getLong("start") * 1000)); // 开始时间
+		detail.setEndTime(new Date(obj.getLong("expire") * 1000)); // 结束时间
+		detail.setDonation(obj.getString("donation")); // 集资金额
+		detail.setAmount(obj.getString("amount")); // 目标金额
+		detail.setPhone(obj.getString("phone")); // 项目发起人手机号
+		detail.setUserId(obj.getLong("userid")); // 项目发起人ID
+		detail.setNickname(obj.getString("nickname")); // 项目发起人昵称
+		detail.setAvatar(obj.getString("avatar")); // 项目发起人头像URL
+		detail.setSellstats(obj.getInt("sellstats")); // 已售件数
+		detail.setTotalstats(obj.getInt("totalstats")); // 总件数
+		detail.setPercent(obj.getDouble("percent")); // 完成度(%)
+		detail.setOsType(obj.getInt("ostype")); // OS类型
+
+		long now = System.currentTimeMillis();
+		long end = detail.getEndTime().getTime();
+		if (now < end) { // 是否进行中
+			detail.setRunning(true);
+		} else {
+			detail.setRunning(false);
+		}
+	}
+
+	/**
+	 * 解析桃叭集资详细的json对象，将信息设置到{@link Detail}中。
+	 * 
+	 * @param join    桃叭集资详细实例
+	 * @param joinObj 桃叭集资详细JSON对象
+	 * @throws JSONException
+	 */
+	protected static void setTaobaJoin(TaobaJoin join, JSONObject obj) throws JSONException {
+		join.setId(obj.getLong("id")); // 集资ID
+		join.setSn(obj.getString("sn")); // SN码
+		join.setMoney(obj.getString("money")); // 集资金额
+		join.setFlower(obj.getInt("flower"));
+		join.setCreatTime(new Date(obj.getLong("stime") * 1000)); // 集资时间
+		join.setUserid(obj.getLong("userid")); // 用户ID
+		join.setNickname(obj.getString("nick")); // 用户昵称
+		join.setAvatar(obj.getString("avatar")); // 用户头像
+		join.setIsSend(false);// 默认未发送
 	}
 
 }

@@ -30,7 +30,7 @@ public class Common {
 		public static final long SECOND = 1000;
 		public static final long SECOND_5 = SECOND * 5;
 		public static final long MINUTE = SECOND * 60;
-		public static final long POCKET_REQUEST = SECOND * 8;
+		public static final long REQUEST = SECOND * 8;
 	}
 
 	public class RedisKey {
@@ -77,6 +77,7 @@ public class Common {
 		public static final String HTML_INDEX_DS_ACTIVE_ROOMS = HTML_INDEX_DS + "_active_rooms";
 		public static final String HTML_INDEX_DS_ACTIVE_MEMBERS = HTML_INDEX_DS + "_active_members";
 
+		public static final String TAOBA_MONITOR_ = "taoba_monitor_";
 	}
 
 	/*
