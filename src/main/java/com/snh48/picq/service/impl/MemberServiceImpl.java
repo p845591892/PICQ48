@@ -54,13 +54,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<Member> getListByNotMonitorType(int monitorType) {
+	public List<Member> getListByNotMonitorTypeNot(int monitorType) {
 		List<Member> members = null;
 		try {
 			members = memberRepository.findByRoomMonitorNot(monitorType);
 			if (null == members) {
 				members = new ArrayList<Member>();
-				log.error("method memberRepository.findByNotRoomMonitor(monitorType) result is null. monitorType={}",
+				log.error("method MemberRepository.findByRoomMonitorNot(monitorType) result is null. monitorType={}",
 						monitorType);
 			}
 		} catch (Exception e) {

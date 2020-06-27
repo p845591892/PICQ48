@@ -52,6 +52,7 @@ public interface ResourceManagementService {
 
 	/**
 	 * 获取微博动态监控的新增弹窗内容
+	 * 
 	 * @param userId 微博用户ID
 	 * @return 新增弹窗的HTML
 	 */
@@ -85,4 +86,19 @@ public interface ResourceManagementService {
 	 * @return Page<RoomMessage> 返回Page的房间消息列表
 	 */
 	public Page<RoomMessage> getRoomMessages(Integer pageNumber, Integer pageSize, RoomMessageVO vo);
+
+	/**
+	 * 获取桃叭项目监控配置列表的HTML
+	 * 
+	 * @param detailId 项目ID
+	 * @return Table的DetailView中的HTML内容
+	 */
+	public String getTaobaMonitorHtml(Long detailId);
+
+	/**
+	 * 获取桃叭项目监控的新增弹窗内容
+	 * @param detailId 项目ID
+	 * @return 弹窗的HTML
+	 */
+	public String getTaobaMonitorLayerHtml(Long detailId);
 }

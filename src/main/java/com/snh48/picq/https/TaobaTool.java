@@ -1,7 +1,9 @@
 package com.snh48.picq.https;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
@@ -30,7 +32,7 @@ public class TaobaTool extends JsonPICQ48 {
 	 */
 	public static TaobaDetail getDetail(long id) {
 		try {
-			JSONObject detailObj = jsonDetail(id);
+			JSONObject detailObj = jsonTaobaDetail(id);
 			TaobaDetail detail = new TaobaDetail();
 			setTaobaDetail(detail, detailObj);
 			return detail;
@@ -53,7 +55,7 @@ public class TaobaTool extends JsonPICQ48 {
 	public static List<TaobaJoin> getTaobaJoin(boolean ismore, int limit, long id, int offset) {
 		List<TaobaJoin> joins = new ArrayList<TaobaJoin>();
 		try {
-			JSONArray joinArray = jsonJoin(ismore, limit, id, offset);
+			JSONArray joinArray = jsonTaobaJoin(ismore, limit, id, offset);
 			for (int i = 0; i < joinArray.length(); i++) {
 				JSONObject joinObj = joinArray.getJSONObject(i);
 				TaobaJoin join = new TaobaJoin();
@@ -67,6 +69,35 @@ public class TaobaTool extends JsonPICQ48 {
 					e.toString());
 		}
 		return joins;
+	}
+
+	/**
+	 * 获取桃叭集资项目排名列表。通过Https的方式发送请求，获得json结果，解析后生成{@link Map}，ranks：集资排名List，juser：累计参与人数。
+	 * @param id 桃叭项目ID
+	 * @return {@link Map}
+	 */
+	public static Map<String, Object> getRank(long id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			JSONObject jsonObj = jsonTaobaRank(id);
+			int juser = jsonObj.getInt("juser");
+			
+			List<TaobaJoin> ranks = new ArrayList<TaobaJoin>();
+			JSONArray rankArray = jsonObj.getJSONArray("list");
+			for (int i = 0; i < rankArray.length(); i++) {
+				JSONObject rankObj = rankArray.getJSONObject(i);
+				TaobaJoin rank = new TaobaJoin();
+				rank.setDetailId(id); // 所属项目ID
+				setTaobaJoin(rank, rankObj);
+				ranks.add(rank);
+			}
+			
+			map.put("juser", juser);
+			map.put("ranks", ranks);
+		} catch (Exception e) {
+			log.error("获取桃叭集资排名列表失败，id={}，异常：{}", id, e.toString());
+		}
+		return map;
 	}
 
 }

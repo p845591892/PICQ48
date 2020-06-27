@@ -18,6 +18,7 @@ import com.snh48.picq.repository.snh48.RoomMonitorRepository;
 import com.snh48.picq.repository.weibo.WeiboUserRepository;
 import com.snh48.picq.service.ResourceManagementService;
 import com.snh48.picq.service.SystemManageService;
+import com.snh48.picq.service.TaobaService;
 import com.snh48.picq.utils.StringUtil;
 import com.snh48.picq.vo.MemberVO;
 import com.snh48.picq.vo.ResultVO;
@@ -79,6 +80,9 @@ public class ResourceContorller {
 	 */
 	@Autowired
 	private SystemManageService systemManageService;
+
+	@Autowired
+	private TaobaService taobaService;
 
 	/**
 	 * @Description: 获取成员列表
@@ -364,6 +368,46 @@ public class ResourceContorller {
 		result.setStatus(HttpsURLConnection.HTTP_OK);
 		result.setCause("success");
 		result.setData(resourceManagementService.getRoomMessages(pageNumber, pageSize, vo));
+		return result;
+	}
+
+	/**
+	 * 获取桃叭集资项目列表
+	 */
+	@GetMapping("/taoba")
+	public ResultVO getTaobaDetail() {
+		ResultVO result = new ResultVO();
+		result.setStatus(HttpsURLConnection.HTTP_OK);
+		result.setCause("success");
+		result.setData(taobaService.getDetails());
+		return result;
+	}
+
+	/**
+	 * 获取桃叭监控配置拓展页
+	 * 
+	 * @param id 项目ID
+	 */
+	@GetMapping("/taoba/monitor/{detailId}")
+	public ResultVO getTaobaMonitorHtml(@PathVariable Long detailId) {
+		ResultVO result = new ResultVO();
+		result.setStatus(HttpsURLConnection.HTTP_OK);
+		result.setCause("success");
+		result.setData(resourceManagementService.getTaobaMonitorHtml(detailId));
+		return result;
+	}
+
+	/**
+	 * 获取桃叭监控配置新增弹窗
+	 * 
+	 * @param detailId 项目ID
+	 */
+	@GetMapping("/taoba/add-monitor-layer/{detailId}")
+	public ResultVO getTaobaMonitorLayerHtml(@PathVariable Long detailId) {
+		ResultVO result = new ResultVO();
+		result.setStatus(HttpsURLConnection.HTTP_OK);
+		result.setCause("success");
+		result.setData(resourceManagementService.getTaobaMonitorLayerHtml(detailId));
 		return result;
 	}
 

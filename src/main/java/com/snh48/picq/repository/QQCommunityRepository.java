@@ -46,4 +46,11 @@ public interface QQCommunityRepository extends JpaRepository<QQCommunity, Long> 
 	@Query(value = "from QQCommunity t where t.id not in (select r.communityId from DynamicMonitor r where r.userId = ?1)")
 	List<QQCommunity> findByNotInIdAndUserId(Long userId);
 
+	/**
+	 * 根据桃叭项目ID获取未监控该项目的QQ列表
+	 * @param detailId 桃叭项目ID
+	 */
+	@Query(value = "from QQCommunity t where t.id not in (select r.communityId from TaobaMonitor r where r.id = ?1)")
+	List<QQCommunity> findByNotInIdAndDetailId(Long detailId);
+
 }

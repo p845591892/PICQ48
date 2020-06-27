@@ -763,11 +763,11 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 	 * @throws NoSuchAlgorithmException
 	 * @throws IOException
 	 */
-	public static JSONObject jsonDetail(long id)
+	public static JSONObject jsonTaobaDetail(long id)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
-		String jsonStr = httpsDetail(id);
+		String jsonStr = httpsTaobaDetail(id);
 		JSONObject detailObj = JsonProcess.getJSONObjectByString(jsonStr);
-		if (detailObj.getInt("code") == 0) {
+		if (detailObj.has("datas")) {
 			return detailObj.getJSONObject("datas");
 		}
 		throw new HttpsPocketAuthenticateException(
@@ -787,9 +787,9 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	public static JSONArray jsonJoin(boolean ismore, int limit, long id, int offset)
+	public static JSONArray jsonTaobaJoin(boolean ismore, int limit, long id, int offset)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
-		String jsonStr = httpsJoin(ismore, limit, id, offset);
+		String jsonStr = httpsTaobaJoin(ismore, limit, id, offset);
 		JSONObject detailObj = JsonProcess.getJSONObjectByString(jsonStr);
 		if (detailObj.getInt("code") == 0) {
 			return detailObj.getJSONArray("list");
@@ -798,6 +798,25 @@ public abstract class JsonPICQ48 extends HttpsPICQ48 {
 				+ ", id=" + id + ", offset=" + offset + "， result=" + detailObj.toString());
 	}
 
+	/**
+	 * 发送Https请求，获取桃叭集资排名。
+	 * 
+	 * @param id 项目ID
+	 * @return 桃叭项目排名列表的json对象
+	 * @throws IOException
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyManagementException
+	 * @throws JSONException
+	 */
+	public static JSONObject jsonTaobaRank(long id) 
+			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+		String jsonStr = httpsTaobaRank(id);
+		JSONObject rankObj = JsonProcess.getJSONObjectByString(jsonStr);
+		if (rankObj.getInt("code") == 0) {
+			return rankObj;
+		}
+		throw new HttpsPocketAuthenticateException("HttpsURL.TAOBA_RANK失败，id=" + id + "，result=" + rankObj.toString());
+	}
 	/**
 	 * 解析桃叭项目的json对象，将信息设置到{@link TaobaDetail}中。
 	 * 

@@ -13,6 +13,8 @@ import com.snh48.picq.core.Common.ExpireTime;
 import com.snh48.picq.core.Common.RedisKey;
 import com.snh48.picq.entity.taoba.TaobaDetail;
 import com.snh48.picq.entity.taoba.TaobaJoin;
+import com.snh48.picq.entity.taoba.TaobaMonitor;
+import com.snh48.picq.exception.RepositoryException;
 import com.snh48.picq.repository.taoba.TaobaDetailRepository;
 import com.snh48.picq.repository.taoba.TaobaJoinRepository;
 import com.snh48.picq.repository.taoba.TaobaMonitorRepository;
@@ -28,11 +30,11 @@ import lombok.extern.log4j.Log4j2;
 public class TaobaServiceImpl implements TaobaService {
 
 	@Autowired
-	private TaobaDetailRepository detailRepository;
+	private TaobaDetailRepository taobaDetailRepository;
 
 	@Autowired
 	private TaobaJoinRepository taobaJoinRepository;
-	
+
 	@Autowired
 	private TaobaMonitorRepository taobaMonitorRepository;
 
@@ -40,9 +42,10 @@ public class TaobaServiceImpl implements TaobaService {
 	public List<TaobaDetail> getDetailsByRunningNot(boolean running) {
 		List<TaobaDetail> details = new ArrayList<TaobaDetail>();
 		try {
-			details = detailRepository.findByRunningNot(running);
+			details = taobaDetailRepository.findByRunningNot(running);
 		} catch (Exception e) {
 			log.error("DetailRepository.findByRunningNot失败，running={}，异常：{}", running, e.toString());
+			throw new RepositoryException("DetailRepository.findByRunningNot失败", e);
 		}
 		return details;
 	}
@@ -50,9 +53,10 @@ public class TaobaServiceImpl implements TaobaService {
 	@Override
 	public void saveDetail(TaobaDetail detail) {
 		try {
-			detailRepository.save(detail);
+			taobaDetailRepository.save(detail);
 		} catch (Exception e) {
 			log.error("DetailRepository.saveDetail失败，异常：{}", e.toString());
+			throw new RepositoryException("DetailRepository.saveDetail失败", e);
 		}
 	}
 
@@ -65,6 +69,7 @@ public class TaobaServiceImpl implements TaobaService {
 			}
 		} catch (Exception e) {
 			log.error("TaobaJoinRepository.findById失败，id={}，异常：{}", id, e.toString());
+			throw new RepositoryException("TaobaJoinRepository.findById失败", e);
 		}
 		return null;
 	}
@@ -79,6 +84,7 @@ public class TaobaServiceImpl implements TaobaService {
 		} catch (Exception e) {
 			log.error("TaobaJoinRepository.findFirstByDetailIdOrderByCreatTimeDesc失败，detailId={}，异常：{}", detailId,
 					e.toString());
+			throw new RepositoryException("TaobaJoinRepository.findFirstByDetailIdOrderByCreatTimeDesc失败", e);
 		}
 		return null;
 	}
@@ -89,6 +95,7 @@ public class TaobaServiceImpl implements TaobaService {
 			taobaJoinRepository.saveAll(joins);
 		} catch (Exception e) {
 			log.error("TaobaJoinRepository.saveAll失败，异常：{}", e.toString());
+			throw new RepositoryException("TaobaJoinRepository.saveAll失败", e);
 		}
 	}
 
@@ -99,9 +106,47 @@ public class TaobaServiceImpl implements TaobaService {
 		if (RedisUtil.exists(key)) {
 			return (List<TaobaMonitorVO>) RedisUtil.get(key);
 		}
-		List<TaobaMonitorVO> vos = taobaMonitorRepository.findTaobaMonitorAndQQCommunityByDetailId(detailId);
+		List<TaobaMonitorVO> vos = new ArrayList<TaobaMonitorVO>();
+		try {
+			vos = taobaMonitorRepository.findTaobaMonitorAndQQCommunityByDetailId(detailId);
+		} catch (Exception e) {
+			log.error("TaobaMonitorRepository.findTaobaMonitorAndQQCommunityByDetailId失败，detailId={}，异常：{}", detailId,
+					e.toString());
+			throw new RepositoryException("TaobaMonitorRepository.findTaobaMonitorAndQQCommunityByDetailId失败", e);
+		}
 		RedisUtil.setex(key, vos, ExpireTime.MINUTE_10);
 		return vos;
+	}
+
+	@Override
+	public List<TaobaDetail> getDetails() {
+		List<TaobaDetail> details = new ArrayList<TaobaDetail>();
+		try {
+			details = taobaDetailRepository.findAll();
+		} catch (Exception e) {
+			log.error("TaobaDetailRepository.findAll失败，异常：{}", e.toString());
+			throw new RepositoryException("TaobaDetailRepository.findAll失败", e);
+		}
+		return details;
+	}
+
+	@Override
+	public void saveMonitor(TaobaMonitor monitor) {
+		try {
+			taobaMonitorRepository.save(monitor);
+		} catch (Exception e) {
+			log.error("TaobaMonitorRepository.save失败，异常：{}", e.toString());
+			throw new RepositoryException("TaobaMonitorRepository.save失败", e);
+		}
+
+		String key = RedisKey.TAOBA_MONITOR_ + monitor.getDetailId();
+		List<TaobaMonitorVO> vos = new ArrayList<TaobaMonitorVO>();
+		try {
+			vos = taobaMonitorRepository.findTaobaMonitorAndQQCommunityByDetailId(monitor.getDetailId());
+			RedisUtil.setex(key, vos, ExpireTime.MINUTE_10);
+		} catch (Exception e) {
+			log.error("设置桃叭监控配置缓存失败，detailId={}，异常：{}", monitor.getDetailId(), e.toString());
+		}
 	}
 
 }

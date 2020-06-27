@@ -39,7 +39,7 @@ public class TaobaDetail implements Serializable {
 	/** 项目封面URL */
 	@Column(name = "POSTER", length = 200)
 	private String poster;
-	
+
 	/** 项目标题 */
 	@Column(name = "TITLE", length = 100)
 	private String title;
@@ -79,7 +79,7 @@ public class TaobaDetail implements Serializable {
 	/** 项目发起人昵称 */
 	@Column(name = "NICKNAME", length = 50)
 	private String nickname;
-	
+
 	/** 项目发起人头像URL */
 	@Column(name = "AVATAR", length = 200)
 	private String avatar;
@@ -91,7 +91,7 @@ public class TaobaDetail implements Serializable {
 	/** 总件数 */
 	@Column(name = "TOTALSTATS")
 	private Integer totalstats;
-	
+
 	/**
 	 * 完成度(%)
 	 */
@@ -101,11 +101,15 @@ public class TaobaDetail implements Serializable {
 	/** OS类型 */
 	@Column(name = "OS_TYPE")
 	private Integer osType;
-	
+
 	/**
 	 * 项目进行中
 	 */
 	@Column(name = "RUNNING")
 	private Boolean running;
-	
+
+	/** 参与人数 */
+	@Column(name = "JOIN_USER")
+	private Integer joinUser;
+
 }

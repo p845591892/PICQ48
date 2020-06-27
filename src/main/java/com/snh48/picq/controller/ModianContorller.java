@@ -21,7 +21,7 @@ import com.snh48.picq.vo.ResultVO;
  */
 @RestController
 @RequestMapping("/modian")
-public class MoDianContorller {
+public class ModianContorller {
 
 	/**
 	 * 摩点集资项目表DAO组件

@@ -31,12 +31,14 @@ import com.snh48.picq.repository.snh48.RoomMessageRepository;
 import com.snh48.picq.repository.snh48.RoomMonitorRepository;
 import com.snh48.picq.repository.weibo.DynamicMonitorRepository;
 import com.snh48.picq.service.ResourceManagementService;
+import com.snh48.picq.service.TaobaService;
 import com.snh48.picq.utils.StringUtil;
 import com.snh48.picq.vo.CommentMonitorVO;
 import com.snh48.picq.vo.DynamicMonitorVO;
 import com.snh48.picq.vo.MemberVO;
 import com.snh48.picq.vo.RoomMessageVO;
 import com.snh48.picq.vo.RoomMonitorVO;
+import com.snh48.picq.vo.TaobaMonitorVO;
 
 @Service
 @Transactional
@@ -63,10 +65,13 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 	@Autowired
 	private RoomMessageRepository roomMessageRepository;
 
+	@Autowired
+	private TaobaService taobaService;
+
 	public String getRoomMonitorTableHtml(Long roomId) {
 		List<RoomMonitorVO> vos = roomMonitorRepository.findRoomMonitorAndQQCommunityByRoomId(roomId);
 		/* 用拿到的数据构造table */
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("<div class=\"content-panel\">");
 		sb.append("<table class=\"table table-striped table-advance table-hover\">");
 		sb.append("<h4><i class=\"fa fa-angle-right\"></i> 监控配置</h4>");
@@ -112,7 +117,7 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 	public String getMeberAddMonitorLayerHtml(Long roomId) {
 		List<QQCommunity> qqCommunitys = qqCommunityRepository.findByNotInIdAndRoomId(roomId);
 		/* 用拿到的数据构造Layer */
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("<form id=\"monitor-form\" class=\"form-horizontal style-form\">");
 		sb.append("<div class=\"form-group\">");
 		sb.append("<div class=\"col-sm-1\"></div>");
@@ -146,7 +151,7 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 	public String getCommentMonitorTableHtml(Long projectId) {
 		List<CommentMonitorVO> vos = commentMonitorRepostiory.findMoDianCommentAndQQCommunityByProjectId(projectId);
 		/* 用拿到的数据构造table */
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("<div class=\"content-panel\">");
 		sb.append("<table class=\"table table-striped table-advance table-hover\">");
 		sb.append("<h4><i class=\"fa fa-angle-right\"></i> 监控配置</h4>");
@@ -184,7 +189,7 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 	public String getModianAddMonitorLayerHtml(Long projectId) {
 		List<QQCommunity> qqCommunitys = qqCommunityRepository.findByNotInIdAndProjectId(projectId);
 		/* 用拿到的数据构造Layer */
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("<form id=\"monitor-form\" class=\"form-horizontal style-form\">");
 		sb.append("<div class=\"form-group\">");
 		sb.append("<div class=\"col-sm-1\"></div>");
@@ -209,7 +214,7 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 
 	public String getDynamicMonitorTableHtml(Long userId) {
 		List<DynamicMonitorVO> vos = dynamicMonitorRepository.findDynamicMonitorAndQQCommunityByUserId(userId);
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("<div class=\"content-panel\">");
 		sb.append("<table class=\"table table-striped table-advance table-hover\">");
 		sb.append("<h4><i class=\"fa fa-angle-right\"></i> 监控配置</h4>");
@@ -247,7 +252,7 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 	public String getWeiboAddMonitorLayerHtml(Long userId) {
 		List<QQCommunity> qqCommunitys = qqCommunityRepository.findByNotInIdAndUserId(userId);
 		/* 用拿到的数据构造Layer */
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("<form id=\"monitor-form\" class=\"form-horizontal style-form\">");
 		sb.append("<div class=\"form-group\">");
 		sb.append("<div class=\"col-sm-1\"></div>");
@@ -374,6 +379,71 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 			e.printStackTrace();
 		}
 		return roomMessages;
+	}
+
+	@Override
+	public String getTaobaMonitorHtml(Long detailId) {
+		List<TaobaMonitorVO> vos = taobaService.getCacheTaobaMonitor(detailId);
+		StringBuilder sb = new StringBuilder();
+		sb.append("<div class=\"content-panel\">");
+		sb.append("<table class=\"table table-striped table-advance table-hover\">");
+		sb.append("<h4><i class=\"fa fa-angle-right\"></i> 监控配置</h4>");
+		sb.append("<hr>");
+		sb.append("<thead>");
+		sb.append("<tr>");
+		sb.append("<th class=\"col-md-4\"><i class=\"fa fa-qq\"></i> QQ（群）名</th>");
+		sb.append("<th class=\"col-md-2\"><i class=\"fa fa-qq\"></i> QQ（群）号</th>");
+		sb.append("<th class=\"col-md-1\"><button class=\"btn btn-success btn-xs\" onclick=\"showAddMonitor(this,"
+				+ detailId + ")\"><i class=\"fa fa-plus-circle fa-lg\"></i> 新增</button></th>");
+		sb.append("</tr>");
+		sb.append("</thead>");
+		sb.append("<tbody>");
+		/* tbody start */
+		for (TaobaMonitorVO vo : vos) {
+			long id = vo.getTaobaMonitor().getId();
+			long qq = vo.getQqCommunity().getId();// QQ号
+			String qqName = vo.getQqCommunity().getCommunityName();// QQ（群）名称
+			sb.append("<tr>");
+			sb.append("<td>" + qqName + "</td>");
+			sb.append("<td>" + qq + "</td>");
+			sb.append("<td>");
+			sb.append("<button class=\"btn btn-danger btn-xs\" onclick=\"deleteMonitor(" + id
+					+ ")\"><i class=\"fa fa-trash-o\"></i></button>");
+			sb.append("</td>");
+			sb.append("</tr>");
+		}
+		/* tbody end */
+		sb.append("</tbody>");
+		sb.append("</table>");
+		sb.append("</div>");
+		return sb.toString();
+	}
+
+	@Override
+	public String getTaobaMonitorLayerHtml(Long detailId) {
+		List<QQCommunity> qqCommunitys = qqCommunityRepository.findByNotInIdAndDetailId(detailId);
+		/* 用拿到的数据构造Layer */
+		StringBuilder sb = new StringBuilder();
+		sb.append("<form id=\"monitor-form\" class=\"form-horizontal style-form\">");
+		sb.append("<div class=\"form-group\">");
+		sb.append("<div class=\"col-sm-1\"></div>");
+		sb.append("<label class=\"col-sm-2 control-label\">发送目标：</label>");
+		sb.append("<div class=\"col-sm-7\">");
+		sb.append("<select class=\"form-control\" name=\"communityId\">");
+		/* select start */
+		for (QQCommunity qqCommunity : qqCommunitys) {
+			long qq = qqCommunity.getId();
+			String qqName = qqCommunity.getCommunityName();
+			sb.append("<option value=\"" + qq + "\">" + qqName + "(" + qq + ")</option>");
+		}
+		/* select end */
+		sb.append("</select>");
+		sb.append(
+				"<span class=\"help-block\">没有你想要的QQ号？到<a href=\"/resource-management/qq-table\">QQ列表</a>进行操作</span>");
+		sb.append("</div>");
+		sb.append("</div>");
+		sb.append("</form>");
+		return sb.toString();
 	}
 
 }

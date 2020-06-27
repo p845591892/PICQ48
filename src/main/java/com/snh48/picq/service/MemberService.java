@@ -34,6 +34,6 @@ public interface MemberService {
 	 * @param monitorType 监控状态
 	 * @return {@link List<Member>}
 	 */
-	List<Member> getListByNotMonitorType(int monitorType);
+	List<Member> getListByNotMonitorTypeNot(int monitorType);
 
 }

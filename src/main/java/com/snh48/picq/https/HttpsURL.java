@@ -69,4 +69,7 @@ public class HttpsURL {
 	/** 桃叭集资购买列表接口。请求方式为POST。 */
 	public static final String TAOBA_JOIN = TAOBA_API + "/idols/join";
 
+	/** 桃叭集资排名列表接口。请求方式为POST。 */
+	public static final String TAOBA_RANK = TAOBA_JOIN + "/rank";
+
 }

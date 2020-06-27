@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
@@ -45,6 +46,7 @@ public class SyncTaobaJob extends QuartzJobBean {
 	@Autowired
 	private PicqBotX bot;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		log.info("--------------[开始] 同步桃叭集资项目任务。");
@@ -59,6 +61,7 @@ public class SyncTaobaJob extends QuartzJobBean {
 
 			long id = detail.getId();
 			TaobaDetail newDetail = TaobaTool.getDetail(id);
+
 			if (null == newDetail) {
 				continue;
 			}
@@ -68,6 +71,8 @@ public class SyncTaobaJob extends QuartzJobBean {
 				continue;
 			}
 
+			Map<String, Object> rankMap = TaobaTool.getRank(id);
+			newDetail.setJoinUser((int) rankMap.get("juser"));
 			taobaService.saveDetail(newDetail);
 
 			int limit = 20;
@@ -112,11 +117,18 @@ public class SyncTaobaJob extends QuartzJobBean {
 				} else {
 					ismore = false;
 				}
+
+				try {
+					Thread.sleep(SleepMillis.REQUEST);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			} while (ismore);
 
 			if (joins.size() > 0) {
 				try {
-					sendMessage(joins, detail);
+					List<TaobaJoin> ranks = (List<TaobaJoin>) rankMap.get("ranks");
+					sendMessage(joins, detail, ranks);
 				} catch (InterruptedException e) {
 					log.error("发送桃叭集资详细消息失败，项目：{}，异常：", detail.getTitle(), e.toString());
 				}
@@ -127,6 +139,9 @@ public class SyncTaobaJob extends QuartzJobBean {
 		log.info("--------------[结束] 同步桃叭集资项目任务。");
 	}
 
+	/**
+	 * 是否需要更新
+	 */
 	private boolean isNeedUpdate(TaobaDetail detail, TaobaDetail newDetail) {
 		if (!newDetail.getRunning()) {
 			return true;
@@ -140,23 +155,30 @@ public class SyncTaobaJob extends QuartzJobBean {
 		return false;
 	}
 
-	private void sendMessage(List<TaobaJoin> joins, TaobaDetail detail) throws InterruptedException {
+	/**
+	 * 发送消息
+	 */
+	private void sendMessage(List<TaobaJoin> joins, TaobaDetail detail, List<TaobaJoin> ranks)
+			throws InterruptedException {
 		Collections.reverse(joins); // 逆序发送，从最前的消息开始发送
 		List<TaobaMonitorVO> vos = taobaService.getCacheTaobaMonitor(detail.getId());
 		IcqHttpApi icqHttpApi = bot.getAccountManager().getNonAccountSpecifiedApi();
 		for (TaobaJoin join : joins) {
-			String message = deserializeMsgContent(detail, join);
-
+			String message = deserializeMsgContent(detail, join, ranks);
+			System.out.println(message);
 			for (TaobaMonitorVO vo : vos) {
 				QQCommunity qqCommunity = vo.getQqCommunity();
 				KuqManage.sendSyncMessage(icqHttpApi, message, qqCommunity);
 			}
-			
+
 			join.setIsSend(true); // 已发送
 		}
 	}
 
-	private String deserializeMsgContent(TaobaDetail detail, TaobaJoin join) {
+	/**
+	 * 构造消息
+	 */
+	private String deserializeMsgContent(TaobaDetail detail, TaobaJoin join, List<TaobaJoin> ranks) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("来自桃叭：".concat(detail.getTitle()));
 		sb.append("\n");
@@ -168,12 +190,32 @@ public class SyncTaobaJob extends QuartzJobBean {
 		sb.append("\n");
 		sb.append("已筹集：".concat(detail.getDonation()).concat("元"));
 		sb.append("\n");
+
+		if (detail.getPercent() != 0) {
+			sb.append("当前进度：".concat(String.valueOf(detail.getPercent())).concat("%"));
+			sb.append("\n");
+		}
+
 		sb.append("集资链接：".concat(detail.getDetailUrl()));
 		sb.append("\n");
+
 		BigDecimal b1 = new BigDecimal(detail.getEndTime().getTime() - System.currentTimeMillis());
 		BigDecimal b2 = new BigDecimal(1000 * 60 * 60);
 		BigDecimal divide = b1.divide(b2, 2, RoundingMode.UP);
 		sb.append("剩余时间：".concat(divide.toPlainString()).concat("小时"));
+
+		if (null != ranks && ranks.size() > 0) {
+			sb.append("\n");
+			sb.append("______________________________");
+			sb.append("\n");
+			sb.append("当前集资TOP5：");
+			int size = ranks.size() >= 5 ? 5 : ranks.size();
+			for (int i = 0; i < size; i++) {
+				TaobaJoin rank = ranks.get(i);
+				sb.append("\n");
+				sb.append((i + 1) + ".".concat(rank.getNickname()).concat(" ¥").concat(rank.getMoney()));
+			}
+		}
 		return sb.toString();
 	}
 

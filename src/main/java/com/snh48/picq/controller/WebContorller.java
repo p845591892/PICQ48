@@ -412,5 +412,16 @@ public class WebContorller {
 
 		return isMoblie;
 	}
+	
+	/**
+	 * @Title: toModianTable
+	 * @Description: 跳转到机器人配置-桃叭项目列表
+	 * @author JuFF_白羽
+	 */
+	@GetMapping("/resource-management/taoba-table")
+	public ModelAndView toTaobaTable(ModelAndView mav) {
+		mav.setViewName("resource_management/taoba_table");
+		return mav;
+	}
 
 }

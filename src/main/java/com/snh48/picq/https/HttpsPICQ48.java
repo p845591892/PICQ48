@@ -85,14 +85,13 @@ public abstract class HttpsPICQ48 {
 	 * @throws KeyManagementException
 	 * @throws JSONException
 	 */
-	@SuppressWarnings("deprecation")
 	public static String httpsMember(long memberId)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
 		Https https = new Https();
 		/* 请求头 */
 		Map<String, String> requestPropertys = new HashMap<String, String>();
 		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
-		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
+		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_VALUE);
 		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPAD);
 		/* 请求参数 */
 		String payloadJson = "{\"memberId\":\"" + String.valueOf(memberId) + "\"}";
@@ -116,27 +115,11 @@ public abstract class HttpsPICQ48 {
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
 	 */
-	@SuppressWarnings("deprecation")
 	public static String httpsMemberRoom(long roomId, int targetType)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
-		Https https = new Https();
-		/* 请求头 */
-		Map<String, String> requestPropertys = new HashMap<String, String>();
-		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
-		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
-		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPAD);
-		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
-		requestPropertys.put(MyHttpHeaders.PA, StringUtil.getPa());
-		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
 		/* 请求参数 */
 		String payloadJson = "{\"roomId\":\"" + roomId + "\",\"targetType\":" + targetType + "}";
-		/* 发送请求 */
-		String roomJson = https.setUrl(HttpsURL.MEMBER_ROOM)
-												.setDataType(HttpMethod.POST.name())
-												.setRequestProperty(requestPropertys)
-												.setPayloadJson(payloadJson)
-												.send();
-		return roomJson;
+		return httpsPocket(payloadJson, HttpsURL.MEMBER_ROOM);
 	}
 
 	/**
@@ -234,28 +217,12 @@ public abstract class HttpsPICQ48 {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	@SuppressWarnings("deprecation")
 	public static String httpsRoomMessage(String memberId, String roomId, long nextTime)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
-		Https https = new Https();
-		/* 请求头 */
-		Map<String, String> requestPropertys = new HashMap<String, String>();
-		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
-		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
-		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPAD);
-		requestPropertys.put(MyHttpHeaders.PA, StringUtil.getPa());
-		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
-		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
 		/* 请求参数 */
 		String payloadJson = "{\"needTop1Msg\":false,\"roomId\":\"" + roomId + "\",\"ownerId\":\"" + memberId
 				+ "\",\"nextTime\":" + nextTime + "}";
-		/* 发送请求 */
-		String messageStr = https.setDataType(HttpMethod.POST.name())
-													.setRequestProperty(requestPropertys)
-													.setPayloadJson(payloadJson)
-													.setUrl(HttpsURL.ROOM_MESSAGE)
-													.send();
-		return messageStr;
+		return httpsPocket(payloadJson, HttpsURL.ROOM_MESSAGE);
 	}
 
 	/**
@@ -278,28 +245,12 @@ public abstract class HttpsPICQ48 {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	@SuppressWarnings("deprecation")
 	public static String httpsRoomMessageALL(long nextTime, boolean needTop1Msg, long roomId)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
-		Https https = new Https();
-		/* 请求头 */
-		Map<String, String> requestPropertys = new HashMap<String, String>();
-		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
-		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
-		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPAD);
-		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
-		requestPropertys.put(MyHttpHeaders.PA, StringUtil.getPa());
-		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
 		/* 请求参数 */
 		String payloadJson = "{\"nextTime\":" + String.valueOf(nextTime) + ",\"needTop1Msg\":"
 				+ String.valueOf(needTop1Msg) + ",\"roomId\":\"" + roomId + "\"}";
-		/* 发送请求 */
-		String messageStr = https.setDataType(HttpMethod.POST.name())
-													.setRequestProperty(requestPropertys)
-													.setPayloadJson(payloadJson)
-													.setUrl(HttpsURL.ROOM_MESSAGE_ALL)
-													.send();
-		return messageStr;
+		return httpsPocket(payloadJson, HttpsURL.ROOM_MESSAGE_ALL);
 	}
 
 	/**
@@ -315,27 +266,11 @@ public abstract class HttpsPICQ48 {
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyManagementException
 	 */
-	@SuppressWarnings("deprecation")
 	public static String httpsFlipcardContent(String questionId, String answerId)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
-		Https https = new Https();
-		/* 请求头 */
-		Map<String, String> requestPropertys = new HashMap<String, String>();
-		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
-		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
-		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPAD);
-		requestPropertys.put(MyHttpHeaders.PA, StringUtil.getPa());
-		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
-		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
 		/* 请求参数 */
 		String payloadJson = "{\"questionId\":\"" + questionId + "\",\"answerId\":\"" + answerId + "\"}";
-		/* 发送请求 */
-		String jsonStr = https.setDataType(HttpMethod.POST.name())
-											.setRequestProperty(requestPropertys)
-											.setPayloadJson(payloadJson)
-											.setUrl(HttpsURL.ROOM_MESSAGE_FLIPCARD)
-											.send();
-		return jsonStr;
+		return httpsPocket(payloadJson, HttpsURL.ROOM_MESSAGE_FLIPCARD);
 	}
 
 	/**
@@ -359,28 +294,12 @@ public abstract class HttpsPICQ48 {
 	 * @throws KeyManagementException
 	 * @throws JSONException 
 	 */
-	@SuppressWarnings("deprecation")
 	public static String httpsTrip(long lastTime, int groupId, boolean isMore, long userId)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
-		Https https = new Https();
-		/* 请求头 */
-		Map<String, String> requestPropertys = new HashMap<String, String>();
-		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
-		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
-		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPAD);
-		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
-		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
-		requestPropertys.put(MyHttpHeaders.PA, StringUtil.getPa());
 		/* 请求参数 */
 		String payloadJson = "{\"groupId\":" + groupId + ",\"lastTime\":\"" + lastTime + "\",\"isMore\":" + isMore
 				+ ",\"userId\":" + userId + "}";
-		/* 发送请求 */
-		String jsonStr = https.setDataType(HttpMethod.POST.name())
-											.setRequestProperty(requestPropertys)
-											.setPayloadJson(payloadJson)
-											.setUrl(HttpsURL.TRIP)
-											.send();
-		return jsonStr;
+		return httpsPocket(payloadJson, HttpsURL.TRIP);
 	}
 
 	/**
@@ -394,28 +313,12 @@ public abstract class HttpsPICQ48 {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	@SuppressWarnings("deprecation")
 	public static String httpsPocketUser(int needMuteInfo, long userId)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
-		Https https = new Https();
-		/* 请求头 */
-		Map<String, String> requestPropertys = new HashMap<String, String>();
-		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.ALL_VALUE);
-		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_UTF8_VALUE);
-		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.USER_AGENT_IPAD);
-		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
-		requestPropertys.put(MyHttpHeaders.PA, StringUtil.getPa());
-		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
 		/* 请求参数 */
 		String payloadJson = "{\"needMuteInfo\":" + String.valueOf(needMuteInfo) + ",\"userId\":\""
 				+ String.valueOf(userId) + "\"}";
-		/* 发送请求 */
-		String jsonStr = https.setDataType(HttpMethod.POST.name())
-											.setRequestProperty(requestPropertys)
-											.setPayloadJson(payloadJson)
-											.setUrl(HttpsURL.USER_SMALL)
-											.send();
-		return jsonStr;
+		return httpsPocket(payloadJson, HttpsURL.USER_SMALL);
 	}
 
 	/**
@@ -475,6 +378,13 @@ public abstract class HttpsPICQ48 {
 	 */
 	public static String httpsConversation(int targetType)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
+		/* 请求参数 */
+		String payloadJson = "{\"targetType\":" + targetType + "}";
+		return httpsPocket(payloadJson, HttpsURL.CONVERSATION);
+	}
+	
+	private static String httpsPocket(String payloadJson, String url) 
+			throws KeyManagementException, NoSuchAlgorithmException, IOException, JSONException {
 		Https https = new Https();
 		/* 请求头 */
 		Map<String, String> requestPropertys = new HashMap<String, String>();
@@ -484,13 +394,11 @@ public abstract class HttpsPICQ48 {
 		requestPropertys.put(MyHttpHeaders.APPINFO, MyMediaType.APPINFO);
 		requestPropertys.put(MyHttpHeaders.PA, StringUtil.getPa());
 		requestPropertys.put(MyHttpHeaders.POCKET_TOKEN, getToken());
-		/* 请求参数 */
-		String payloadJson = "{\"targetType\":" + targetType + "}";
 		/* 发送请求 */
 		String jsonStr = https.setDataType(HttpMethod.POST.name())
 												.setPayloadJson(payloadJson)
 												.setRequestProperty(requestPropertys)
-												.setUrl(HttpsURL.CONVERSATION)
+												.setUrl(url)
 												.send();
 		return jsonStr;
 	}
@@ -504,25 +412,12 @@ public abstract class HttpsPICQ48 {
 	 * @throws NoSuchAlgorithmException
 	 * @throws IOException
 	 */
-	public static String httpsDetail(long id) 
+	public static String httpsTaobaDetail(long id)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException {
-		Https https = new Https();
-		/* 请求头 */
-		Map<String, String> requestPropertys = new HashMap<String, String>();
-		requestPropertys.put(MyHttpHeaders.ACCEPT, MyMediaType.SAFARI_VALUE);
-		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.SAFARI_USER_AGENT);
-		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_VALUE);
 		/* 请求参数 */
 		long requestTime = System.currentTimeMillis() / 1000;
-		String payloadJson = StringUtil.encodePayloadJson(
-				"{\"id\":\"" + id + "\",\"requestTime\":" + requestTime + "000,\"pf\":\"h5\"}");
-		/* 发送请求 */
-		String resultStr = https.setDataType(HttpMethod.POST.name())
-											.setUrl(HttpsURL.TAOBA_DETAIL)
-											.setPayloadJson(payloadJson)
-											.setRequestProperty(requestPropertys)
-											.send();
-		return StringUtil.decodeRequestResult(resultStr);
+		String payloadJson = "{\"id\":\"" + id + "\",\"requestTime\":" + requestTime + "000,\"pf\":\"h5\"}";
+		return httpsTaoba(payloadJson, HttpsURL.TAOBA_DETAIL);
 	}
 	
 	/**
@@ -537,7 +432,34 @@ public abstract class HttpsPICQ48 {
 	 * @throws NoSuchAlgorithmException
 	 * @throws IOException
 	 */
-	public static String httpsJoin(boolean ismore, int limit, long id, int offset) 
+	public static String httpsTaobaJoin(boolean ismore, int limit, long id, int offset)
+			throws KeyManagementException, NoSuchAlgorithmException, IOException {
+		/* 请求参数 */
+		long requestTime = System.currentTimeMillis();
+		String payloadJson = "{\"ismore\":" + ismore + ",\"limit\":" + limit + ",\"id\":\"" + id + "\",\"offset\":"
+				+ offset + ",\"requestTime\":" + requestTime + ",\"_version_\":1,\"pf\":\"h5\"}";
+		return httpsTaoba(payloadJson, HttpsURL.TAOBA_JOIN);
+	}
+	
+	/**
+	 * 发送Https请求，获取桃叭集资排名列表。
+	 * 
+	 * @param id 项目ID
+	 * @return 叭项目排名列表的json字符串
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 */
+	public static String httpsTaobaRank(long id) 
+			throws KeyManagementException, NoSuchAlgorithmException, IOException {
+		/* 请求参数 */
+		long requestTime = System.currentTimeMillis();
+		String payloadJson = "{\"id\":\"" + id + "\",\"requestTime\":" + requestTime
+				+ ",\"_version_\":1,\"pf\":\"h5\"}";
+		return httpsTaoba(payloadJson, HttpsURL.TAOBA_RANK);
+	}
+	
+	private static String httpsTaoba(String payloadJson, String url) 
 			throws KeyManagementException, NoSuchAlgorithmException, IOException {
 		Https https = new Https();
 		/* 请求头 */
@@ -546,17 +468,13 @@ public abstract class HttpsPICQ48 {
 		requestPropertys.put(MyHttpHeaders.USER_AGENT, MyMediaType.SAFARI_USER_AGENT);
 		requestPropertys.put(MyHttpHeaders.CONTENT_TYPE, MyMediaType.APPLICATION_JSON_VALUE);
 		/* 请求参数 */
-		long requestTime = System.currentTimeMillis();
-		String payloadJson = StringUtil.encodePayloadJson(
-				"{\"ismore\":" + ismore + ",\"limit\":" + limit + ",\"id\":\"" + id + "\",\"offset\":" + offset
-						+ ",\"requestTime\":" + requestTime + ",\"_version_\":1,\"pf\":\"h5\"}");
+		payloadJson = StringUtil.encodePayloadJson(payloadJson);
 		/* 发送请求 */
 		String resultStr = https.setDataType(HttpMethod.POST.name())
-											.setUrl(HttpsURL.TAOBA_JOIN)
+											.setUrl(url)
 											.setPayloadJson(payloadJson)
 											.setRequestProperty(requestPropertys)
 											.send();
 		return StringUtil.decodeRequestResult(resultStr);
 	}
-	
 }

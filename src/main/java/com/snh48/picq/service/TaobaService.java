@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.snh48.picq.entity.taoba.TaobaDetail;
 import com.snh48.picq.entity.taoba.TaobaJoin;
+import com.snh48.picq.entity.taoba.TaobaMonitor;
 import com.snh48.picq.vo.TaobaMonitorVO;
 
 /**
@@ -60,5 +61,17 @@ public interface TaobaService {
 	 * @return {@link TaobaMonitorVO}集合
 	 */
 	List<TaobaMonitorVO> getCacheTaobaMonitor(long detailId);
+
+	/**
+	 * 获取桃叭项目列表
+	 * 
+	 * @return {@link TaobaDetail}集合
+	 */
+	List<TaobaDetail> getDetails();
+
+	/**
+	 * 插入/更新桃叭监控配置
+	 */
+	void saveMonitor(TaobaMonitor monitor);
 
 }

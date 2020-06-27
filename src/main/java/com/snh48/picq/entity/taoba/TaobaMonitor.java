@@ -19,7 +19,7 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name = "TAOBA_COMMUNITY_MONITOR")
+@Table(name = "MONITOR_TAOBA_COMMUNITY")
 public class TaobaMonitor implements Serializable {
 
 	private static final long serialVersionUID = 7653820413629275327L;
