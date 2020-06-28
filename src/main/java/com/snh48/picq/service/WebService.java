@@ -48,4 +48,20 @@ public interface WebService {
 	 */
 	public List<MtboxVO> getModianDetailsTable(String projectIds);
 
+	/**
+	 * 获取摩点项目的名称
+	 * 
+	 * @param detailIds 项目ID，多个ID用逗号间隔
+	 * @return 可视化页面的总标题
+	 */
+	public String getTaobaDetailNames(String detailIds);
+
+	/**
+	 * 获取桃叭项目集资详细列表
+	 * 
+	 * @param detailIds 项目ID，多个ID用逗号间隔
+	 * @return 可视化页面的集资详细表格
+	 */
+	public List<MtboxVO> getTaobaJoinTable(String detailIds);
+
 }

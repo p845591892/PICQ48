@@ -307,4 +307,15 @@ public class StringUtil extends StringUtils {
 		return compressed;
 	}
 
+	/**
+	 * 判断字符串是否为数字
+	 * 
+	 * @param str 被验证字符串
+	 * @return 如果是返回true，否则返回false
+	 */
+	public static boolean isNumeric(String str) {
+		Pattern pattern = Pattern.compile("[0-9]*");
+		return pattern.matcher(str).matches();
+	}
+
 }

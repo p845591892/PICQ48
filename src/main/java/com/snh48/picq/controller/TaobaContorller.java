@@ -22,7 +22,7 @@ import com.snh48.picq.vo.ResultVO;
 @RestController
 @RequestMapping("/taoba")
 public class TaobaContorller {
-	
+
 	@Autowired
 	private TaobaService taobaService;
 
@@ -36,6 +36,60 @@ public class TaobaContorller {
 		taobaService.saveMonitor(monitor);
 		result.setStatus(HttpsURLConnection.HTTP_OK);
 		result.setCause("success");
+		return result;
+	}
+
+	/**
+	 * 删除一条桃叭监控配置并刷新缓存
+	 * 
+	 * @param monitorId 监控配置ID
+	 * @param detailId  项目ID
+	 */
+	@Log(desc = "删除桃叭监控配置", type = OperationType.DEL)
+	@PostMapping(value = "/monitor/delete")
+	public ResultVO addMonitor(long monitorId, long detailId) {
+		ResultVO result = new ResultVO();
+		taobaService.deleteMonitor(monitorId, detailId);
+		result.setStatus(HttpsURLConnection.HTTP_OK);
+		result.setCause("success");
+		return result;
+	}
+
+	/**
+	 * 新增一个桃叭项目
+	 */
+	@Log(desc = "新增桃叭项目", type = OperationType.ADD)
+	@PostMapping(value = "/add")
+	public ResultVO add(String detailUrl) {
+		ResultVO result = new ResultVO();
+		int flag = taobaService.add(detailUrl);
+		if (flag == 1) {
+			result.setStatus(HttpsURLConnection.HTTP_OK);
+			result.setCause("success");
+		} else if (flag == 2) {
+			result.setStatus(HttpsURLConnection.HTTP_INTERNAL_ERROR);
+			result.setCause("链接格式有误！");
+		}
+		return result;
+	}
+
+	/**
+	 * 删除桃叭集资项目
+	 * 
+	 * @param detailIds 项目ID，多个ID用逗号间隔
+	 */
+	@Log(desc = "删除桃叭项目", type = OperationType.DEL)
+	@PostMapping("/delete")
+	public ResultVO delete(String detailIds) {
+		ResultVO result = new ResultVO();
+		if (detailIds != null) {
+			taobaService.delete(detailIds);
+			result.setStatus(HttpsURLConnection.HTTP_OK);
+			result.setCause("success");
+		} else {
+			result.setStatus(HttpsURLConnection.HTTP_INTERNAL_ERROR);
+			result.setCause("ID不能为空");
+		}
 		return result;
 	}
 

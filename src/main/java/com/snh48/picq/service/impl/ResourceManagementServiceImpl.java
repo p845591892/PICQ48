@@ -407,7 +407,7 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 			sb.append("<td>" + qqName + "</td>");
 			sb.append("<td>" + qq + "</td>");
 			sb.append("<td>");
-			sb.append("<button class=\"btn btn-danger btn-xs\" onclick=\"deleteMonitor(" + id
+			sb.append("<button class=\"btn btn-danger btn-xs\" onclick=\"deleteMonitor(" + id + ", " + detailId
 					+ ")\"><i class=\"fa fa-trash-o\"></i></button>");
 			sb.append("</td>");
 			sb.append("</tr>");

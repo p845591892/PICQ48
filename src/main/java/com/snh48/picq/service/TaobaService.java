@@ -74,4 +74,34 @@ public interface TaobaService {
 	 */
 	void saveMonitor(TaobaMonitor monitor);
 
+	/**
+	 * 删除桃叭监控配置
+	 * 
+	 * @param monitorId 监控配置ID
+	 * @param detailId  桃叭项目ID
+	 */
+	void deleteMonitor(long monitorId, long detailId);
+
+	/**
+	 * 新增一个桃叭项目
+	 * 
+	 * @param detailUrl 集资链接
+	 */
+	int add(String detailUrl);
+
+	/**
+	 * 删除桃叭项目
+	 * 
+	 * @param detailIds 项目ID，多个用逗号间隔
+	 */
+	void delete(String detailIds);
+
+	/**
+	 * 获取桃叭项目
+	 * 
+	 * @param id 项目ID
+	 * @return {@link TaobaDetail}
+	 */
+	TaobaDetail getDetail(long id);
+
 }

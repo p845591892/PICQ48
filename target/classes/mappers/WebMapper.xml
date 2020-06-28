@@ -72,5 +72,26 @@
 		ORDER BY
 			ROUND(SUM(t.backer_money), 2) DESC
 	</select>
+	
+	<select id="findTaobaJoinTableByIds" parameterType="java.util.ArrayList" resultType="MtboxVO">
+		SELECT
+			j.nickname `name`,
+			j.avatar icon,
+			COUNT( j.user_id ) `count`,
+			ROUND( SUM( j.money ), 2 ) `data` 
+		FROM
+			taoba_join j 
+		WHERE
+			j.detail_id IN 
+			<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		GROUP BY
+			j.user_id,
+			j.nickname,
+			j.avatar 
+		ORDER BY
+			ROUND( SUM( j.money ), 2 ) DESC
+	</select>
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.snh48.picq.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.snh48.picq.core.Common.MonitorType;
 import com.snh48.picq.core.Common.RedisKey;
 import com.snh48.picq.dao.WebDao;
 import com.snh48.picq.entity.modian.MoDianPoolProject;
+import com.snh48.picq.entity.taoba.TaobaDetail;
 import com.snh48.picq.exception.RepositoryException;
 import com.snh48.picq.repository.modian.MoDianCommentRepository;
 import com.snh48.picq.repository.modian.MoDianPoolProjectRepository;
@@ -22,6 +24,7 @@ import com.snh48.picq.repository.snh48.MemberRepository;
 import com.snh48.picq.repository.snh48.RoomMessageRepository;
 import com.snh48.picq.repository.weibo.DynamicRepository;
 import com.snh48.picq.repository.weibo.WeiboUserRepository;
+import com.snh48.picq.service.TaobaService;
 import com.snh48.picq.service.WebService;
 import com.snh48.picq.utils.DateUtil;
 import com.snh48.picq.utils.RedisUtil;
@@ -76,6 +79,9 @@ public class WebServiceImpl implements WebService {
 	 */
 	@Autowired
 	private WebDao webDao;
+
+	@Autowired
+	private TaobaService taobaService;
 
 	public Map<String, MtboxVO> getMtboxData() {
 		Map<String, MtboxVO> map = new HashMap<String, MtboxVO>();
@@ -311,6 +317,32 @@ public class WebServiceImpl implements WebService {
 		String[] ids = projectIds.split(",");
 		List<MtboxVO> detailsTable = webDao.findModianDetailsTableByIds(ids);
 		return detailsTable;
+	}
+
+	@Override
+	public String getTaobaDetailNames(String detailIds) {
+		String[] ids = detailIds.split(",");
+		String[] detailNames = new String[ids.length];
+		BigDecimal money = new BigDecimal(0);
+		for (int i = 0; i < ids.length; i++) {
+			String id = ids[i];
+			TaobaDetail detail = taobaService.getDetail(Long.parseLong(id));
+			detailNames[i] = detail.getTitle();
+			money = money.add(new BigDecimal(detail.getDonation()));
+		}
+		StringBuilder result = new StringBuilder();
+		result.append(StringUtil.join(detailNames, "；"));
+		result.append("。");
+		result.append("集资总额：￥");
+		result.append(money.toPlainString());
+		return result.toString();
+	}
+
+	@Override
+	public List<MtboxVO> getTaobaJoinTable(String detailIds) {
+		String[] ids = detailIds.split(",");
+		List<MtboxVO> joinTable = webDao.findTaobaJoinTableByIds(ids);
+		return joinTable;
 	}
 
 }

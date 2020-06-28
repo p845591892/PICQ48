@@ -22,4 +22,6 @@ public interface WebDao {
 
 	List<MtboxVO> findModianDetailsTableByIds(String[] ids);
 
+	List<MtboxVO> findTaobaJoinTableByIds(String[] ids);
+
 }

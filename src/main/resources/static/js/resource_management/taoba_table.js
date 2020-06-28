@@ -23,7 +23,7 @@ $(document).ready(function () {
             formatter: posterHtml
         }, {
             field: "title",
-            title: "标题",
+            title: "集资项目",
             width: 150,
             formatter: titleHtml
         }, {
@@ -128,9 +128,9 @@ var runningHtml = function (value, row, index) {
  */
 function addVideoShow() {
     var html = "<div id=\"layer_add\"><div class=\"row\">"
-        + "<label class=\"control-label col-xs-3 text-right\">项目ID：</label><div class=\"col-xs-8\">"
-        + "<input name=\"id\" class=\"form-control\">"
-        + "<span class=\"help-block\">例如：[https://zhongchou.modian.com/item/27659.html?_mdsf1=1383779_share_unkown_ios_xiangmu_27659]<br>其中的27659就是该项目ID</span>"
+        + "<label class=\"control-label col-xs-3 text-right\">桃叭链接：</label><div class=\"col-xs-8\">"
+        + "<input name=\"detailUrl\" class=\"form-control\">"
+        + "<span class=\"help-block\">例如：https://www.tao-ba.club/#/pages/idols/detail?id=5005</span>"
         + "</div></div></div>";
 
     layer.open({
@@ -142,11 +142,11 @@ function addVideoShow() {
         btn: ["保存", "取消"],
         yes: function (index, layero) {
             openLoad();
-            var id = layero.find("input[name='id']").val();
+            var detailUrl = layero.find("input[name='detailUrl']").val();
             $.ajax({
-                url: "/modian/add",
+                url: "/taoba/add",
                 data: {
-                    "id": id
+                    "detailUrl": detailUrl
                 },
                 type: "post",
                 success: function (data) {
@@ -174,16 +174,16 @@ function deleteVideoShow() {
     if (ids == null) {
         return;
     }
-    layer.confirm("删除摩点项目后关联的集资记录也会一并删除", {
+    layer.confirm("删除桃叭项目后关联的集资记录和监控配置也会一并删除，是否要执行删除操作？", {
         icon: 3,
         title: '提示'
     }, function (index) {
         openLoad();
         $.ajax({
-            url: "/modian/delete",
+            url: "/taoba/delete",
             type: "post",
             data: {
-                "id": ids
+                "detailIds": ids
             },
             success: function (data) {
                 closeLoad();
@@ -286,17 +286,18 @@ function showAddMonitor(btn, detailId) {
  * @param {*}
  *            id
  */
-function deleteMonitor(id) {
+function deleteMonitor(monitorId, detailId) {
     layer.confirm('确定要删除该条配置吗？', {
         icon: 3,
         title: '提示'
     }, function (index) {
         openLoad();
         $.ajax({
-            url: "/modian-monitor/delete",
+            url: "/taoba/monitor/delete",
             type: "post",
             data: {
-                "id": id
+                "monitorId": monitorId,
+                "detailId": detailId
             },
             success: function (data) {
                 closeLoad();
@@ -342,6 +343,6 @@ function getSelectedIds() {
 function toVisual() {
     var ids = getSelectedIds();
     if (ids != null) {
-        window.location.href = "/data-visualization/modian-visual?projectIds=" + ids;
+        window.location.href = "/data-visualization/taoba-visual?detailIds=" + ids;
     }
 }

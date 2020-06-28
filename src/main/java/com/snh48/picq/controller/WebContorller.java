@@ -412,7 +412,7 @@ public class WebContorller {
 
 		return isMoblie;
 	}
-	
+
 	/**
 	 * @Title: toModianTable
 	 * @Description: 跳转到机器人配置-桃叭项目列表
@@ -421,6 +421,35 @@ public class WebContorller {
 	@GetMapping("/resource-management/taoba-table")
 	public ModelAndView toTaobaTable(ModelAndView mav) {
 		mav.setViewName("resource_management/taoba_table");
+		return mav;
+	}
+
+	/**
+	 * 跳转到可视化数据-桃叭项目
+	 * 
+	 * @param detailIds 项目ID，多个用逗号间隔
+	 */
+	@Log(desc = "查询桃叭项目的集资详情", type = OperationType.SELECT)
+	@GetMapping("/data-visualization/taoba-visual")
+	public ModelAndView toTaobaVisual(ModelAndView mav, String detailIds) {
+		mav.setViewName("data_visualization/taoba_visual");
+		mav.addObject("detailIds", detailIds);
+		if (!StringUtil.isEmpty(detailIds)) {
+			String[] ids = detailIds.split(",");
+			for (int i = 0; i < ids.length; i++) {
+				if (!MathUtil.isNumeric(ids[i])) {
+					mav.addObject("detailNames", null);
+					mav.addObject("joinTable", null);
+					mav.addObject("msg", "查询ID填写错误");
+					return mav;
+				}
+			}
+			mav.addObject("detailNames", webService.getTaobaDetailNames(detailIds));
+			mav.addObject("joinTable", webService.getTaobaJoinTable(detailIds));
+		} else {
+			mav.addObject("detailNames", null);
+			mav.addObject("joinTable", null);
+		}
 		return mav;
 	}
 
