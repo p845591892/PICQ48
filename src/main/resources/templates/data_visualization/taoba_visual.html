@@ -9,6 +9,7 @@
 <meta name="author" content="Dashboard">
 <meta name="keyword"
 	content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+<meta name="referrer" content="never">
 
 <title>PICQ48</title>
 
@@ -181,8 +182,8 @@
 									<tbody>
 										<tr th:each="join,joinStat:${joinTable}">
 											<td th:text="${joinStat.count}" width="80"></td>
-											<td width="160"><img th:src="${join.icon}" class="img-circle"
-												width="60" /></td>
+											<td width="160"><img th:src="${join.icon}"
+												class="img-circle" width="60" /></td>
 											<td th:text="${join.name}"></td>
 											<td th:text="${join.count}"></td>
 											<td class="numeric" th:text="'￥' + ${join.data}"></td>

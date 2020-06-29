@@ -18,13 +18,13 @@ import lombok.extern.log4j.Log4j2;
 public class DataSourceQQThread implements Runnable {
 
 	@Autowired
-	private QQCommunityService QQCommunityService;
+	private QQCommunityService qqCommunityService;
 
 	@Override
 	public void run() {
 		try {
 			Thread.sleep(1000);
-			QQCommunityService.syncQQCommunity();
+			qqCommunityService.syncQQCommunity();
 			log.info("---------同步QQ列表完毕---------");
 		} catch (InterruptedException e) {
 			e.printStackTrace();

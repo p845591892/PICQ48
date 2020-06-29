@@ -117,5 +117,4 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/redis/clients/jedis/3.1.0/jedis-3.1.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/commons/commons-pool2/2.7.0/commons-pool2-2.7.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/github/theborakompanioni/thymeleaf-extras-shiro/2.0.0/thymeleaf-extras-shiro-2.0.0.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/io/webfolder/cdp4j/4.2.2/cdp4j-4.2.2.jar" enabled="true" runInBatchMode="false"/>
 </factorypath>

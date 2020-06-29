@@ -9,6 +9,7 @@
 <meta name="author" content="Dashboard">
 <meta name="keyword"
 	content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+<meta name="referrer" content="never">
 
 <title>PICQ48</title>
 
@@ -116,8 +117,8 @@
 							class="fa fa-desktop"></i> <span>可视化数据</span>
 					</a>
 						<ul class="sub">
-							<li shiro:hasPermission="modian-visual:url"><a
-								href="/data-visualization/modian-visual">摩点项目数据</a></li>
+							<li><a href="/data-visualization/modian-visual">摩点项目数据</a></li>
+							<li><a href="/data-visualization/taoba-visual">桃叭项目数据</a></li>
 							<li><a href="/data-visualization/room-message">口袋房间消息</a></li>
 						</ul></li>
 					<li class="sub-menu"><a href="/help"> <i
@@ -165,14 +166,16 @@
 
 	<!-- 工具容器 -->
 	<div id="toolbar" class="btn-group">
-		<button id="btn_add" class="btn btn-success" onclick="addVideoShow()">
+		<button id="btn_add" class="btn btn-success" onclick="addVideoShow()"
+			shiro:hasPermission="taoba:add">
 			<i class="fa fa-plus-circle fa-lg"></i> 新增
 		</button>
 		<button id="btn_delete" class="btn btn-danger"
-			onclick="deleteVideoShow()">
+			onclick="deleteVideoShow()" shiro:hasPermission="taoba:delete">
 			<i class="fa fa-trash-o"></i> 删除
 		</button>
-		<button id="btn_visual" class="btn btn-warning" onclick="toVisual()">
+		<button id="btn_visual" class="btn btn-warning" onclick="toVisual()"
+			shiro:hasPermission="taoba-visual:url">
 			<i class="fa fa-table"></i> 详细
 		</button>
 	</div>

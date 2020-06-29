@@ -179,6 +179,14 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/modian-monitor/add", "perms[modian-monitor:add]");// 新增摩点项目监控接口
 		filterChainDefinitionMap.put("/modian-monitor/delete", "perms[modian-monitor:delete]");// 删除摩点项目监控接口
 		/*
+		 * L--L桃叭项目列表
+		 */
+		filterChainDefinitionMap.put("/resource-management/taoba-table", "anon"); // 桃叭项目列表跳转URL
+		filterChainDefinitionMap.put("/taoba/add", "perms[taoba:add]");// 新增桃叭项目接口
+		filterChainDefinitionMap.put("/taoba/delete", "perms[taoba:delete]");// 删除桃叭项目接口
+		filterChainDefinitionMap.put("/taoba/monitor/add", "perms[taoba-monitor:add]");// 新增桃叭项目监控接口
+		filterChainDefinitionMap.put("/taoba/monitor/delete", "perms[taoba-monitor:delete]");// 删除桃叭项目监控接口
+		/*
 		 * L--L微博用户列表
 		 */
 		filterChainDefinitionMap.put("/resource-management/weibo-table", "anon");// 微博用户列表跳转url
@@ -209,6 +217,10 @@ public class ShiroConfig {
 		 * L--L摩点项目数据
 		 */
 		filterChainDefinitionMap.put("/data-visualization/modian-visual", "perms[modian-visual:url]");// 可视化摩点数据跳转url
+		/*
+		 * L--L桃叭项目数据
+		 */
+		filterChainDefinitionMap.put("/data-visualization/taoba-visual", "perms[taoba-visual:url]"); // 可视化桃叭集资统计跳转URL
 		/*
 		 * L--L口袋房间消息数据
 		 */

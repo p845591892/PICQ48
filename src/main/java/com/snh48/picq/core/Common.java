@@ -9,10 +9,10 @@ package com.snh48.picq.core;
 public class Common {
 
 	public class PicqSystem {
-		public static final String UPDATE_TIME = "更新时间：2020-06-23";
-		public static final String PICQ48_VERSION = "【PQIC48版本】  1.5.0";
+		public static final String UPDATE_TIME = "更新时间：2020-06-29";
+		public static final String PICQ48_VERSION = "【PQIC48版本】  2.0.0";
 		public static final String PICQ_BOT_X_VERSION = "【PicqBotX版本】  4.12.0.1015.PRE";
-		public static final String UPDATE_MESSAGE = "本次更新：\n修复 获取不到口袋房间消息的问题。";
+		public static final String UPDATE_MESSAGE = "重大更新：\n新增 桃叭监控功能\n新增 桃叭监控配置页面和统计页面。";
 	}
 
 	public class ExpireTime {
