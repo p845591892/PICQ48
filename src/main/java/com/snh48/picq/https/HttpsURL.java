@@ -8,9 +8,6 @@ package com.snh48.picq.https;
  */
 public class HttpsURL {
 
-	/** 发送请求的间隔时间 */
-	public static final long REQUEST_INTERVAL_TIME = 5000l;
-
 	/** 图片 视频等域名地址 */
 	public static final String SOURCE = "https://source.48.cn";
 

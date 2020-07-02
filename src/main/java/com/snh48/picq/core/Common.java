@@ -9,10 +9,10 @@ package com.snh48.picq.core;
 public class Common {
 
 	public class PicqSystem {
-		public static final String UPDATE_TIME = "更新时间：2020-06-29";
-		public static final String PICQ48_VERSION = "【PQIC48版本】  2.0.0";
+		public static final String UPDATE_TIME = "更新时间：2020-07-03";
+		public static final String PICQ48_VERSION = "【PQIC48版本】  2.0.1";
 		public static final String PICQ_BOT_X_VERSION = "【PicqBotX版本】  4.12.0.1015.PRE";
-		public static final String UPDATE_MESSAGE = "重大更新：\n新增 桃叭监控功能\n新增 桃叭监控配置页面和统计页面。";
+		public static final String UPDATE_MESSAGE = "本次更新：\n修改 单次请求间隔，防止再次被封IP。";
 	}
 
 	public class ExpireTime {
@@ -29,8 +29,9 @@ public class Common {
 	public class SleepMillis {
 		public static final long SECOND = 1000;
 		public static final long SECOND_5 = SECOND * 5;
+		public static final long SECOND_10 = SECOND * 10;
 		public static final long MINUTE = SECOND * 60;
-		public static final long REQUEST = SECOND * 8;
+		public static final long REQUEST = SECOND_10;
 	}
 
 	public class RedisKey {

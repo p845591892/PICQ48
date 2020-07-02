@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.snh48.picq.core.Common.SleepMillis;
 import com.snh48.picq.entity.weibo.WeiboUser;
-import com.snh48.picq.https.HttpsURL;
 import com.snh48.picq.https.WeiboTool;
 import com.snh48.picq.repository.weibo.WeiboUserRepository;
 
@@ -36,10 +36,11 @@ public class SyncWeiboUserJob extends QuartzJobBean {
 		List<WeiboUser> sourceUserList = weiboUserRepository.findAll();
 		for (WeiboUser sourceUser : sourceUserList) {
 			try {
-				Thread.sleep(HttpsURL.REQUEST_INTERVAL_TIME);
+				Thread.sleep(SleepMillis.REQUEST);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				log.error("线程休眠错误，异常：{}", e.toString());
 			}
+			
 			WeiboUser weiboUser = WeiboTool.getUser(sourceUser.getContainerUserId());
 			if (weiboUser != null) {
 				weiboUserRepository.save(weiboUser);

@@ -4,7 +4,7 @@
 本项目基于zztyyh项目进行改造，重构数据监控模块逻辑，重写发送消息模块，但未改变表数据结构，前端页面也未做更改。<br/>
 原项目git：https://github.com/p845591892/zztyyh  <br/>
 本项目的QQ交互部分使用基于酷Q的HTTP插件：https://github.com/HyDevelop/PicqBotX  <br/>
-部署地址：[PICQ](http://203.195.205.79:8080/index)
+部署地址：[PICQ48](http://106.55.41.91:8080/index)
 
 软件：酷Q Air / 酷Q Pro Windows环境下安装
 

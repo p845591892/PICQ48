@@ -11,10 +11,10 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.snh48.picq.core.Common.MsgSend;
+import com.snh48.picq.core.Common.SleepMillis;
 import com.snh48.picq.entity.QQCommunity;
 import com.snh48.picq.entity.weibo.Dynamic;
 import com.snh48.picq.entity.weibo.WeiboUser;
-import com.snh48.picq.https.HttpsURL;
 import com.snh48.picq.https.WeiboTool;
 import com.snh48.picq.kuq.KuqManage;
 import com.snh48.picq.repository.weibo.DynamicRepository;
@@ -62,9 +62,9 @@ public class SyncWeiboDynamicJob extends QuartzJobBean {
 //			log.info("同步微博用户动态==>>{}", weiboUser.getUserName());
 
 			try {
-				Thread.sleep(HttpsURL.REQUEST_INTERVAL_TIME);
+				Thread.sleep(SleepMillis.REQUEST);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				log.error("线程休眠错误，异常：{}", e.toString());
 			}
 
 			long containerDynamicId = weiboUser.getContainerDynamicId();

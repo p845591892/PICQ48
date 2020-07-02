@@ -52,7 +52,7 @@ public class SendUpdateMessageThread implements Runnable {
 		mb.newLine().add("酷Q版本信息：");
 		mb.newLine().add("【型号】  " + ver.getCoolqEdition());
 		mb.newLine().add("【版本】  " + ver.getPluginVersion()).newLine();
-		mb.newLine().add("主页：http://203.195.205.79:8080/index");
+		mb.newLine().add("主页：http://106.55.41.91:8080/index");
 		mb.newLine().add("指令功能帮助请输入：-help");
 		mb.newLine().add(PicqSystem.UPDATE_MESSAGE);
 

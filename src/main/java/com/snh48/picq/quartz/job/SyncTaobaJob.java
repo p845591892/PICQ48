@@ -186,6 +186,8 @@ public class SyncTaobaJob extends QuartzJobBean {
 		sb.append("\n");
 		sb.append("支持了".concat(join.getMoney()).concat("元。"));
 		sb.append("\n");
+		sb.append("______________________________");
+		sb.append("\n");
 		sb.append("非常感谢支持🙏");
 		sb.append("\n");
 		sb.append("已筹集：".concat(detail.getDonation()).concat("元"));

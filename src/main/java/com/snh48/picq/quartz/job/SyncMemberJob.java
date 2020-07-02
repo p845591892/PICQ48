@@ -12,6 +12,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.snh48.picq.core.Common.MonitorType;
+import com.snh48.picq.core.Common.SleepMillis;
 import com.snh48.picq.dao.MemberDao;
 import com.snh48.picq.entity.snh48.Member;
 import com.snh48.picq.https.JsonPICQ48;
@@ -51,6 +52,12 @@ public class SyncMemberJob extends QuartzJobBean {
 		}
 		
 		for (Member member : memberList) {
+			try {
+				Thread.sleep(SleepMillis.REQUEST);
+			} catch (InterruptedException e) {
+				log.error("线程休眠错误，异常：{}", e.toString());
+			}
+			
 			long memberId = member.getId();
 			long roomId = httpsService.getRoomId(memberId);
 			
