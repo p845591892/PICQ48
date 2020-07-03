@@ -1,5 +1,6 @@
 package com.snh48.picq.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import com.snh48.picq.entity.QQCommunity;
 import com.snh48.picq.repository.QQCommunityRepository;
 import com.snh48.picq.repository.modian.CommentMonitorRepostiory;
 import com.snh48.picq.repository.snh48.RoomMonitorRepository;
+import com.snh48.picq.repository.taoba.TaobaMonitorRepository;
 import com.snh48.picq.repository.weibo.DynamicMonitorRepository;
 import com.snh48.picq.service.QQCommunityService;
 
@@ -53,6 +55,9 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 	private RoomMonitorRepository roomMonitorRepository;
 
 	@Autowired
+	private TaobaMonitorRepository taobaMonitorRepository;
+
+	@Autowired
 	private PicqBotX bot;
 
 	public int addQQCommunity(QQCommunity qqCommunity) {
@@ -88,6 +93,7 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 			commentMonitorRepostiory.deleteByCommunityId(Long.parseLong(idStr));
 			dynamicMonitorRepository.deleteByCommunityId(Long.parseLong(idStr));
 			roomMonitorRepository.deleteByCommunityId(Long.parseLong(idStr));
+			taobaMonitorRepository.deleteByCommunityId(Long.parseLong(idStr));
 			qqCommunityRepository.deleteById(Long.parseLong(idStr));
 		}
 		return HttpsURLConnection.HTTP_OK;
@@ -99,10 +105,11 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 		if (icqHttpApi == null) {
 			return false;
 		}
-
+		
 		// 刷新缓存
 		bot.getAccountManager().refreshCache();
 
+		List<QQCommunity> newList = new ArrayList<QQCommunity>();
 		// 好友列表
 		List<RFriend> rFriendList = icqHttpApi.getFriendList().data;
 		for (RFriend rFriend : rFriendList) {
@@ -110,7 +117,7 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 			qq.setId(rFriend.getUserId());
 			qq.setCommunityName(rFriend.getNickname());
 			qq.setQqType(QQType.FRIEND);
-			qqCommunityRepository.save(qq);
+			newList.add(qq);
 			log.info("同步好友[{}]", rFriend.getUserId());
 		}
 
@@ -121,10 +128,31 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 			qq.setId(rGroup.getGroupId());
 			qq.setCommunityName(rGroup.getGroupName());
 			qq.setQqType(QQType.GROUP);
-			qqCommunityRepository.save(qq);
+			newList.add(qq);
 			log.info("同步群[{}]", rGroup.getGroupId());
 		}
+		qqCommunityRepository.saveAll(newList);
+		
+		// 差集
+		List<QQCommunity> sourceList = qqCommunityRepository.findAll();
+		sourceList.removeAll(newList);
+		
+		String[] ids = new String[sourceList.size()];
+		for (int i = 0; i < sourceList.size(); i++) {
+			ids[i] = String.valueOf(sourceList.get(i).getId());
+		}
+		deleteQQCommunity(String.join(",", ids));
+		
 		return true;
+	}
+
+	@Override
+	public void truncate() {
+		try {
+			qqCommunityRepository.deleteAll();
+		} catch (Exception e) {
+			log.error("清空QQ列表失败，异常：{}", e.toString());
+		}
 	}
 
 }

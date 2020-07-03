@@ -27,10 +27,15 @@ public interface QQCommunityService {
 	 * @author JuFF_白羽
 	 */
 	int deleteQQCommunity(String id);
-	
+
 	/**
 	 * 同步QQ列表
 	 */
 	boolean syncQQCommunity();
+
+	/**
+	 * 清空QQ列表
+	 */
+	void truncate();
 
 }

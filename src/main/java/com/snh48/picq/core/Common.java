@@ -10,9 +10,9 @@ public class Common {
 
 	public class PicqSystem {
 		public static final String UPDATE_TIME = "更新时间：2020-07-03";
-		public static final String PICQ48_VERSION = "【PQIC48版本】  2.0.1";
-		public static final String PICQ_BOT_X_VERSION = "【PicqBotX版本】  4.12.0.1015.PRE";
-		public static final String UPDATE_MESSAGE = "本次更新：\n修改 单次请求间隔，防止再次被封IP。";
+		public static final String PICQ48_VERSION = "【PQIC48版本】  2.0.2";
+		public static final String PICQ_BOT_X_VERSION = "【PicqBotX版本】  4.15.0.1058";
+		public static final String UPDATE_MESSAGE = "本次更新：\n升级 酷Q插件版本至最新\n优化 部分代码逻辑";
 	}
 
 	public class ExpireTime {

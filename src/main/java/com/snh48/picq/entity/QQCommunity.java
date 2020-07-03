@@ -45,5 +45,5 @@ public class QQCommunity implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "QQ_TYPE", length = 20)
 	private QQType qqType;
-
+	
 }

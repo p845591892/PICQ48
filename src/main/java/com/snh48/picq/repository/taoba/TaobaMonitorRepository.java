@@ -30,4 +30,9 @@ public interface TaobaMonitorRepository
 	@Query("delete from TaobaMonitor t where t.detailId = ?1")
 	int deleteByDetailId(long id);
 
+	@Transactional
+	@Modifying
+	@Query("delete from TaobaMonitor t where t.communityId = ?1")
+	int deleteByCommunityId(long parseLong);
+
 }
