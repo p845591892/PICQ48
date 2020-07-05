@@ -6,29 +6,23 @@
 
 	<select id="findActiveRoom" parameterType="java.util.Map" resultType="MtboxVO">
 		SELECT
-			*
+			b.room_name `name`,
+			CONCAT( b.group_name, '-', b.`name` ) `icon`,
+			COUNT( a.room_id ) `data` 
 		FROM
-			(
-				SELECT
-					a.room_name `name`,
-					CONCAT(a.group_name, '-', a.`name`) `icon`,
-					count(b.room_id) `data`
-				FROM
-					t_snh_member a
-					LEFT OUTER JOIN t_snh_room_message b ON a.room_id = b.room_id
-				WHERE
-					  b.message_time &gt;= #{beginDate, jdbcType=TIMESTAMP}
-				AND b.message_time &lt;= #{endDate, jdbcType=TIMESTAMP}
-				AND a.room_monitor = 1
-				GROUP BY
-					b.room_id,
-					a.room_name,
-					a.group_name,
-					a.`name`
-			) c
+			pocket_room_message_all a
+			LEFT JOIN t_snh_member b ON a.room_id = b.room_id 
+		WHERE
+			a.message_time &gt;= #{beginDate, jdbcType=TIMESTAMP}
+			AND a.message_time &lt;= #{endDate, jdbcType=TIMESTAMP}
+		GROUP BY
+			a.room_id,
+			b.room_name,
+			b.group_name,
+			b.`name` 
 		ORDER BY
-			c.`data` DESC
-		LIMIT 5
+			COUNT( a.room_id ) DESC 
+			LIMIT 5
 	</select>
 	
 	<select id="findActiveMembers" parameterType="java.util.Map" resultType="MtboxVO">
@@ -92,6 +86,19 @@
 			j.avatar 
 		ORDER BY
 			ROUND( SUM( j.money ), 2 ) DESC
+	</select>
+	
+	<select id="findBar" resultType="MtboxVO">
+		SELECT
+			COUNT( 1 ) `count`,
+			DATE_FORMAT( y.message_time, '%Y-%m-%d' ) `name` 
+		FROM
+			( SELECT t.message_time FROM pocket_room_message_all t ) y 
+		GROUP BY
+			DATE_FORMAT( y.message_time, '%Y-%m-%d' ) 
+		ORDER BY
+			DATE_FORMAT( y.message_time, '%Y-%m-%d' ) DESC 
+			LIMIT 7
 	</select>
 
 </mapper>

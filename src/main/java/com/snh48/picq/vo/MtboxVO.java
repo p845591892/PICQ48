@@ -22,4 +22,6 @@ public class MtboxVO implements Serializable{
 
 	private Integer count;
 	
+	private Object date;
+	
 }

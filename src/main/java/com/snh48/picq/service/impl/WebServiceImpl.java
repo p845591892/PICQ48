@@ -1,6 +1,8 @@
 package com.snh48.picq.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -167,17 +169,26 @@ public class WebServiceImpl implements WebService {
 			mtbox4 = (MtboxVO) RedisUtil.get(RedisKey.HTML_INDEX_MTBOX_4);
 
 		} else {
-			int modianCount = 0;
+			int count = 0;
 			try {
-				modianCount = moDianPoolProjectRepository.countByStatus(ModianStatus.COLLECTING);
+				int modianCount = moDianPoolProjectRepository.countByStatus(ModianStatus.COLLECTING);
+				count += modianCount;
 			} catch (Exception e) {
 				log.error("MoDianPoolProjectRepository.countByStatus失败，status={}，异常：{}", ModianStatus.COLLECTING,
 						e.toString());
 				throw new RepositoryException("获取正在监控的摩点项目个数失败", e);
 			}
 
-			mtbox4.setName("正在监控的摩点项目");
-			mtbox4.setData(modianCount);
+			try {
+				int taobaCount = taobaService.getDetailCountByRunning(true);
+				count += taobaCount;
+			} catch (Exception e) {
+				log.error("TaobaService.getDetailCountByRunning失败，running=true，异常：{}", e.toString());
+				throw new RepositoryException("获取正在监控的桃叭项目个数失败", e);
+			}
+
+			mtbox4.setName("正在监控的集资项目");
+			mtbox4.setData(count);
 			mtbox4.setIcon("<i class=\"fa fa-credit-card\"></i>");
 
 			String result = RedisUtil.setex(RedisKey.HTML_INDEX_MTBOX_4, mtbox4, ExpireTime.MINUTE_5);
@@ -284,7 +295,7 @@ public class WebServiceImpl implements WebService {
 			}
 		}
 
-		String result1 = RedisUtil.setex(RedisKey.HTML_INDEX_DS_ACTIVE_ROOMS, activeRooms, ExpireTime.MINUTE_5);
+		String result1 = RedisUtil.setex(RedisKey.HTML_INDEX_DS_ACTIVE_ROOMS, activeRooms, ExpireTime.HOUR);
 		String result2 = RedisUtil.setex(RedisKey.HTML_INDEX_DS_ACTIVE_MEMBERS, activeMembers, ExpireTime.MINUTE_5);
 		if ("error".equals(result1) || "error".equals(result2)) {
 			log.error(".ds中的数据存入Redis失败, ds={} or {}", RedisKey.HTML_INDEX_DS_ACTIVE_ROOMS,
@@ -343,6 +354,106 @@ public class WebServiceImpl implements WebService {
 		String[] ids = detailIds.split(",");
 		List<MtboxVO> joinTable = webDao.findTaobaJoinTableByIds(ids);
 		return joinTable;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<MtboxVO> getFirwinData() {
+		List<MtboxVO> vos = new ArrayList<MtboxVO>();
+
+		if (RedisUtil.exists(RedisKey.HTML_INDEX_WIN_TAOBA)) {
+			vos = (List<MtboxVO>) RedisUtil.get(RedisKey.HTML_INDEX_WIN_TAOBA);
+			return vos;
+		}
+
+		List<TaobaDetail> details = taobaService.getDetailsByRunning(true);
+		for (TaobaDetail detail : details) {
+			String name = "<a href=\"" + detail.getDetailUrl() + "\">" + detail.getTitle() + "</a>";
+			String icon = detail.getPoster();
+			int count = detail.getJoinUser();
+			String data = detail.getDonation();
+			BigDecimal time = new BigDecimal(detail.getEndTime().getTime() - System.currentTimeMillis());
+			BigDecimal div = new BigDecimal(1000 * 60 * 60);
+			String date = time.divide(div, 2).toPlainString();
+
+			MtboxVO firwin = new MtboxVO();
+			firwin.setName(name);
+			firwin.setIcon(icon);
+			firwin.setCount(count);
+			firwin.setData(data);
+			firwin.setDate(date);
+
+			vos.add(firwin);
+		}
+
+		String result = RedisUtil.setex(RedisKey.HTML_INDEX_WIN_TAOBA, vos, ExpireTime.MINUTE_5);
+		if ("error".equals(result)) {
+			log.error(".firwin中的数据存入Redis失败, firwin={}", RedisKey.HTML_INDEX_WIN_TAOBA);
+		}
+
+		return vos;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> getBarData() {
+		List<Integer> yList = new ArrayList<Integer>();
+		List<MtboxVO> xList;
+		int yMax = 10;
+
+		if (RedisUtil.exists(RedisKey.HTML_INDEX_BAR)) {
+			xList = (List<MtboxVO>) RedisUtil.get(RedisKey.HTML_INDEX_BAR);
+		} else {
+			xList = webDao.findBar();
+			
+			String result = RedisUtil.setex(RedisKey.HTML_INDEX_BAR, xList, ExpireTime.HOUR);
+			if ("error".equals(result)) {
+				log.error(".bar中的数据存入Redis失败, bar={}", RedisKey.HTML_INDEX_BAR);
+			}
+		}
+
+		// y轴最大值
+		for (MtboxVO x : xList) {
+			if (yMax < x.getCount()) {
+				yMax = x.getCount();
+			}
+		}
+		// 最大值向上取整
+		String yMaxStr = String.valueOf(yMax);
+		double size = Math.pow(10, yMaxStr.length() > 1 ? yMaxStr.length() - 2 : yMaxStr.length() - 1);
+		BigDecimal yMaxBigDecimal = new BigDecimal(yMaxStr)
+				.divide(new BigDecimal(size), 0)
+				.multiply(new BigDecimal(size));
+		yMaxStr = yMaxBigDecimal.toPlainString();
+		// 求差值
+		yMax = Integer.parseInt(yMaxStr);
+		int sub = yMax / 5;
+		// 加入yList
+		for (int i = 0; i < 5; i++) {
+			yList.add(yMax);
+			yMax -= sub;
+		}
+		yList.add(0);
+		// 赋值百分比，去掉年份
+		for (MtboxVO x : xList) {
+			int count = x.getCount();
+			String pro = new BigDecimal(count)
+					.multiply(new BigDecimal(100))
+					.divide(yMaxBigDecimal, 2)
+					.toPlainString()
+					.concat("%");
+			x.setData(pro);
+			String name = x.getName();
+			x.setName(name.substring(5));
+		}
+		// x轴倒序
+		Collections.reverse(xList);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("yList", yList);
+		map.put("xList", xList);
+
+		return map;
 	}
 
 }

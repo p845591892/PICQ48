@@ -106,10 +106,8 @@
 							<li><a href="/resource-management/modian-table">摩点项目列表</a></li>
 							<li><a href="/resource-management/taoba-table">桃叭项目列表</a></li>
 							<li><a href="/resource-management/weibo-table">微博用户列表</a></li>
-							<li shiro:hasPermission="qq-table:url"><a
-								href="/resource-management/qq-table">QQ列表</a></li>
-							<li shiro:hasPermission="quartz-confing-table:url"><a
-								href="/resource-management/quartz-confing-table">轮询配置列表</a></li>
+							<li><a href="/resource-management/qq-table">QQ列表</a></li>
+							<li><a href="/resource-management/quartz-confing-table">轮询配置列表</a></li>
 						</ul></li>
 					<li class="sub-menu"><a href="javascript:;"> <i
 							class="fa fa-desktop"></i> <span>可视化数据</span>
@@ -214,83 +212,43 @@
 							</div>
 							<!-- /row mt -->
 
-							<div class="row mt">
+							<div class="row mt firwin">
 								<!-- SERVER STATUS PANELS -->
 								<!-- 1-1窗 -->
-								<div class="col-md-4 col-sm-4 mb">
-									<div class="white-panel pn donut-chart">
-										<div class="white-header">
-											<h5>暂无数据展示</h5>
-										</div>
-										<div class="row">
-											<div class="col-sm-6 col-xs-6 goleft">
-												<p>
-													<i class="fa fa-database"></i> 70%
-												</p>
-											</div>
-										</div>
-										<canvas id="serverstatus01" height="120" width="120"></canvas>
-										<script>
-											var doughnutData = [ {
-												value : 70,
-												color : "#68dff0"
-											}, {
-												value : 30,
-												color : "#fdfdfd"
-											} ];
-											var myDoughnut = new Chart(document.getElementById("serverstatus01").getContext("2d")).Doughnut(doughnutData);
-										</script>
-									</div>
-								</div>
-								<!-- /col-md-4-->
-
-								<!-- 1-2窗 -->
-								<div class="col-md-4 col-sm-4 mb">
+								<div class="col-md-4 col-sm-4 mb" th:each="tbwin : ${tbwins}">
 									<div class="white-panel pn">
 										<div class="white-header">
-											<h5>暂无数据展示</h5>
+											<h5 th:utext="${tbwin.name}"></h5>
 										</div>
 										<div class="row">
 											<div class="col-sm-6 col-xs-6 goleft">
 												<p>
-													<i class="fa fa-heart"></i> 122
+													<i class="fa fa-shopping-cart"></i> <span
+														th:text="${tbwin.count}"></span><span>&nbsp;人</span>
 												</p>
 											</div>
 											<div class="col-sm-6 col-xs-6"></div>
 										</div>
 										<div class="centered">
-											<img src="assets/img/product.png" width="120" />
+											<img th:src="${tbwin.icon}" width="150" />
 										</div>
-									</div>
-								</div>
-								<!-- /col-md-4 -->
-
-								<!-- 1-3窗 -->
-								<div class="col-md-4 mb">
-									<div class="white-panel pn">
-										<div class="white-header">
-											<h5>暂无数据展示</h5>
-										</div>
-										<p>
-											<img src="assets/img/ui-zac.jpg" class="img-circle"
-												width="80" />
-										</p>
-										<p>
-											<b>Zac Snider</b>
-										</p>
 										<div class="row">
 											<div class="col-md-6">
-												<p class="small mt">MEMBER SINCE</p>
-												<p>2012</p>
+												<p class="small mt">剩余时间</p>
+												<p>
+													<span th:text="${tbwin.date}"></span><span>&nbsp;h</span>
+												</p>
 											</div>
 											<div class="col-md-6">
-												<p class="small mt">TOTAL SPEND</p>
-												<p>$ 47,60</p>
+												<p class="small mt">已筹金额</p>
+												<p>
+													<span>¥&nbsp;</span><span th:text="${tbwin.data}"></span>
+												</p>
 											</div>
 										</div>
 									</div>
 								</div>
-								<!-- /col-md-4 -->
+								<!-- /col-md-4-->
 
 							</div>
 							<!-- /row -->
@@ -376,51 +334,17 @@
 							<div class="row mt">
 								<!--CUSTOM CHART START -->
 								<div class="border-head">
-									<h3>暂无数据展示</h3>
+									<h3>口袋房间总消息数</h3>
 								</div>
 								<div class="custom-bar-chart">
 									<ul class="y-axis">
-										<li><span>10.000</span></li>
-										<li><span>8.000</span></li>
-										<li><span>6.000</span></li>
-										<li><span>4.000</span></li>
-										<li><span>2.000</span></li>
-										<li><span>0</span></li>
+										<li th:each="y : ${bar.yList}"><span th:text="${y}"></span></li>
 									</ul>
-									<div class="bar">
-										<div class="title">JAN</div>
-										<div class="value tooltips" data-original-title="8.500"
-											data-toggle="tooltip" data-placement="top">85%</div>
-									</div>
-									<div class="bar ">
-										<div class="title">FEB</div>
-										<div class="value tooltips" data-original-title="5.000"
-											data-toggle="tooltip" data-placement="top">50%</div>
-									</div>
-									<div class="bar ">
-										<div class="title">MAR</div>
-										<div class="value tooltips" data-original-title="6.000"
-											data-toggle="tooltip" data-placement="top">60%</div>
-									</div>
-									<div class="bar ">
-										<div class="title">APR</div>
-										<div class="value tooltips" data-original-title="4.500"
-											data-toggle="tooltip" data-placement="top">45%</div>
-									</div>
-									<div class="bar">
-										<div class="title">MAY</div>
-										<div class="value tooltips" data-original-title="3.200"
-											data-toggle="tooltip" data-placement="top">32%</div>
-									</div>
-									<div class="bar ">
-										<div class="title">JUN</div>
-										<div class="value tooltips" data-original-title="6.200"
-											data-toggle="tooltip" data-placement="top">62%</div>
-									</div>
-									<div class="bar">
-										<div class="title">JUL</div>
-										<div class="value tooltips" data-original-title="7.500"
-											data-toggle="tooltip" data-placement="top">75%</div>
+									<div class="bar" th:each="x : ${bar.xList}">
+										<div class="title" th:text="${x.name}"></div>
+										<div class="value tooltips"
+											th:data-original-title="${x.count}" data-toggle="tooltip"
+											data-placement="top" th:text="${x.data}"></div>
 									</div>
 								</div>
 								<!--custom chart end-->
@@ -438,7 +362,7 @@
 						<div class="col-lg-3 ds">
 
 							<!-- 今日口袋房间活跃成员 -->
-							<h3>今日口袋房间活跃成员</h3>
+							<h3>今日活跃成员（已监控）</h3>
 							<!-- First Member -->
 							<div class="desc">
 								<div class="thumb">
@@ -645,36 +569,6 @@
 	<script type="application/javascript">
 		
 		
-		
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         $(document).ready(function () {
             $("#date-popover").popover({ html: true, trigger: "manual" });
             $("#date-popover").hide();
@@ -707,35 +601,6 @@
             console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 	
 	
 	

@@ -38,4 +38,12 @@ public interface QQCommunityService {
 	 */
 	void truncate();
 
+	/**
+	 * 获取QQ/Q群对象
+	 * 
+	 * @param groupId qq/群号
+	 * @return {@link QQCommunity}
+	 */
+	QQCommunity getQQCommunity(long groupId);
+
 }

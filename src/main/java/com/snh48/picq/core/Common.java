@@ -9,10 +9,10 @@ package com.snh48.picq.core;
 public class Common {
 
 	public class PicqSystem {
-		public static final String UPDATE_TIME = "更新时间：2020-07-03";
-		public static final String PICQ48_VERSION = "【PQIC48版本】  2.0.2";
-		public static final String PICQ_BOT_X_VERSION = "【PicqBotX版本】  4.15.0.1058";
-		public static final String UPDATE_MESSAGE = "本次更新：\n升级 酷Q插件版本至最新\n优化 部分代码逻辑";
+		public static final String UPDATE_TIME = "更新时间：2020-07-06";
+		public static final String PICQ48_VERSION = "【PQIC48版本】  2.0.5";
+		public static final String PICQ_BOT_X_VERSION = "【PicqBotX版本】  4.12.0.1019.PRE";
+		public static final String UPDATE_MESSAGE = "本次更新：\n优化 一些功能的代码\n修正 一些页面显示数据\n新增 QQ列表-自定义欢迎消息功能";
 	}
 
 	public class ExpireTime {
@@ -64,21 +64,33 @@ public class Common {
 		/**
 		 * 主页横向监控数据
 		 */
-		public static final String HTML_INDEX_MTBOX = "html_index_mtbox";
-		public static final String HTML_INDEX_MTBOX_1 = HTML_INDEX_MTBOX + "_1";
-		public static final String HTML_INDEX_MTBOX_2 = HTML_INDEX_MTBOX + "_2";
-		public static final String HTML_INDEX_MTBOX_3 = HTML_INDEX_MTBOX + "_3";
-		public static final String HTML_INDEX_MTBOX_4 = HTML_INDEX_MTBOX + "_4";
-		public static final String HTML_INDEX_MTBOX_5 = HTML_INDEX_MTBOX + "_5";
+		public static final String HTML_INDEX_MTBOX = "html_index_mtbox_";
+		public static final String HTML_INDEX_MTBOX_1 = HTML_INDEX_MTBOX + "1";
+		public static final String HTML_INDEX_MTBOX_2 = HTML_INDEX_MTBOX + "2";
+		public static final String HTML_INDEX_MTBOX_3 = HTML_INDEX_MTBOX + "3";
+		public static final String HTML_INDEX_MTBOX_4 = HTML_INDEX_MTBOX + "4";
+		public static final String HTML_INDEX_MTBOX_5 = HTML_INDEX_MTBOX + "5";
 
 		/**
 		 * 主页纵向监控数据
 		 */
-		public static final String HTML_INDEX_DS = "html_index_ds";
-		public static final String HTML_INDEX_DS_ACTIVE_ROOMS = HTML_INDEX_DS + "_active_rooms";
-		public static final String HTML_INDEX_DS_ACTIVE_MEMBERS = HTML_INDEX_DS + "_active_members";
+		public static final String HTML_INDEX_DS = "html_index_ds_";
+		public static final String HTML_INDEX_DS_ACTIVE_ROOMS = HTML_INDEX_DS + "active_rooms";
+		public static final String HTML_INDEX_DS_ACTIVE_MEMBERS = HTML_INDEX_DS + "active_members";
+
+		/**
+		 * 主页窗口数据
+		 */
+		public static final String HTML_INDEX_WIN_ = "html_index_win_";
+		public static final String HTML_INDEX_WIN_TAOBA = "html_index_win_taoba";
+
+		/**
+		 * 主页条形图数据
+		 */
+		public static final String HTML_INDEX_BAR = "html_index_bar";
 
 		public static final String TAOBA_MONITOR_ = "taoba_monitor_";
+
 	}
 
 	/*
@@ -228,13 +240,13 @@ public class Common {
 		public static final String MENU = "menu";
 		public static final String BUTTON = "button";
 	}
-	
+
 	public class RoleType {
 		public static final String SYSTEM_ADMIN = "systemadmin";
 		public static final String YYH_DELEGATE = "delegate";
 		public static final String GENERAL = "general";
 	}
-	
+
 	public class UserState {
 		public static final int NOT_ACTIVE = 0;
 		public static final int NORMAL = 1;

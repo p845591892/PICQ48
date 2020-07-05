@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.snh48.picq.config.KuqProperties;
+import com.snh48.picq.entity.QQCommunity;
 import com.snh48.picq.service.QQCommunityService;
 import com.snh48.picq.utils.SpringUtil;
+import com.snh48.picq.utils.StringUtil;
 
 import cc.moecraft.icq.event.EventHandler;
 import cc.moecraft.icq.event.IcqListener;
@@ -28,6 +30,9 @@ public class EventNoticeListener extends IcqListener {
 
 	@Autowired
 	private KuqProperties properties;
+	
+	@Autowired
+	private QQCommunityService qqCommunityService;
 
 	/**
 	 * 加好友提醒
@@ -64,16 +69,21 @@ public class EventNoticeListener extends IcqListener {
 	 * @throws InterruptedException
 	 */
 	@EventHandler
-	public void onENGMIEvent(EventNoticeGroupMemberIncrease event) throws InterruptedException {
-		long groupId = event.getGroupId();// 群号
-		String groupName = event.getGroupMethods().getGroup().getInfo().getGroupName();// 群名称
-		long userId = event.getUserId();// 新入群的QQ号
+	public void onENGMIEvent(EventNoticeGroupMemberIncrease event) {
+		long groupId = event.getGroupId(); // 群号
+		QQCommunity qqCommunity = qqCommunityService.getQQCommunity(groupId);
+		String welcome = qqCommunity.getWelcome();
+		
+		if (StringUtil.isBlank(welcome)) { // 为空不发送
+			return;
+		}
+		
+		long userId = event.getUserId(); // 新入群的QQ号
 		/* 构造消息 */
 		MessageBuilder mb = new MessageBuilder();
-		mb.add(new ComponentAt(userId));// 艾特该QQ
-		mb.add("欢迎加入【" + groupName + "】这个大家庭。");
-		/* 3秒后发送 */
-		Thread.sleep(3000);
+		mb.add(new ComponentAt(userId)); // 艾特该QQ
+		mb.newLine();
+		mb.add(welcome.trim());
 		IcqHttpApi icqHttpApi = event.getHttpApi();
 		icqHttpApi.sendGroupMsg(groupId, mb.toString(), false);
 	}

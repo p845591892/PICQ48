@@ -14,6 +14,9 @@ $(document).ready(function() {
 			field : "qqType",
 			title : "类型",
 			formatter : qqTypeHtml
+		}, {
+			field : "welcome",
+			title : "欢迎语"
 		} ],
 		// clickToSelect : true,
 		striped : true,
@@ -107,14 +110,17 @@ function updateVideoShow() {
 				+ qqCommunity.id
 				+ "\"></div></div><div class=\"row\">"
 				+ "<label class=\"control-label col-xs-3 text-right\">QQ群名称：</label><div class=\"col-xs-8\">"
-				+ "<input name=\"communityName\" class=\"form-control\" value=\""
-				+ qqCommunity.communityName + "\"></div></div></div>";
+				+ "<input name=\"communityName\" class=\"form-control\" readonly=\"readonly\" value=\""
+				+ qqCommunity.communityName + "\"></div></div>"
+				+ "<div class=\"row\"> <label class=\"control-label col-xs-3 text-right\">欢迎语：</label> "
+				+ "<div class=\"col-xs-8\"> <textarea name=\"welcome\" class=\"form-control\">"
+				+ qqCommunity.welcome + "</textarea> </div> </div></div>";
 
 		layer.open({
 			title : "修改QQ信息",
 			type : 1,
 			content : html,
-			area : "600px",
+			area : "400px",
 			scrollbar : false,
 			btn : [ "保存", "取消" ],
 			yes : function(index, layero) {
@@ -122,11 +128,13 @@ function updateVideoShow() {
 				var id = layero.find("input[name='id']").val();
 				var communityName = layero.find("input[name='communityName']")
 						.val();
+				var welcome = layero.find("textarea[name='welcome']").val();
 				$.ajax({
 					url : "/qq-community/update",
 					data : {
 						"id" : id,
-						"communityName" : communityName
+						"communityName" : communityName,
+						"welcome" : welcome
 					},
 					type : "post",
 					success : function(data) {

@@ -104,4 +104,20 @@ public interface TaobaService {
 	 */
 	TaobaDetail getDetail(long id);
 
+	/**
+	 * 获取桃叭项目数
+	 * 
+	 * @param running 是否进行中
+	 * @return 项目个数
+	 */
+	int getDetailCountByRunning(boolean running);
+
+	/**
+	 * 获取主页展示的桃叭项目列表
+	 * 
+	 * @param running 是否进行中
+	 * @return {@link Detail}集合
+	 */
+	List<TaobaDetail> getDetailsByRunning(boolean running);
+
 }

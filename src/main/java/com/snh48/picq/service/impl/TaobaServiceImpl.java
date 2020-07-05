@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -125,7 +129,10 @@ public class TaobaServiceImpl implements TaobaService {
 	public List<TaobaDetail> getDetails() {
 		List<TaobaDetail> details = new ArrayList<TaobaDetail>();
 		try {
-			details = taobaDetailRepository.findAll();
+			details = taobaDetailRepository.findAll((Specification<TaobaDetail>) (root, query, criteriaBuilder) -> {
+				Order order = criteriaBuilder.desc(root.get("id"));
+				return query.orderBy(order).getRestriction();
+			});
 		} catch (Exception e) {
 			log.error("TaobaDetailRepository.findAll失败，异常：{}", e.toString());
 			throw new RepositoryException("TaobaDetailRepository.findAll失败", e);
@@ -251,6 +258,37 @@ public class TaobaServiceImpl implements TaobaService {
 					e);
 		}
 		throw exc;
+	}
+
+	@Override
+	public int getDetailCountByRunning(boolean running) {
+		try {
+			long count = taobaDetailRepository.count((Specification<TaobaDetail>) (root, query, criteriaBuilder) -> {
+				Predicate predicate = criteriaBuilder.equal(root.get("running"), running);
+				Order order = criteriaBuilder.desc(root.get("id"));
+				return query.where(predicate).orderBy(order).getRestriction();
+			});
+			return (int) count;
+		} catch (Exception e) {
+			log.error("TaobaDetailRepository.count失败，running={}，异常：{}", String.valueOf(running), e.toString());
+			throw new RepositoryException("TaobaDetailRepository.count失败", e);
+		}
+	}
+
+	@Override
+	public List<TaobaDetail> getDetailsByRunning(boolean running) {
+		try {
+			List<TaobaDetail> details = taobaDetailRepository
+					.findAll((Specification<TaobaDetail>) (root, query, criteriaBuilder) -> {
+						Predicate predicate = criteriaBuilder.equal(root.get("running"), running);
+						Order order = criteriaBuilder.desc(root.get("id"));
+						return query.where(predicate).orderBy(order).getRestriction();
+					});
+			return details;
+		} catch (Exception e) {
+			log.error("TaobaDetailRepository.findAll失败，running={}，异常：{}", String.valueOf(running), e.toString());
+			throw new RepositoryException("TaobaDetailRepository.findAll失败", e);
+		}
 	}
 
 }

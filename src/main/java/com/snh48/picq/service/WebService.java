@@ -16,7 +16,7 @@ public interface WebService {
 	/**
 	 * .mtbox中的数据
 	 * <p>
-	 * 共5组，每组有三个参数data,name,icon。
+	 * 共5组
 	 * 
 	 * @return
 	 */
@@ -25,7 +25,7 @@ public interface WebService {
 	/**
 	 * .ds中的数据
 	 * <P>
-	 * 共10组，每组两个参数：data,name
+	 * 共10组
 	 * 
 	 * @return
 	 * @throws ParseException
@@ -63,5 +63,19 @@ public interface WebService {
 	 * @return 可视化页面的集资详细表格
 	 */
 	public List<MtboxVO> getTaobaJoinTable(String detailIds);
+
+	/**
+	 * .firwin中的数据
+	 * <p>
+	 * 共3组
+	 */
+	public List<MtboxVO> getFirwinData();
+
+	/**
+	 * .custom-bar-chart中的数据
+	 * <p>
+	 * y：y轴数据 x：x轴数据
+	 */
+	public Map<String, Object> getBarData();
 
 }

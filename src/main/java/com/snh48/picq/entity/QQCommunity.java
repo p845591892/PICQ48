@@ -36,14 +36,20 @@ public class QQCommunity implements Serializable {
 	/**
 	 * QQ群/QQ名
 	 */
-	@Column(name = "COMMUNITY_NAME", length = 225)
+	@Column(name = "COMMUNITY_NAME", length = 100, updatable = false)
 	private String communityName;
 
 	/**
 	 * QQ类型（group：QQ群 ， friend：QQ好友）
 	 */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "QQ_TYPE", length = 20)
+	@Column(name = "QQ_TYPE", length = 10, updatable = false)
 	private QQType qqType;
-	
+
+	/**
+	 * 欢迎消息
+	 */
+	@Column(name = "WELCOME", columnDefinition = "text")
+	private String welcome;
+
 }

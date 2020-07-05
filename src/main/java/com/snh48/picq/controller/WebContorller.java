@@ -1,6 +1,8 @@
 package com.snh48.picq.controller;
 
 import java.text.ParseException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,6 +34,7 @@ import com.snh48.picq.service.WebService;
 import com.snh48.picq.utils.IpUtil;
 import com.snh48.picq.utils.MathUtil;
 import com.snh48.picq.utils.StringUtil;
+import com.snh48.picq.vo.MtboxVO;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -67,9 +70,15 @@ public class WebContorller {
 	 */
 	@GetMapping("/index")
 	public ModelAndView toIndex(ModelAndView mav) {
-		mav.addObject("mtbox", webService.getMtboxData()); // .mtbox中的数据
 		try {
-			mav.addObject("ds", webService.getDsData()); // .ds中的数据
+			Map<String, MtboxVO> mtboxMap = webService.getMtboxData(); // .mtbox中的数据
+			Map<String, MtboxVO> dsMap = webService.getDsData(); // .ds中的数据
+			List<MtboxVO> firwinList = webService.getFirwinData(); // .firwin中的数据
+			Map<String, Object> barMap = webService.getBarData(); // .bar中的数据
+			mav.addObject("mtbox", mtboxMap);
+			mav.addObject("ds", dsMap);
+			mav.addObject("tbwins", firwinList);
+			mav.addObject("bar", barMap);
 		} catch (ParseException e) {
 			log.error("跳转index页面异常：获取.ds中的数据失败，异常：{}", e.toString());
 			throw new RuntimeException("跳转index页面异常", e);

@@ -44,7 +44,7 @@ public class SendUpdateMessageThread implements Runnable {
 		IcqHttpApi icqHttpApi = bot.getAccountManager().getNonAccountSpecifiedApi();
 		RVersionInfo ver = icqHttpApi.getVersionInfo().getData();
 		MessageBuilder mb = new MessageBuilder();
-		mb.add("PICQ已重启。").newLine();
+		mb.add("PICQ已重启").newLine();
 		mb.add(PicqSystem.UPDATE_TIME).newLine();
 		mb.newLine().add("系统版本信息：");
 		mb.newLine().add(PicqSystem.PICQ48_VERSION);

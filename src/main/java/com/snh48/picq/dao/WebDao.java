@@ -24,4 +24,6 @@ public interface WebDao {
 
 	List<MtboxVO> findTaobaJoinTableByIds(String[] ids);
 
+	List<MtboxVO> findBar();
+
 }

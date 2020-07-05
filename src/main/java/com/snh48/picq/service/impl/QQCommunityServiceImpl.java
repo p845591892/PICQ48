@@ -12,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.snh48.picq.core.QQType;
 import com.snh48.picq.entity.QQCommunity;
+import com.snh48.picq.exception.RepositoryException;
 import com.snh48.picq.repository.QQCommunityRepository;
 import com.snh48.picq.repository.modian.CommentMonitorRepostiory;
 import com.snh48.picq.repository.snh48.RoomMonitorRepository;
 import com.snh48.picq.repository.taoba.TaobaMonitorRepository;
 import com.snh48.picq.repository.weibo.DynamicMonitorRepository;
 import com.snh48.picq.service.QQCommunityService;
+import com.snh48.picq.utils.StringUtil;
 
 import cc.moecraft.icq.PicqBotX;
 import cc.moecraft.icq.sender.IcqHttpApi;
@@ -80,8 +82,12 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 		if (qqCommunity.getId() == null) {
 			return 1;
 		}
-		if (qqCommunity.getCommunityName() == null || qqCommunity.getCommunityName().equals("")) {
+		if (StringUtil.isEmpty(qqCommunity.getCommunityName())) {
 			return 2;
+		}
+		
+		if ("null".equalsIgnoreCase(qqCommunity.getWelcome())) {
+			qqCommunity.setWelcome(null);
 		}
 		qqCommunityRepository.save(qqCommunity);
 		return HttpsURLConnection.HTTP_OK;
@@ -105,7 +111,7 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 		if (icqHttpApi == null) {
 			return false;
 		}
-		
+
 		// 刷新缓存
 		bot.getAccountManager().refreshCache();
 
@@ -132,17 +138,17 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 			log.info("同步群[{}]", rGroup.getGroupId());
 		}
 		qqCommunityRepository.saveAll(newList);
-		
+
 		// 差集
 		List<QQCommunity> sourceList = qqCommunityRepository.findAll();
 		sourceList.removeAll(newList);
-		
+
 		String[] ids = new String[sourceList.size()];
 		for (int i = 0; i < sourceList.size(); i++) {
 			ids[i] = String.valueOf(sourceList.get(i).getId());
 		}
 		deleteQQCommunity(String.join(",", ids));
-		
+
 		return true;
 	}
 
@@ -152,6 +158,16 @@ public class QQCommunityServiceImpl implements QQCommunityService {
 			qqCommunityRepository.deleteAll();
 		} catch (Exception e) {
 			log.error("清空QQ列表失败，异常：{}", e.toString());
+		}
+	}
+
+	@Override
+	public QQCommunity getQQCommunity(long groupId) {
+		try {
+			return qqCommunityRepository.findById(groupId).get();
+		} catch (Exception e) {
+			log.error("QQCommunityRepository.findById失败，id={}，异常：{}", groupId, e.toString());
+			throw new RepositoryException("QQCommunityRepository.findById失败", e);
 		}
 	}
 

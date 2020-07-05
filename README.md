@@ -22,7 +22,7 @@
 
 缓存：jedis 2.9.0（shiro-redis 3.2.3）
 
-酷Q的HTTP插件：PicqBotX 4.15.0.1058
+酷Q的HTTP插件：PicqBotX 4.12.0.1019.PRE
 
 <br/>
 <br/>

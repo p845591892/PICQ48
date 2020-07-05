@@ -37,6 +37,8 @@ public class SystemJob extends QuartzJobBean {
 		} catch (ParseException e) {
 			log.error("定时任务：系统任务执行异常，刷新主页DS数据到Redis中失败，异常：{}", e.toString());
 		}
+		webService.getFirwinData(); // 刷新主页.firwin的数据到缓存
+		webService.getBarData(); // 刷新主页.bar的数据到缓存
 
 		log.info("--------------[结束] 系统任务");
 	}
