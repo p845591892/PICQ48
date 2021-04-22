@@ -20,7 +20,7 @@
 		<spring.mybatis>2.1.0</spring.mybatis>
 		<spring.druid>1.1.20</spring.druid>
 		<spring.pagehelper>1.2.12</spring.pagehelper>
-		<spring.shiro>1.4.0</spring.shiro>
+		<spring.shiro>1.7.0</spring.shiro>
 		<shiro.redis>3.2.3</shiro.redis>
 		<shiro.thymeleaf>2.0.0</shiro.thymeleaf>
 		<PicqBotX>4.12.0.1019.PRE</PicqBotX>
