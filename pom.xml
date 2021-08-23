@@ -24,7 +24,7 @@
 		<shiro.redis>3.2.3</shiro.redis>
 		<shiro.thymeleaf>2.0.0</shiro.thymeleaf>
 		<PicqBotX>4.12.0.1019.PRE</PicqBotX>
-		<jsoup>1.11.3</jsoup>
+		<jsoup>1.14.2</jsoup>
 		<fastjson>1.2.40</fastjson>
 	</properties>
 
